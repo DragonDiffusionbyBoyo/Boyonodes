@@ -1,0 +1,142 @@
+{
+  "last_node_id": 4,
+  "last_link_id": 2,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "BoyoLoadImageList",
+      "pos": [
+        386.8121643066406,
+        235.14097595214844
+      ],
+      "size": [
+        315,
+        126
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "links": [
+            1
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "filenames",
+          "type": "STRING",
+          "links": [
+            2
+          ],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "BoyoLoadImageList"
+      },
+      "widgets_values": [
+        "C:\\Users\\Andrew Baines\\Documents\\50_AlexisK",
+        512,
+        512
+      ]
+    },
+    {
+      "id": 2,
+      "type": "PreviewImage",
+      "pos": [
+        943.760009765625,
+        184.9656219482422
+      ],
+      "size": [
+        210,
+        246
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 1
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 3,
+      "type": "Display Any (rgthree)",
+      "pos": [
+        510.2271728515625,
+        446.2657165527344
+      ],
+      "size": [
+        301.4195251464844,
+        234.6073455810547
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "source",
+          "type": "*",
+          "link": 2,
+          "dir": 3
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "Display Any (rgthree)"
+      },
+      "widgets_values": [
+        ""
+      ]
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      2,
+      0,
+      "IMAGE"
+    ],
+    [
+      2,
+      1,
+      1,
+      3,
+      0,
+      "*"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.9646149645000012,
+      "offset": [
+        102.27005232571923,
+        -107.18929409415773
+      ]
+    },
+    "node_versions": {
+      "comfy-core": "0.3.13",
+      "rgthree-comfy": "70756c044d805ffc260568ca3fe9eafaed5e6363"
+    },
+    "ue_links": [],
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0
+  },
+  "version": 0.4
+}

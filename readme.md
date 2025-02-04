@@ -1,0 +1,1 @@
+Just plop this folder in custom nodes and then restart comfy. No install requirements other than comfy :)
