@@ -4,65 +4,44 @@ import numpy as np
 from PIL import Image
 
 class BoyoSaver:
+    def __init__(self):
+        self.counter = 0
+
     @classmethod
     def INPUT_TYPES(s):
         return {
             "required": {
-                "images": ("IMAGE",),
-                "output_path": ("STRING", {"default": "outputs"}),
-                "filename_prefix": ("STRING", {"default": "Boyo"}),
-            },
+                "original_image": ("IMAGE",),
+                "upscaled_image": ("IMAGE",),
+                "prefix": ("STRING", {"default": "boyo"}),
+                "directory": ("STRING", {"default": "output"})
+            }
         }
 
     RETURN_TYPES = ()
     FUNCTION = "save_images"
-
     OUTPUT_NODE = True
-
     CATEGORY = "Boyonodes"
 
-    def save_images(self, images, output_path, filename_prefix):
-        results = list()
+    def save_images(self, original_image, upscaled_image, prefix, directory):
+        self.counter += 1
+        os.makedirs(directory, exist_ok=True)
 
-        # Ensure output_path is an absolute path
-        output_path = os.path.abspath(output_path)
+        def process_and_save_image(image, filename):
+            i = 255. * image.cpu().numpy()
+            img = Image.fromarray(np.clip(i, 0, 255).astype(np.uint8))
+            img.save(os.path.join(directory, filename))
 
-        # Create the output directory if it doesn't exist
-        os.makedirs(output_path, exist_ok=True)
+        # Save original image
+        original_filename = f"{prefix}{self.counter:03d}A.png"
+        process_and_save_image(original_image[0], original_filename)
 
-        # Get the highest existing number suffix
-        existing_files = [f for f in os.listdir(output_path) if f.startswith(filename_prefix) and f.endswith('.png')]
-        highest_suffix = 0
-        for file in existing_files:
-            try:
-                # Extract the numeric part of the filename and convert to int
-                suffix = int(''.join(filter(str.isdigit, file.split('_')[-1])))
-                highest_suffix = max(highest_suffix, suffix)
-            except ValueError:
-                pass
+        # Save upscaled image
+        upscaled_filename = f"{prefix}{self.counter:03d}B.png"
+        process_and_save_image(upscaled_image[0], upscaled_filename)
 
-        for idx, image in enumerate(images):
-            try:
-                i = 255. * image.cpu().numpy()
-                img = Image.fromarray(np.clip(i, 0, 255).astype(np.uint8))
-                
-                # Generate a unique filename
-                suffix = highest_suffix + idx + 1
-                file = f"{filename_prefix}_{suffix:04}.png"
-                save_path = os.path.join(output_path, file)
-
-                # Save the image
-                img.save(save_path)
-                results.append({
-                    "filename": file,
-                    "subfolder": "",
-                    "type": "output"
-                })
-                print(f"Successfully saved image: {save_path}")
-            except Exception as e:
-                print(f"Error processing or saving image {idx}: {str(e)}")
-
-        return { "ui": { "images": results } }
+        print(f"Saved images: {original_filename} and {upscaled_filename}")
+        return ()
 
 NODE_CLASS_MAPPINGS = {
     "BoyoSaver": BoyoSaver
