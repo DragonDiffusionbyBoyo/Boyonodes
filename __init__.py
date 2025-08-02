@@ -3,13 +3,15 @@ from .boyo_vae_decode import BoyoVAEDecode
 from .boyo_saver import BoyoSaver
 from .boyo_load_image_list import BoyoLoadImageList
 from .BoyoAudioEval import BoyoAudioEval
+from .boyo_paired_saver import BoyoPairedSaver
 from .Boyomandelbrot import NODE_CLASS_MAPPINGS as MANDELBROT_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS as MANDELBROT_DISPLAY_NAME_MAPPINGS
 
 NODE_CLASS_MAPPINGS = {
     "BoyoVAEDecode": BoyoVAEDecode,
     "BoyoSaver": BoyoSaver,
     "BoyoLoadImageList": BoyoLoadImageList,
-    "BoyoAudioEval": BoyoAudioEval
+    "BoyoAudioEval": BoyoAudioEval,
+    "BoyoPairedSaver": BoyoPairedSaver
 }
 
 NODE_CLASS_MAPPINGS.update(BOYOLATENT_CLASS_MAPPINGS)
@@ -19,7 +21,8 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "BoyoVAEDecode": "Boyo VAE Decode",
     "BoyoSaver": "Boyo Saver",
     "BoyoLoadImageList": "Boyo Load Image List",
-    "BoyoAudioEval": "Boyo Audio Evaluator"
+    "BoyoAudioEval": "Boyo Audio Evaluator",
+    "BoyoPairedSaver": "Boyo Paired Saver"
 }
 
 NODE_DISPLAY_NAME_MAPPINGS.update(BOYOLATENT_DISPLAY_NAME_MAPPINGS)
