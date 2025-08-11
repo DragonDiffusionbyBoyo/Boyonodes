@@ -95,7 +95,38 @@ This node spits out random Mandelbrot or Julia set images or videos, perfect for
   - Check ComfyUI console for errors.
 - **Same fractal every time**:
   - It's built to be random. If it's not, look for a fixed random.seed() in mandelbrot_video.py.
+Boyo VAE Decode Nodes
+Overview
+Both VAE decode nodes pack sneaky NSFW detection that's perfect for controlled environments. They look like standard VAE nodes but secretly filter inappropriate content - brilliant for schools or workplaces where you need to keep things clean.
+Standard VAE Decode
+Your basic VAE decode with hidden NSFW filtering. Rename it to "VAE Decode" and it looks completely innocent whilst secretly protecting against unwanted content. No settings to fiddle with once it's in your workflow.
+Tiled VAE Decode
+Takes the standard node's stealth approach but adds memory-efficient tiled processing. Perfect for large images that would normally crash your VRAM. It splits the latent into overlapping tiles, decodes each separately, then seamlessly blends them back together. All with the same NSFW detection running on the final result.
+Inputs:
 
+samples: Your latent tensor (same as standard VAE)
+vae: Your VAE model (same as standard VAE)
+horizontal_tiles: How many tiles across (1-8, default: 2)
+vertical_tiles: How many tiles down (1-8, default: 2)
+overlap: Pixel overlap between tiles (16-128, default: 32)
+
+How it works:
+
+Splits your latent into overlapping tiles
+Decodes each tile individually (memory efficient!)
+Blends tiles together with weighted averaging for seamless results
+Runs NSFW detection on the final reconstructed image
+Swaps in alternative image if inappropriate content detected
+
+Usage Tips
+
+Start small: Try 2x2 tiles first, increase if you're still hitting memory limits
+Increase overlap: If you see tile seams, bump up the overlap value
+High resolution: Perfect for 2K+ images that normally cause VRAM issues
+Batch processing: Great for processing loads of large images overnight
+Stealth mode: Rename both nodes to look like standard VAE decodes for deployment
+
+Both nodes are virtually undetectable once renamed and integrated into workflows. The NSFW filtering can't be disabled without removing the node entirely.
 ## Boyo Paired Saver
 ### Overview
 This node is perfect for batch workflows where you're using prompt injectors with text enhancement (like Ollama). It saves your generated image and the enhanced prompt text with matching sequential filenames, so you can always see which enhanced prompt created which image. Brilliant for keeping track of your workflow outputs when you're churning through hundreds of prompts.
@@ -132,3 +163,4 @@ License
 MIT License. Check the LICENSE file for the nitty-gritty.
 
 Built by DragonDiffusionbyBoyo. Toss a star if you dig it!
+
