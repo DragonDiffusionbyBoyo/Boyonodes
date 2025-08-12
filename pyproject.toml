@@ -1,7 +1,7 @@
 [project]
 name = "boyonodes"
 description = "The Vae node is a sneaky little node perfect for deployment in Schools or work environments where you do not want the kiddywinkles creating NSFW content. Just rename the node to VAE decode and it looks like a normal node but hidden inside is an NSFW detector. Once hidden in the workflow there are no settings to undo the NSFW detection so cannot be worked around unless you remove the node. The node looks innocent once renamed so is virtually undetectable. I have placed an example workflow for you to see how to connect it. Simple stuff really, but once connected just rename."
-version = "1.1.0"
+version = "1.2.0"
 license = {file = "LICENSE"}
 dependencies = ["torchvision", "numpy", "pillow"]
 
@@ -14,3 +14,4 @@ PublisherId = "dragondiffusionbyboyo"
 id = "boyonodes"
 DisplayName = "Boyonodes"
 Icon = ""
+
