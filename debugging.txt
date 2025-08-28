@@ -1,0 +1,80 @@
+# Wan Fun Control Debugging Summary - Session End
+
+## Current State ✅❌
+
+**✅ What's Working:**
+- BoyoWanFunImageSampler successfully generates clean images (no garbage)
+- Model patching approach is correct (video model → single image)
+- VAE encoding path works without errors
+- Control strength 0.0 = perfect normal images
+
+**❌ What's NOT Working:**
+- Zero control influence at any strength (0.1 → 2.0)
+- Control signal not affecting generation at all
+
+## Root Cause Analysis 🔍
+
+**Discovery:** Wan 2.1 Fun Control config shows `"in_dim": 48` 
+- Expected: 32 control channels + 16 latent channels = 48 total
+- **Problem:** Our control might still be wrong format/channels
+
+## Action Plan for Next Session
+
+### A) WanVideoWrapper Forensic Logging 🕵️
+
+**Add logging to official WanVideoWrapper at these key points:**
+
+```python
+# 1. Control latents input
+log.info(f"🔍 control_latents input shape: {control_latents.shape}")
+log.info(f"🔍 control_latents dtype: {control_latents.dtype}")
+
+# 2. Image conditioning 
+log.info(f"🔍 image_cond shape: {image_cond.shape}")
+
+# 3. The critical concatenation
+if (control_start_percent <= current_step_percentage <= control_end_percent):
+    image_cond_input = torch.cat([control_latents.to(z), image_cond.to(z)])
+    log.info(f"🔍 CONTROL ON - image_cond_input shape: {image_cond_input.shape}")
+else:
+    image_cond_input = torch.cat([torch.zeros_like(control_latents, dtype=dtype), image_cond.to(z)])
+    log.info(f"🔍 CONTROL OFF - image_cond_input shape: {image_cond_input.shape}")
+
+# 4. Y parameter to transformer
+log.info(f"🔍 y parameter: {type(kwargs.get('y', 'None'))}")
+if 'y' in kwargs:
+    log.info(f"🔍 y[0] shape: {kwargs['y'][0].shape}")
+
+# 5. Main latent being processed
+log.info(f"🔍 z (main latent) shape: {z.shape}")
+```
+
+### B) BoyoWanFunImageSampler Current Issues 🛠️
+
+**Files:** `BoyoControl.py` (current version with 32-channel control)
+
+**Known Issues to Fix:**
+1. **Control tensor format** - Need exact match to working implementation
+2. **Y parameter structure** - Verify list format `[tensor]` vs direct tensor
+3. **Step timing logic** - Current percentage calculation might be wrong
+4. **Channel ordering** - Maybe control/latent order is swapped
+
+**Next Session Goals:**
+1. **Compare logs** - Official vs our implementation
+2. **Fix tensor shapes** - Match exactly what works
+3. **Test control influence** - Should work at 0.3-0.5 strength
+4. **Verify pose and depth** - Both control types working
+
+## Quick Reference 📋
+
+**Current BoyoWanFunImageSampler logic:**
+```python
+# Our current approach:
+image_cond_input = torch.cat([control_latents, x], dim=1)  # 32 + 16 = 48 channels
+kwargs['y'] = [image_cond_input]
+```
+
+**Expected working result:** Control influence visible at 0.3-0.8 strength
+
+---
+*Resume point: Add logging to WanVideoWrapper, run comparison test, fix tensor format discrepancies* 🚀
