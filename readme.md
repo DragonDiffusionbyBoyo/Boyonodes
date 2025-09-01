@@ -156,6 +156,65 @@ The node automatically handles sequential numbering and continues from where it 
 
 If you ask me technical stuff I am likely to ask you to ask me one on sport as I vibe coded this. 
 
+Boyo Image Grab
+Overview
+This node automatically monitors a directory and grabs the most recently added or modified image file. Perfect for automation workflows where external processes are creating images and you want ComfyUI to seamlessly pick up the latest one without manual intervention. The node continuously monitors for new files and automatically switches to the newest image as soon as it appears.
+Inputs
+
+directory_path: Full path to the directory you want to monitor (e.g., "C:\MyImages" or "/home/user/generated_images/")
+file_extensions (optional): Comma-separated list of image formats to look for (default: "jpg,jpeg,png,bmp,tiff,webp")
+auto_refresh (optional): When enabled, automatically checks for new files on each workflow execution (default: True)
+refresh_trigger (optional): Change this number to manually force the node to refresh and check for new images (default: 0)
+
+Outputs
+
+image: The loaded image tensor ready for use in your workflow
+filename: Just the filename of the loaded image (e.g., "latest_image.png")
+full_path: Complete path to the loaded image file
+timestamp: File modification timestamp (useful for debugging or chaining with other nodes)
+
+Usage
+
+Drop the Boyo Image Grab node into your workflow (found under "Boyo/loaders")
+Set the directory_path to the folder you want to monitor
+Optionally customise file_extensions if you only want specific image types
+Connect the image output to wherever you need the loaded image in your workflow
+Run your workflow - the node will automatically grab the newest image from the specified directory
+
+Advanced Usage
+
+Automation Workflows: Perfect for scenarios where other software (image editors, AI tools, cameras) drops images into a folder and you want ComfyUI to automatically process the latest one
+Manual Control: Set auto_refresh to False and use the refresh_trigger input if you want manual control over when to check for new files
+File Filtering: Customise file_extensions to "png,jpg" if you only want specific formats, or add exotic formats like "exr,hdr" for specialised workflows
+Batch Processing: The timestamp output can be useful for conditional processing or sorting in complex workflows
+
+Troubleshooting
+
+Error: "Directory path does not exist":
+
+Double-check your directory path is correct and accessible
+On Windows, use forward slashes or double backslashes: "C:/MyImages/" or "C:\MyImages\"
+Ensure ComfyUI has read permissions for the directory
+
+
+Error: "No image files found":
+
+Check that the directory contains images with the specified extensions
+Verify the file_extensions setting matches your image file types
+
+
+Node not updating with new images:
+
+Ensure auto_refresh is enabled (True)
+Try changing the refresh_trigger value to force a manual refresh
+Check the console for any error messages
+
+
+Performance with large directories:
+
+The node scans all files to find the newest one, so very large directories (thousands of files) may slow things down
+Consider organising files into smaller subdirectories for better performance
+
 Contributing
 Got ideas? Fork the repo, make a branch (`git checkout -b cool-new-thing`), commit your stuff (`git commit -m "Added cool thing"`), push it (`git push origin cool-new-thing`), and open a pull request. Add some docs for your changes, and we're golden.
 
@@ -163,4 +222,5 @@ License
 MIT License. Check the LICENSE file for the nitty-gritty.
 
 Built by DragonDiffusionbyBoyo. Toss a star if you dig it!
+
 
