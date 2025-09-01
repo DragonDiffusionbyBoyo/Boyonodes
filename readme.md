@@ -156,7 +156,7 @@ The node automatically handles sequential numbering and continues from where it 
 
 If you ask me technical stuff I am likely to ask you to ask me one on sport as I vibe coded this. 
 
-Boyo Image Grab
+###Boyo Image Grab
 
 Overview
 This node automatically monitors a directory and grabs the most recently added or modified image file. Perfect for automation workflows where external processes are creating images and you want ComfyUI to seamlessly pick up the latest one without manual intervention. The node continuously monitors for new files and automatically switches to the newest image as soon as it appears.
@@ -164,7 +164,7 @@ Inputs
 
 directory_path: Full path to the directory you want to monitor (e.g., "C:\MyImages" or "/home/user/generated_images/")
 file_extensions (optional): Comma-separated list of image formats to look for (default: "jpg,jpeg,png,bmp,tiff,webp")
-auto_refresh (optional): When enabled, automatically checks for new files on each workflow execution (default: True)
+auto_refresh (optional): This has to be enabled to grab the latest image (default: True)
 refresh_trigger (optional): Change this number to manually force the node to refresh and check for new images (default: 0)
 
 Outputs
@@ -223,6 +223,7 @@ License
 MIT License. Check the LICENSE file for the nitty-gritty.
 
 Built by DragonDiffusionbyBoyo. Toss a star if you dig it!
+
 
 
 
