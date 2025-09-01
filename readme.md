@@ -157,6 +157,7 @@ The node automatically handles sequential numbering and continues from where it 
 If you ask me technical stuff I am likely to ask you to ask me one on sport as I vibe coded this. 
 
 Boyo Image Grab
+
 Overview
 This node automatically monitors a directory and grabs the most recently added or modified image file. Perfect for automation workflows where external processes are creating images and you want ComfyUI to seamlessly pick up the latest one without manual intervention. The node continuously monitors for new files and automatically switches to the newest image as soon as it appears.
 Inputs
@@ -222,5 +223,6 @@ License
 MIT License. Check the LICENSE file for the nitty-gritty.
 
 Built by DragonDiffusionbyBoyo. Toss a star if you dig it!
+
 
 
