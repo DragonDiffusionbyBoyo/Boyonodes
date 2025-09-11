@@ -9,13 +9,15 @@ from .Boyomandelbrot import NODE_CLASS_MAPPINGS as MANDELBROT_CLASS_MAPPINGS, NO
 from .BoyoBastardLoops import NODE_CLASS_MAPPINGS as BASTARDLOOPS_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS as BASTARDLOOPS_DISPLAY_NAME_MAPPINGS
 from .BoyoPromptLoop import NODE_CLASS_MAPPINGS as PROMPTLOOP_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS as PROMPTLOOP_DISPLAY_NAME_MAPPINGS
 from .BoyoLoopCollector import NODE_CLASS_MAPPINGS as LOOPCOLLECTOR_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS as LOOPCOLLECTOR_DISPLAY_NAME_MAPPINGS
+
 # Import the existing custom nodes
 from .BoyoControl import NODE_CLASS_MAPPINGS as BOYOCONTROL_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS as BOYOCONTROL_DISPLAY_NAME_MAPPINGS
+
 # Import the new BoyoImageGrab node
 from .boyo_image_grab import NODE_CLASS_MAPPINGS as BOYOIMAGEGRAB_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS as BOYOIMAGEGRAB_DISPLAY_NAME_MAPPINGS
 
-# New import for the BoyoPairedImageSaver node
-from .boyo_paired_image_saver import BoyoPairedImageSaver
+# Import the paired image saver nodes
+from .boyo_paired_image_saver import BoyoPairedImageSaver, BoyoIncontextSaver
 
 NODE_CLASS_MAPPINGS = {
     "BoyoVAEDecode": BoyoVAEDecode,
@@ -24,7 +26,8 @@ NODE_CLASS_MAPPINGS = {
     "BoyoAudioEval": BoyoAudioEval,
     "BoyoTiledVAEDecode": BoyoTiledVAEDecode,
     "BoyoPairedSaver": BoyoPairedSaver,
-    "BoyoPairedImageSaver": BoyoPairedImageSaver # Added the new class mapping
+    "BoyoPairedImageSaver": BoyoPairedImageSaver,
+    "BoyoIncontextSaver": BoyoIncontextSaver
 }
 
 # Update the mappings with all custom nodes
@@ -43,7 +46,8 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "BoyoAudioEval": "Boyo Audio Evaluator",
     "BoyoTiledVAEDecode": "Boyo Tiled VAE Decode",
     "BoyoPairedSaver": "Boyo Paired Saver",
-    "BoyoPairedImageSaver": "Boyo Paired Image Saver" # Added the new display name mapping
+    "BoyoPairedImageSaver": "Boyo Paired Image Saver",
+    "BoyoIncontextSaver": "Boyo Incontext Saver"
 }
 
 # Update the display name mappings with all custom nodes

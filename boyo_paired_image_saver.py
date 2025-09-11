@@ -80,10 +80,89 @@ class BoyoPairedImageSaver:
         
         return ()
 
+
+class BoyoIncontextSaver:
+    def __init__(self):
+        self.counters = {}  # Track counters per folder combination
+
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "source_image": ("IMAGE",),
+                "diffusion_output": ("IMAGE",),
+                "folder_name": ("STRING", {"default": "incontext_dataset"}),
+            }
+        }
+
+    RETURN_TYPES = ()
+    FUNCTION = "save_incontext_pair"
+    OUTPUT_NODE = True
+    CATEGORY = "Boyonodes"
+
+    def save_incontext_pair(self, source_image, diffusion_output, folder_name):
+        # Get the output directory from ComfyUI
+        output_dir = folder_paths.get_output_directory()
+        
+        # Create the subfolder path
+        save_dir = os.path.join(output_dir, folder_name)
+        os.makedirs(save_dir, exist_ok=True)
+        
+        # Get or initialise the counter for this folder
+        if folder_name not in self.counters:
+            # Find the highest existing number in the directory
+            existing_files = [f for f in os.listdir(save_dir) if (f.startswith('control_') or f.startswith('dataset_')) and f.endswith('.png')]
+            if existing_files:
+                # Extract numbers from existing files
+                numbers = []
+                for f in existing_files:
+                    try:
+                        if f.startswith('control_'):
+                            num_str = f.split('_')[1].split('.')[0]
+                        elif f.startswith('dataset_'):
+                            num_str = f.split('_')[1].split('.')[0]
+                        else:
+                            continue
+                        numbers.append(int(num_str))
+                    except (ValueError, IndexError):
+                        continue
+                self.counters[folder_name] = max(numbers) + 1 if numbers else 1
+            else:
+                self.counters[folder_name] = 1
+        else:
+            self.counters[folder_name] += 1
+        
+        # Generate the filename with zero-padded number
+        file_number = f"{self.counters[folder_name]:03d}"
+        
+        # Full paths for both images
+        control_image_path = os.path.join(save_dir, f"control_{file_number}.png")
+        dataset_image_path = os.path.join(save_dir, f"dataset_{file_number}.png")
+        
+        # Helper function to save a single image tensor
+        def save_tensor_to_file(image_tensor, path):
+            # Convert tensor to PIL Image
+            i = 255. * image_tensor[0].cpu().numpy()
+            img = Image.fromarray(np.clip(i, 0, 255).astype(np.uint8))
+            img.save(path)
+
+        # Save the source image as control
+        save_tensor_to_file(source_image, control_image_path)
+        
+        # Save the diffusion output as dataset
+        save_tensor_to_file(diffusion_output, dataset_image_path)
+        
+        print(f"Saved incontext pair: control_{file_number}.png and dataset_{file_number}.png in {folder_name}/")
+        
+        return ()
+
+
 NODE_CLASS_MAPPINGS = {
-    "BoyoPairedImageSaver": BoyoPairedImageSaver
+    "BoyoPairedImageSaver": BoyoPairedImageSaver,
+    "BoyoIncontextSaver": BoyoIncontextSaver
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "BoyoPairedImageSaver": "Boyo Paired Image Saver"
+    "BoyoPairedImageSaver": "Boyo Paired Image Saver",
+    "BoyoIncontextSaver": "Boyo Incontext Saver"
 }
