@@ -9,12 +9,13 @@ from .Boyomandelbrot import NODE_CLASS_MAPPINGS as MANDELBROT_CLASS_MAPPINGS, NO
 from .BoyoBastardLoops import NODE_CLASS_MAPPINGS as BASTARDLOOPS_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS as BASTARDLOOPS_DISPLAY_NAME_MAPPINGS
 from .BoyoPromptLoop import NODE_CLASS_MAPPINGS as PROMPTLOOP_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS as PROMPTLOOP_DISPLAY_NAME_MAPPINGS
 from .BoyoLoopCollector import NODE_CLASS_MAPPINGS as LOOPCOLLECTOR_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS as LOOPCOLLECTOR_DISPLAY_NAME_MAPPINGS
-
 # Import the existing custom nodes
 from .BoyoControl import NODE_CLASS_MAPPINGS as BOYOCONTROL_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS as BOYOCONTROL_DISPLAY_NAME_MAPPINGS
-
 # Import the new BoyoImageGrab node
 from .boyo_image_grab import NODE_CLASS_MAPPINGS as BOYOIMAGEGRAB_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS as BOYOIMAGEGRAB_DISPLAY_NAME_MAPPINGS
+
+# New import for the BoyoPairedImageSaver node
+from .boyo_paired_image_saver import BoyoPairedImageSaver
 
 NODE_CLASS_MAPPINGS = {
     "BoyoVAEDecode": BoyoVAEDecode,
@@ -22,7 +23,8 @@ NODE_CLASS_MAPPINGS = {
     "BoyoLoadImageList": BoyoLoadImageList,
     "BoyoAudioEval": BoyoAudioEval,
     "BoyoTiledVAEDecode": BoyoTiledVAEDecode,
-    "BoyoPairedSaver": BoyoPairedSaver
+    "BoyoPairedSaver": BoyoPairedSaver,
+    "BoyoPairedImageSaver": BoyoPairedImageSaver # Added the new class mapping
 }
 
 # Update the mappings with all custom nodes
@@ -32,7 +34,7 @@ NODE_CLASS_MAPPINGS.update(BOYOCONTROL_CLASS_MAPPINGS)
 NODE_CLASS_MAPPINGS.update(BASTARDLOOPS_CLASS_MAPPINGS)
 NODE_CLASS_MAPPINGS.update(PROMPTLOOP_CLASS_MAPPINGS)
 NODE_CLASS_MAPPINGS.update(LOOPCOLLECTOR_CLASS_MAPPINGS)
-NODE_CLASS_MAPPINGS.update(BOYOIMAGEGRAB_CLASS_MAPPINGS)  # Add the new node
+NODE_CLASS_MAPPINGS.update(BOYOIMAGEGRAB_CLASS_MAPPINGS)
 
 NODE_DISPLAY_NAME_MAPPINGS = {
     "BoyoVAEDecode": "Boyo VAE Decode",
@@ -40,7 +42,8 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "BoyoLoadImageList": "Boyo Load Image List",
     "BoyoAudioEval": "Boyo Audio Evaluator",
     "BoyoTiledVAEDecode": "Boyo Tiled VAE Decode",
-    "BoyoPairedSaver": "Boyo Paired Saver"
+    "BoyoPairedSaver": "Boyo Paired Saver",
+    "BoyoPairedImageSaver": "Boyo Paired Image Saver" # Added the new display name mapping
 }
 
 # Update the display name mappings with all custom nodes
@@ -50,6 +53,6 @@ NODE_DISPLAY_NAME_MAPPINGS.update(BOYOCONTROL_DISPLAY_NAME_MAPPINGS)
 NODE_DISPLAY_NAME_MAPPINGS.update(BASTARDLOOPS_DISPLAY_NAME_MAPPINGS)
 NODE_DISPLAY_NAME_MAPPINGS.update(PROMPTLOOP_DISPLAY_NAME_MAPPINGS)
 NODE_DISPLAY_NAME_MAPPINGS.update(LOOPCOLLECTOR_DISPLAY_NAME_MAPPINGS)
-NODE_DISPLAY_NAME_MAPPINGS.update(BOYOIMAGEGRAB_DISPLAY_NAME_MAPPINGS)  # Add the new node
+NODE_DISPLAY_NAME_MAPPINGS.update(BOYOIMAGEGRAB_DISPLAY_NAME_MAPPINGS)
 
 __all__ = ['NODE_CLASS_MAPPINGS', 'NODE_DISPLAY_NAME_MAPPINGS']
