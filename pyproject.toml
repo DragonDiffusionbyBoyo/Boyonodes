@@ -1,7 +1,7 @@
 [project]
 name = "boyonodes"
 description = "Essential nodes for semantic image editing workflows with Kontext, Qwen Image Edit, and HiDream E1.1 models. Features automated iterative editing with Boyo Image Grab, organised dataset creation with paired image/prompt savers, and comprehensive file management tools. Perfect for batch processing, training data preparation, and streamlined semantic editing pipelines."
-version = "1.6.0"
+version = "2.6.0"
 license = {file = "LICENSE"}
 dependencies = ["torchvision", "numpy", "pillow"]
 

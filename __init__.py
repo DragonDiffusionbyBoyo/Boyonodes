@@ -9,7 +9,7 @@ from .Boyomandelbrot import NODE_CLASS_MAPPINGS as MANDELBROT_CLASS_MAPPINGS, NO
 from .BoyoBastardLoops import NODE_CLASS_MAPPINGS as BASTARDLOOPS_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS as BASTARDLOOPS_DISPLAY_NAME_MAPPINGS
 from .BoyoPromptLoop import NODE_CLASS_MAPPINGS as PROMPTLOOP_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS as PROMPTLOOP_DISPLAY_NAME_MAPPINGS
 from .BoyoLoopCollector import NODE_CLASS_MAPPINGS as LOOPCOLLECTOR_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS as LOOPCOLLECTOR_DISPLAY_NAME_MAPPINGS
-
+from .boyo_video_paired_saver import BoyoVideoPairedSaver, BoyoVideoSaver
 # Import the existing custom nodes
 from .BoyoControl import NODE_CLASS_MAPPINGS as BOYOCONTROL_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS as BOYOCONTROL_DISPLAY_NAME_MAPPINGS
 
@@ -27,6 +27,8 @@ NODE_CLASS_MAPPINGS = {
     "BoyoTiledVAEDecode": BoyoTiledVAEDecode,
     "BoyoPairedSaver": BoyoPairedSaver,
     "BoyoPairedImageSaver": BoyoPairedImageSaver,
+    "BoyoVideoPairedSaver": BoyoVideoPairedSaver,
+    "BoyoVideoSaver": BoyoVideoSaver,
     "BoyoIncontextSaver": BoyoIncontextSaver
 }
 
@@ -47,6 +49,8 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "BoyoTiledVAEDecode": "Boyo Tiled VAE Decode",
     "BoyoPairedSaver": "Boyo Paired Saver",
     "BoyoPairedImageSaver": "Boyo Paired Image Saver",
+    "BoyoVideoPairedSaver": "Boyo Video Paired Saver",
+    "BoyoVideoSaver": "Boyo Video Saver",
     "BoyoIncontextSaver": "Boyo Incontext Saver"
 }
 
