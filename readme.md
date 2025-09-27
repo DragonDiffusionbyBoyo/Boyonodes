@@ -31,6 +31,8 @@ Perfect for workflows like: Original → "add a hat" → "make it red" → "chan
 
 ### Boyo Paired Image Saver
 Saves original and edited image pairs with organised sequential naming - essential for creating datasets from semantic editing workflows.
+### Boyo Paired Video Saver
+Same as above but for video.
 
 **Key Features:**
 - Maintains original/edited image relationships
