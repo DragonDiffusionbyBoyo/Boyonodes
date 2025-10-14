@@ -1,0 +1,193 @@
+{
+  "id": "57e52c40-2b20-4ac6-8522-8b1cd05e8b61",
+  "revision": 0,
+  "last_node_id": 4,
+  "last_link_id": 2,
+  "nodes": [
+    {
+      "id": 2,
+      "type": "LoadImage",
+      "pos": [
+        -254.46742248535156,
+        564.5792846679688
+      ],
+      "size": [
+        278,
+        314
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            1
+          ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.60",
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "joannap_00016_ - Copy.png",
+        "image"
+      ]
+    },
+    {
+      "id": 1,
+      "type": "BoyoVision",
+      "pos": [
+        36.12538528442383,
+        565.26318359375
+      ],
+      "size": [
+        400,
+        280
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 1
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            2
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "Boyonodes",
+        "ver": "51d6c4bc1b8c7dfbc1d981fdf53e2aa8f7d59400",
+        "Node name for S&R": "BoyoVision"
+      },
+      "widgets_values": [
+        "describe the image in detail and in one paragraph",
+        "Qwen2.5-VL-7B-Instruct-abliterated",
+        "none",
+        false,
+        0.7,
+        512,
+        1483,
+        "randomize",
+        ""
+      ]
+    },
+    {
+      "id": 3,
+      "type": "Bjornulf_ShowText",
+      "pos": [
+        449.3125,
+        569.0082397460938
+      ],
+      "size": [
+        390.7917175292969,
+        285.9850158691406
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text_value",
+          "type": "STRING",
+          "link": 2
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "bjornulf_custom_nodes",
+        "ver": "1.0.0",
+        "Node name for S&R": "Bjornulf_ShowText"
+      },
+      "widgets_values": [
+        "The image features a close-up of a person with light blonde hair styled in an elegant updo, adorned with soft waves framing the face. The individual is wearing large, teardrop-shaped earrings with intricate detailing and what appears to be a pearl or gemstone at the bottom. The makeup is subtle yet sophisticated, with defined eyebrows, smoky eyeshadow, and a natural lip color that complements the overall look. The background is blurred, suggesting a formal event or red carpet setting, with hints of other people and possibly photographers in the distance."
+      ]
+    },
+    {
+      "id": 4,
+      "type": "Label (rgthree)",
+      "pos": [
+        -477.4153747558594,
+        349.8029479980469
+      ],
+      "size": [
+        1919.5714111328125,
+        150
+      ],
+      "flags": {
+        "allow_interaction": true
+      },
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "Dragon Diffusion BoyoVision",
+      "properties": {
+        "fontSize": 150,
+        "fontFamily": "Arial",
+        "fontColor": "#ffffff",
+        "textAlign": "left",
+        "backgroundColor": "green",
+        "padding": 0,
+        "borderRadius": 0
+      },
+      "color": "#fff0",
+      "bgcolor": "#fff0"
+    }
+  ],
+  "links": [
+    [
+      1,
+      2,
+      0,
+      1,
+      0,
+      "IMAGE"
+    ],
+    [
+      2,
+      1,
+      0,
+      3,
+      0,
+      "STRING"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ue_links": [],
+    "ds": {
+      "scale": 1.0834705943389107,
+      "offset": [
+        786.1072189985698,
+        -219.16693053529582
+      ]
+    },
+    "frontendVersion": "1.26.13",
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true
+  },
+  "version": 0.4
+}
