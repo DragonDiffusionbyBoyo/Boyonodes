@@ -1,0 +1,441 @@
+{
+  "id": "57e52c40-2b20-4ac6-8522-8b1cd05e8b61",
+  "revision": 0,
+  "last_node_id": 11,
+  "last_link_id": 10,
+  "nodes": [
+    {
+      "id": 7,
+      "type": "ttN text",
+      "pos": [
+        -33.49284744262695,
+        948.6171264648438
+      ],
+      "size": [
+        400,
+        200
+      ],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": [
+            3
+          ]
+        }
+      ],
+      "title": "Trigger Word",
+      "properties": {
+        "cnr_id": "comfyui_tinyterranodes",
+        "ver": "1a90e43480563e9202f7f5482629b1d444e805ed",
+        "Node name for S&R": "ttN text",
+        "ttNnodeVersion": "1.0.0"
+      },
+      "widgets_values": [
+        "Wan-JOPG\n"
+      ],
+      "color": "#232",
+      "bgcolor": "#353"
+    },
+    {
+      "id": 1,
+      "type": "BoyoVision",
+      "pos": [
+        -34.23173141479492,
+        617.0538330078125
+      ],
+      "size": [
+        400,
+        280
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 8
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            4
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "Boyonodes",
+        "ver": "51d6c4bc1b8c7dfbc1d981fdf53e2aa8f7d59400",
+        "Node name for S&R": "BoyoVision"
+      },
+      "widgets_values": [
+        "describe the image in detail and in one paragraph",
+        "Qwen2.5-VL-7B-Instruct-abliterated",
+        "none",
+        false,
+        0.7,
+        512,
+        1210,
+        "randomize",
+        ""
+      ],
+      "color": "#232",
+      "bgcolor": "#353"
+    },
+    {
+      "id": 9,
+      "type": "PreviewImage",
+      "pos": [
+        -367.6317138671875,
+        942.3211059570312
+      ],
+      "size": [
+        310.6814880371094,
+        246
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 10
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.60",
+        "Node name for S&R": "PreviewImage"
+      },
+      "widgets_values": [],
+      "color": "#222",
+      "bgcolor": "#000"
+    },
+    {
+      "id": 3,
+      "type": "Bjornulf_ShowText",
+      "pos": [
+        417.78692626953125,
+        611.8983154296875
+      ],
+      "size": [
+        390.7917175292969,
+        285.9850158691406
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text_value",
+          "type": "STRING",
+          "link": 5
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "bjornulf_custom_nodes",
+        "ver": "1.0.0",
+        "Node name for S&R": "Bjornulf_ShowText"
+      },
+      "widgets_values": [],
+      "color": "#222",
+      "bgcolor": "#000"
+    },
+    {
+      "id": 6,
+      "type": "Text Concatenate",
+      "pos": [
+        427.702392578125,
+        956.9263305664062
+      ],
+      "size": [
+        270,
+        142
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text_a",
+          "shape": 7,
+          "type": "STRING",
+          "link": 3
+        },
+        {
+          "name": "text_b",
+          "shape": 7,
+          "type": "STRING",
+          "link": 4
+        },
+        {
+          "name": "text_c",
+          "shape": 7,
+          "type": "STRING",
+          "link": null
+        },
+        {
+          "name": "text_d",
+          "shape": 7,
+          "type": "STRING",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            5,
+            6
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "was-node-suite-comfyui",
+        "ver": "1.0.2",
+        "Node name for S&R": "Text Concatenate"
+      },
+      "widgets_values": [
+        ", ",
+        "true"
+      ],
+      "color": "#222",
+      "bgcolor": "#000"
+    },
+    {
+      "id": 4,
+      "type": "Label (rgthree)",
+      "pos": [
+        -678.73828125,
+        373.85980224609375
+      ],
+      "size": [
+        2616.571533203125,
+        150
+      ],
+      "flags": {
+        "allow_interaction": true
+      },
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "Dragon Diffusion BoyoVision Captioner",
+      "properties": {
+        "fontSize": 150,
+        "fontFamily": "Arial",
+        "fontColor": "#ffffff",
+        "textAlign": "left",
+        "backgroundColor": "green",
+        "padding": 0,
+        "borderRadius": 0
+      },
+      "color": "#fff0",
+      "bgcolor": "#fff0"
+    },
+    {
+      "id": 8,
+      "type": "Load Image Batch",
+      "pos": [
+        -359.8142395019531,
+        623.759033203125
+      ],
+      "size": [
+        297,
+        270
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            8,
+            9,
+            10
+          ]
+        },
+        {
+          "name": "filename_text",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "was-node-suite-comfyui",
+        "ver": "1.0.2",
+        "Node name for S&R": "Load Image Batch"
+      },
+      "widgets_values": [
+        "incremental_image",
+        747944090186551,
+        "randomize",
+        0,
+        "Batch 001",
+        "",
+        "*",
+        "false",
+        "true"
+      ],
+      "color": "#323",
+      "bgcolor": "#535"
+    },
+    {
+      "id": 11,
+      "type": "Note",
+      "pos": [
+        -643.0830078125,
+        634.162841796875
+      ],
+      "size": [
+        263.3566589355469,
+        242.52774047851562
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "RTFM",
+      "properties": {},
+      "widgets_values": [
+        "Put the image Path in the path in the load image batch node. \nNext to the run button change the number which defaults to one to the number of images in your image folder. \n\nChoose the name of your dataset folder and the file name prefix in the Boyo Paired Saver node. \n\nPress run.\n\nReally easy. If you cannot run this perhaps you have a skill issue! "
+      ],
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 5,
+      "type": "BoyoPairedSaver",
+      "pos": [
+        857.783203125,
+        603.9448852539062
+      ],
+      "size": [
+        270,
+        102
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 9
+        },
+        {
+          "name": "enhanced_prompt",
+          "type": "STRING",
+          "link": 6
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "Boyonodes",
+        "ver": "51d6c4bc1b8c7dfbc1d981fdf53e2aa8f7d59400",
+        "Node name for S&R": "BoyoPairedSaver"
+      },
+      "widgets_values": [
+        "exampledataset",
+        "Dataset"
+      ],
+      "color": "#223",
+      "bgcolor": "#335"
+    }
+  ],
+  "links": [
+    [
+      3,
+      7,
+      0,
+      6,
+      0,
+      "STRING"
+    ],
+    [
+      4,
+      1,
+      0,
+      6,
+      1,
+      "STRING"
+    ],
+    [
+      5,
+      6,
+      0,
+      3,
+      0,
+      "STRING"
+    ],
+    [
+      6,
+      6,
+      0,
+      5,
+      1,
+      "STRING"
+    ],
+    [
+      8,
+      8,
+      0,
+      1,
+      0,
+      "IMAGE"
+    ],
+    [
+      9,
+      8,
+      0,
+      5,
+      0,
+      "IMAGE"
+    ],
+    [
+      10,
+      8,
+      0,
+      9,
+      0,
+      "IMAGE"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 1.0834705943389116,
+      "offset": [
+        762.4205329297904,
+        -380.92394114077865
+      ]
+    },
+    "ue_links": [],
+    "frontendVersion": "1.27.10",
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true
+  },
+  "version": 0.4
+}
