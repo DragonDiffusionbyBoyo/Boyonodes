@@ -105,6 +105,9 @@ Batch image processor for mass workflows.
 
 ## Utility Nodes
 
+# BoyoVision Node
+Qwen2.5VL vision node with abliterated version compatibility. The abliterated model is uncensored and therefor does not refuse tasks given to it. Far superior and accurate as a result
+
 ### Boyo VAE Decode Nodes
 Stealth NSFW filtering for controlled environments.
 
