@@ -18,6 +18,8 @@ from .boyo_image_grab import NODE_CLASS_MAPPINGS as BOYOIMAGEGRAB_CLASS_MAPPINGS
 
 # Import the paired image saver nodes
 from .boyo_paired_image_saver import BoyoPairedImageSaver, BoyoIncontextSaver
+from .boyo_qwen_grounding import BoyoQwenVLGrounding
+from .boyo_vision import BoyoVision
 
 NODE_CLASS_MAPPINGS = {
     "BoyoVAEDecode": BoyoVAEDecode,
@@ -29,6 +31,8 @@ NODE_CLASS_MAPPINGS = {
     "BoyoPairedImageSaver": BoyoPairedImageSaver,
     "BoyoVideoPairedSaver": BoyoVideoPairedSaver,
     "BoyoVideoSaver": BoyoVideoSaver,
+    "BoyoQwenVLGrounding": BoyoQwenVLGrounding,
+    "BoyoVision": BoyoVision,
     "BoyoIncontextSaver": BoyoIncontextSaver
 }
 
@@ -51,6 +55,8 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "BoyoPairedImageSaver": "Boyo Paired Image Saver",
     "BoyoVideoPairedSaver": "Boyo Video Paired Saver",
     "BoyoVideoSaver": "Boyo Video Saver",
+    "BoyoQwenVLGrounding": "Boyo Qwen VL Grounding",
+    "BoyoVision": "Boyo Vision",
     "BoyoIncontextSaver": "Boyo Incontext Saver"
 }
 
