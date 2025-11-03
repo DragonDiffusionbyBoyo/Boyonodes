@@ -1,6 +1,7 @@
 # Boyonodes
 
 Essential nodes for semantic image editing workflows with **Kontext**, **Qwen Image Edit**, and **HiDream E1.1** models. Streamlines iterative editing, dataset creation, and batch processing for next-generation semantic editing pipelines.
+Now with Lora loader for Wan2.2 which automatically selects pairs and any trigger words for you.
 
 ## Semantic Image Editing Workflow Nodes
 
@@ -84,6 +85,90 @@ Saves clean images with accompanying prompt files - perfect for publication and 
 - Creating training datasets with prompt annotations
 - Maintaining reproducible results
 
+## LoRA Management System
+
+Revolutionary paired LoRA management with intelligent prompt handling - perfect for complex workflows requiring multiple LoRA types (utility, character, style) with sophisticated prompt strategies.
+
+### Boyo LoRA JSON Builder
+Create and save LoRA configuration files with flexible prompt and file assignments.
+
+**Key Features:**
+- Supports paired LoRAs (high/low noise variants)
+- Flexible prompt management (multiple prompts per config)
+- Handles utility LoRAs (no prompts needed)
+- Graceful handling of single LoRAs or config-only entries
+- Auto-saves to organised directory structure
+
+**Inputs:**
+- `name`: Configuration name (becomes filename)
+- `prompts`: Multi-line text (one prompt per line, optional)
+- `high_noise_lora`: LoRA file selector (optional)
+- `low_noise_lora`: LoRA file selector (optional)
+- `save_config`: Boolean toggle to save JSON
+
+**Perfect for:**
+- Lightning/reward LoRAs (utility configs with no prompts)
+- Character LoRAs with example prompts
+- Style LoRAs with trigger words
+- Any LoRA requiring organised management
+
+### Boyo LoRA Paired Loader
+Load multiple LoRA configurations simultaneously with intelligent prompt handling strategies.
+
+**Key Features:**
+- **3 simultaneous config slots** for layered effects (utility + character + style)
+- **Prompt strategies per config**: Mute, Concatenate, Merge
+- **Prompt modes**: First Only, Cycle Through, Random (seed-based)
+- **Smart error handling** - continues with missing configs
+- **Combined prompt output** for easy workflow integration
+
+**Inputs:**
+- `prompt_mode`: Global prompt selection behaviour
+- `lora_config_1/2/3`: Configuration file selectors
+- `prompt_strategy_1/2/3`: Individual prompt handling per config
+- `seed`: For consistent random prompt selection
+
+**Outputs:**
+- **6 LoRA paths**: high_noise_path_1/2/3, low_noise_path_1/2/3 (connect directly to LoRA loaders)
+- **4 prompt strings**: individual prompts + combined output
+
+**Workflow Integration:**
+Outputs connect directly to any standard LoRA loader. No primitives needed - clean, direct connections.
+
+### Boyo LoRA Config Inspector
+Preview LoRA configuration contents before loading for informed decision-making.
+
+**Key Features:**
+- **Smart analysis**: Detects utility, paired, or single LoRA configs
+- **File status checking**: Verifies LoRA files actually exist
+- **Usage recommendations**: Suggests optimal prompt strategies
+- **Three output formats**: formatted summary, raw JSON, status line
+- **Real-time inspection**: See exactly what's in each config
+
+**Perfect for:**
+- "What was in that config again?" scenarios
+- Debugging missing LoRA files
+- Planning complex multi-LoRA workflows
+- Understanding prompt availability before loading
+
+**Sample Output:**
+```
+📋 LoRA Configuration: Character_Cyborg
+🎯 LoRA FILES:
+  📈 High Noise: ✅ cyborg_char_v2.safetensors
+  📉 Low Noise: ✅ cyborg_char_v2_low.safetensors
+  🎭 Type: PAIRED LoRA (different high/low files)
+
+💬 PROMPTS (3 total):
+  1. cyborg woman, metallic skin, glowing eyes
+  2. android female, chrome details, futuristic
+  3. robotic humanoid, synthetic appearance
+
+💡 USAGE RECOMMENDATIONS:
+  • Use 'Cycle Through' for variety
+  • Use 'Random' for experimentation
+```
+
 ## Workflow Enhancement Nodes
 
 ### Boyo Empty Latent
@@ -153,6 +238,26 @@ pip install numpy==1.26 matplotlib pillow tqdm torch
 
 Restart ComfyUI after installation.
 
+## LoRA Management Workflow Examples
+
+**Basic Multi-LoRA Setup:**
+1. Create configs for utility (lightning), character, and style LoRAs
+2. Load all three simultaneously in Paired Loader
+3. Set utility to "Mute", character to "Concatenate", style to "Concatenate"
+4. Get combined prompts and all LoRA paths in one node
+
+**Progressive LoRA Development:**
+1. Build character LoRA config with multiple example prompts
+2. Use "Cycle Through" mode for testing different prompt variations
+3. Inspector node helps verify which prompts are available
+4. Iterate and refine prompt collections
+
+**Dataset Creation with LoRAs:**
+1. Set up configs for consistent LoRA + prompt combinations
+2. Use "Random" mode with fixed seeds for controlled variation
+3. Paired Image Saver captures results with LoRA-enhanced prompts
+4. Creates organised datasets with known LoRA configurations
+
 ## Semantic Editing Workflow Examples
 
 **Basic Iterative Editing:**
@@ -177,6 +282,12 @@ Restart ComfyUI after installation.
 
 ## Troubleshooting
 
+**LoRA Management issues:**
+- Verify LoRA files exist in specified subdirectories
+- Check JSON syntax in config files
+- Use Inspector node to debug config problems
+- Ensure LoRA paths use forward slashes
+
 **Boyo Image Grab issues:**
 - Verify directory path exists and is accessible
 - Check file permissions
@@ -192,6 +303,7 @@ Restart ComfyUI after installation.
 - Large directories may slow Image Grab scanning
 - Organise files into smaller subdirectories
 - Use specific file extensions to reduce scanning
+- LoRA configs are cached for faster loading
 
 ## Contributing
 
