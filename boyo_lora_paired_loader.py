@@ -4,6 +4,19 @@ import folder_paths
 import random
 from typing import Dict, List, Optional, Any, Tuple
 
+# Cache the LoRA list at module load time to prevent dynamic changes
+_CACHED_LORA_LIST = None
+
+def get_cached_lora_list():
+    """Get a cached version of the LoRA list to prevent dynamic return type changes."""
+    global _CACHED_LORA_LIST
+    if _CACHED_LORA_LIST is None:
+        try:
+            _CACHED_LORA_LIST = ["none"] + folder_paths.get_filename_list("loras")
+        except:
+            _CACHED_LORA_LIST = ["none"]
+    return _CACHED_LORA_LIST
+
 class BoyoLoRAPairedLoader:
     """
     A ComfyUI node for loading multiple LoRA configurations simultaneously
@@ -29,6 +42,16 @@ class BoyoLoRAPairedLoader:
                 }),
             },
             "optional": {
+                "prepend_text": ("STRING", {
+                    "default": "",
+                    "multiline": True,
+                    "placeholder": "Text to add before all prompts"
+                }),
+                "append_text": ("STRING", {
+                    "default": "",
+                    "multiline": True,
+                    "placeholder": "Text to add after all prompts"
+                }),
                 "lora_config_1": (config_files, {
                     "default": "None"
                 }),
@@ -153,19 +176,33 @@ class BoyoLoRAPairedLoader:
         
         return prompt
     
-    def clean_prompt_combination(self, prompts: List[str]) -> str:
-        """Combine multiple prompts intelligently."""
+    def clean_prompt_combination(self, prompts: List[str], prepend: str = "", append: str = "") -> str:
+        """Combine multiple prompts intelligently with prepend and append text."""
         # Filter out empty prompts
         valid_prompts = [p.strip() for p in prompts if p.strip()]
         
-        if not valid_prompts:
+        if not valid_prompts and not prepend.strip() and not append.strip():
             return ""
         
-        # Simple concatenation with comma separation
-        # TODO: Implement more sophisticated merging logic
-        return ", ".join(valid_prompts)
+        # Build final prompt with prepend/append
+        parts = []
+        
+        # Add prepend if provided
+        if prepend.strip():
+            parts.append(prepend.strip())
+        
+        # Add the combined LoRA prompts
+        if valid_prompts:
+            parts.append(", ".join(valid_prompts))
+        
+        # Add append if provided
+        if append.strip():
+            parts.append(append.strip())
+        
+        return ", ".join(parts)
     
-    RETURN_TYPES = (["none"] + folder_paths.get_filename_list("loras"),) * 6 + ("STRING",) * 4
+    # Use cached LoRA list to prevent dynamic changes
+    RETURN_TYPES = (get_cached_lora_list(),) * 6 + ("STRING",) * 4
     RETURN_NAMES = (
         "high_noise_path_1", "low_noise_path_1", 
         "high_noise_path_2", "low_noise_path_2", 
@@ -176,6 +213,7 @@ class BoyoLoRAPairedLoader:
     CATEGORY = "Boyo/LoRA Tools"
     
     def load_lora_configs(self, prompt_mode: str, 
+                         prepend_text: str = "", append_text: str = "",
                          lora_config_1: str = "None", prompt_strategy_1: str = "Concatenate",
                          lora_config_2: str = "None", prompt_strategy_2: str = "Concatenate", 
                          lora_config_3: str = "None", prompt_strategy_3: str = "Concatenate",
@@ -248,8 +286,8 @@ class BoyoLoRAPairedLoader:
                 lora_paths.extend(["none", "none"])
                 prompts.append("")
         
-        # Create combined prompts
-        combined_prompts = self.clean_prompt_combination(all_prompts)
+        # Create combined prompts with prepend/append
+        combined_prompts = self.clean_prompt_combination(all_prompts, prepend_text, append_text)
         prompts.append(combined_prompts)
         
         # Return: 6 LoRA paths + 4 prompt strings
