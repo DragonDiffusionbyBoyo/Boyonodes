@@ -1,0 +1,1002 @@
+{
+  "id": "83cf73c9-4d6a-403f-bed3-527c3f27bca9",
+  "revision": 0,
+  "last_node_id": 21,
+  "last_link_id": 19,
+  "nodes": [
+    {
+      "id": 6,
+      "type": "Display Any (rgthree)",
+      "pos": [
+        344.86557198291973,
+        809.4915222399742
+      ],
+      "size": [
+        416.49670095232966,
+        251.5285880640139
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "dir": 3,
+          "name": "source",
+          "type": "*",
+          "link": 5
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "rgthree-comfy",
+        "ver": "2b9eb36d3e1741e88dbfccade0e08137f7fa2bfb",
+        "Node name for S&R": "Display Any (rgthree)"
+      },
+      "widgets_values": [
+        "{\"options\": {\"enable_mirostat\": false, \"mirostat\": 0, \"enable_mirostat_eta\": false, \"mirostat_eta\": 0.1, \"enable_mirostat_tau\": false, \"mirostat_tau\": 5.0, \"enable_num_ctx\": false, \"num_ctx\": 2048, \"enable_repeat_last_n\": false, \"repeat_last_n\": 64, \"enable_repeat_penalty\": false, \"repeat_penalty\": 1.05, \"enable_temperature\": false, \"temperature\": 0.95, \"enable_seed\": false, \"seed\": 1422505392, \"enable_stop\": false, \"stop\": \"\", \"enable_tfs_z\": false, \"tfs_z\": 1.0, \"enable_num_predict\": false, \"num_predict\": -1, \"enable_top_k\": false, \"top_k\": 60, \"enable_top_p\": false, \"top_p\": 0.9, \"enable_min_p\": false, \"min_p\": 0.0, \"debug\": false}, \"connectivity\": {\"url\": \"http://127.0.0.1:11434\", \"model\": \"danielsheep/Qwen3-Coder-30B-A3B-Instruct-1M-Unsloth:latest\", \"keep_alive\": 5, \"keep_alive_unit\": \"minutes\"}}"
+      ]
+    },
+    {
+      "id": 1,
+      "type": "OllamaGenerateV2",
+      "pos": [
+        -408.99498052854926,
+        345.3888440343221
+      ],
+      "size": [
+        724.6581196557302,
+        564.7954140553586
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "connectivity",
+          "shape": 7,
+          "type": "OLLAMA_CONNECTIVITY",
+          "link": 1
+        },
+        {
+          "name": "options",
+          "shape": 7,
+          "type": "OLLAMA_OPTIONS",
+          "link": 2
+        },
+        {
+          "name": "images",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "context",
+          "shape": 7,
+          "type": "OLLAMA_CONTEXT",
+          "link": null
+        },
+        {
+          "name": "meta",
+          "shape": 7,
+          "type": "OLLAMA_META",
+          "link": null
+        },
+        {
+          "name": "system",
+          "type": "STRING",
+          "widget": {
+            "name": "system"
+          },
+          "link": 6
+        }
+      ],
+      "outputs": [
+        {
+          "name": "result",
+          "type": "STRING",
+          "links": [
+            3,
+            7
+          ]
+        },
+        {
+          "name": "thinking",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "context",
+          "type": "OLLAMA_CONTEXT",
+          "links": null
+        },
+        {
+          "name": "meta",
+          "type": "OLLAMA_META",
+          "links": [
+            5
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui-ollama",
+        "ver": "2.1.0",
+        "Node name for S&R": "OllamaGenerateV2"
+      },
+      "widgets_values": [
+        "You are an AI artist.",
+        "What is art?",
+        false,
+        true,
+        "text"
+      ]
+    },
+    {
+      "id": 17,
+      "type": "Display Any (rgthree)",
+      "pos": [
+        1780,
+        480
+      ],
+      "size": [
+        424.04354526936993,
+        88
+      ],
+      "flags": {},
+      "order": 15,
+      "mode": 0,
+      "inputs": [
+        {
+          "dir": 3,
+          "name": "source",
+          "type": "*",
+          "link": 15
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "rgthree-comfy",
+        "ver": "2b9eb36d3e1741e88dbfccade0e08137f7fa2bfb",
+        "Node name for S&R": "Display Any (rgthree)"
+      },
+      "widgets_values": [
+        "Camera tracks right across the burning village square as villagers flee from dragon fire\nCamera zooms in on the ancient dragon's massive head breathing orange flames\nCamera dollys forward to show paladin drawing sword and stepping into the foreground"
+      ]
+    },
+    {
+      "id": 18,
+      "type": "Display Any (rgthree)",
+      "pos": [
+        1770,
+        620
+      ],
+      "size": [
+        424.04354526936993,
+        88
+      ],
+      "flags": {},
+      "order": 16,
+      "mode": 0,
+      "inputs": [
+        {
+          "dir": 3,
+          "name": "source",
+          "type": "*",
+          "link": 16
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "rgthree-comfy",
+        "ver": "2b9eb36d3e1741e88dbfccade0e08137f7fa2bfb",
+        "Node name for S&R": "Display Any (rgthree)"
+      },
+      "widgets_values": [
+        "Camera follows paladin's heroic charge through the burning street with handheld movement\nCamera tilts up to capture paladin's determined stance and glowing sword in action\nCamera pans right to show sparks flying from dragon's fire as paladin swings her weapon"
+      ]
+    },
+    {
+      "id": 19,
+      "type": "Display Any (rgthree)",
+      "pos": [
+        1780,
+        1040
+      ],
+      "size": [
+        424.04354526936993,
+        88
+      ],
+      "flags": {},
+      "order": 19,
+      "mode": 0,
+      "inputs": [
+        {
+          "dir": 3,
+          "name": "source",
+          "type": "*",
+          "link": 19
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "rgthree-comfy",
+        "ver": "2b9eb36d3e1741e88dbfccade0e08137f7fa2bfb",
+        "Node name for S&R": "Display Any (rgthree)"
+      },
+      "widgets_values": [
+        "Camera begins at dawn with gentle tracking shot over peaceful village rooftops\nCamera follows paladin walking through the cheerful village square with warm morning light\nCamera slowly zooms out to show the entire restored village with villagers waving and smiling"
+      ]
+    },
+    {
+      "id": 20,
+      "type": "Display Any (rgthree)",
+      "pos": [
+        1770,
+        900
+      ],
+      "size": [
+        424.04354526936993,
+        88
+      ],
+      "flags": {},
+      "order": 18,
+      "mode": 0,
+      "inputs": [
+        {
+          "dir": 3,
+          "name": "source",
+          "type": "*",
+          "link": 18
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "rgthree-comfy",
+        "ver": "2b9eb36d3e1741e88dbfccade0e08137f7fa2bfb",
+        "Node name for S&R": "Display Any (rgthree)"
+      },
+      "widgets_values": [
+        "Camera slowly pulls back from defeated dragon to reveal paladin standing victorious\nCamera pans across the restored village as villagers gather in celebration\nCamera tilts up to show paladin raising sword high as golden sunset creates triumphant glow"
+      ]
+    },
+    {
+      "id": 8,
+      "type": "BoyoStoryboardOutput",
+      "pos": [
+        794.9328208518964,
+        355.3894033415406
+      ],
+      "size": [
+        400,
+        308
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "json_input",
+          "type": "STRING",
+          "widget": {
+            "name": "json_input"
+          },
+          "link": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image_scene1",
+          "type": "STRING",
+          "links": [
+            8
+          ]
+        },
+        {
+          "name": "image_scene2",
+          "type": "STRING",
+          "links": [
+            9
+          ]
+        },
+        {
+          "name": "image_scene3",
+          "type": "STRING",
+          "links": [
+            10
+          ]
+        },
+        {
+          "name": "image_scene4",
+          "type": "STRING",
+          "links": [
+            11
+          ]
+        },
+        {
+          "name": "image_scene5",
+          "type": "STRING",
+          "links": [
+            12
+          ]
+        },
+        {
+          "name": "image_scene6",
+          "type": "STRING",
+          "links": [
+            13
+          ]
+        },
+        {
+          "name": "video_scene1",
+          "type": "STRING",
+          "links": [
+            14
+          ]
+        },
+        {
+          "name": "video_scene2",
+          "type": "STRING",
+          "links": [
+            15
+          ]
+        },
+        {
+          "name": "video_scene3",
+          "type": "STRING",
+          "links": [
+            16
+          ]
+        },
+        {
+          "name": "video_scene4",
+          "type": "STRING",
+          "links": [
+            17
+          ]
+        },
+        {
+          "name": "video_scene5",
+          "type": "STRING",
+          "links": [
+            18
+          ]
+        },
+        {
+          "name": "video_scene6",
+          "type": "STRING",
+          "links": [
+            19
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "Boyonodes",
+        "ver": "29d38253e542950af1c0e297326a4609de728582",
+        "Node name for S&R": "BoyoStoryboardOutput"
+      },
+      "widgets_values": [
+        ""
+      ]
+    },
+    {
+      "id": 3,
+      "type": "OllamaOptionsV2",
+      "pos": [
+        -730.8759892616281,
+        544.9457818087974
+      ],
+      "size": [
+        285.6923065185547,
+        754
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "options",
+          "type": "OLLAMA_OPTIONS",
+          "links": [
+            2
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui-ollama",
+        "ver": "2.1.0",
+        "Node name for S&R": "OllamaOptionsV2"
+      },
+      "widgets_values": [
+        false,
+        0,
+        false,
+        0.1,
+        false,
+        5,
+        false,
+        2048,
+        false,
+        64,
+        false,
+        1.05,
+        false,
+        0.95,
+        false,
+        431217521,
+        "randomize",
+        false,
+        "",
+        false,
+        1,
+        false,
+        -1,
+        false,
+        60,
+        false,
+        0.9,
+        false,
+        0,
+        false
+      ]
+    },
+    {
+      "id": 9,
+      "type": "Display Any (rgthree)",
+      "pos": [
+        1280.1882444727557,
+        264.0964744888372
+      ],
+      "size": [
+        443.2920053359463,
+        138.74576279355574
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "dir": 3,
+          "name": "source",
+          "type": "*",
+          "link": 8
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "rgthree-comfy",
+        "ver": "2b9eb36d3e1741e88dbfccade0e08137f7fa2bfb",
+        "Node name for S&R": "Display Any (rgthree)"
+      },
+      "widgets_values": [
+        "Next Scene: A brave female paladin with red hair embarks on a quest to save a village from an ancient dragon, standing at the edge of a medieval village under a dramatic sunset sky, golden sunlight casting long shadows across cobblestone streets, photorealistic cinematic lighting with warm tones and deep blue twilight in the background, blockbuster movie style with detailed armor textures and atmospheric perspective"
+      ]
+    },
+    {
+      "id": 10,
+      "type": "Display Any (rgthree)",
+      "pos": [
+        1297.7919663842658,
+        453.4293846610528
+      ],
+      "size": [
+        426.83227676658646,
+        125.84719056270035
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "dir": 3,
+          "name": "source",
+          "type": "*",
+          "link": 9
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "rgthree-comfy",
+        "ver": "2b9eb36d3e1741e88dbfccade0e08137f7fa2bfb",
+        "Node name for S&R": "Display Any (rgthree)"
+      },
+      "widgets_values": [
+        "Next Scene: The paladin draws her sword as ancient dragon breathes fire from a nearby mountain peak, orange flames illuminating the darkened village square where frightened villagers scatter, stark contrast lighting between the dragon's fiery breath and the paladin's gleaming armor, photorealistic medieval fantasy elements with dynamic composition"
+      ]
+    },
+    {
+      "id": 11,
+      "type": "Display Any (rgthree)",
+      "pos": [
+        1290.1881198973865,
+        630.7687287371643
+      ],
+      "size": [
+        424.04354526936993,
+        88
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "dir": 3,
+          "name": "source",
+          "type": "*",
+          "link": 10
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "rgthree-comfy",
+        "ver": "2b9eb36d3e1741e88dbfccade0e08137f7fa2bfb",
+        "Node name for S&R": "Display Any (rgthree)"
+      },
+      "widgets_values": [
+        "Next Scene: The paladin charges forward through a burning village street, her red hair flowing as she swings her sword at the beast, armor reflecting sparks from the dragon's flames, determined expression and powerful stance, dramatic chiaroscuro lighting with intense orange and red fire tones contrasting with deep shadows, photorealistic blockbuster movie style with heroic composition"
+      ]
+    },
+    {
+      "id": 12,
+      "type": "Display Any (rgthree)",
+      "pos": [
+        1293.4477053427343,
+        774.5517831134375
+      ],
+      "size": [
+        424.04354526936993,
+        88
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+        {
+          "dir": 3,
+          "name": "source",
+          "type": "*",
+          "link": 11
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "rgthree-comfy",
+        "ver": "2b9eb36d3e1741e88dbfccade0e08137f7fa2bfb",
+        "Node name for S&R": "Display Any (rgthree)"
+      },
+      "widgets_values": [
+        "Next Scene: The paladin and ancient dragon face off in a climactic battle, massive dragon breathing golden fire while her sword glows with divine energy, both figures caught mid-motion with dramatic cinematic lighting, photorealistic epic fantasy scale and intense atmosphere"
+      ]
+    },
+    {
+      "id": 15,
+      "type": "Display Any (rgthree)",
+      "pos": [
+        1780,
+        770
+      ],
+      "size": [
+        424.04354526936993,
+        88
+      ],
+      "flags": {},
+      "order": 17,
+      "mode": 0,
+      "inputs": [
+        {
+          "dir": 3,
+          "name": "source",
+          "type": "*",
+          "link": 17
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "rgthree-comfy",
+        "ver": "2b9eb36d3e1741e88dbfccade0e08137f7fa2bfb",
+        "Node name for S&R": "Display Any (rgthree)"
+      },
+      "widgets_values": [
+        "Camera slowly circles around both figures as they face off in the epic battle\nCamera zooms in on dragon's golden fire breath colliding with paladin's divine energy\nCamera tracks back and forth between the two combatants as they clash with dramatic lighting"
+      ]
+    },
+    {
+      "id": 14,
+      "type": "Display Any (rgthree)",
+      "pos": [
+        1290.2303895445366,
+        907.3353747448175
+      ],
+      "size": [
+        424.04354526936993,
+        88
+      ],
+      "flags": {},
+      "order": 12,
+      "mode": 0,
+      "inputs": [
+        {
+          "dir": 3,
+          "name": "source",
+          "type": "*",
+          "link": 12
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "rgthree-comfy",
+        "ver": "2b9eb36d3e1741e88dbfccade0e08137f7fa2bfb",
+        "Node name for S&R": "Display Any (rgthree)"
+      },
+      "widgets_values": [
+        "Next Scene: The ancient dragon lies defeated on the scorched earth, paladin standing victorious with sword raised high, golden sunset casting long shadows over the restored village with villagers cheering in the background, warm cinematic lighting with triumphant color palette of golds and oranges, photorealistic blockbuster movie style with celebratory composition"
+      ]
+    },
+    {
+      "id": 13,
+      "type": "Display Any (rgthree)",
+      "pos": [
+        1293.4899749898843,
+        1051.1184291210907
+      ],
+      "size": [
+        430.4597533954669,
+        162.07714302831323
+      ],
+      "flags": {},
+      "order": 13,
+      "mode": 0,
+      "inputs": [
+        {
+          "dir": 3,
+          "name": "source",
+          "type": "*",
+          "link": 13
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "rgthree-comfy",
+        "ver": "2b9eb36d3e1741e88dbfccade0e08137f7fa2bfb",
+        "Node name for S&R": "Display Any (rgthree)"
+      },
+      "widgets_values": [
+        "Next Scene: The paladin returns to the village as a peaceful morning scene unfolds, villagers gather around her with gratitude, gentle golden morning light illuminating their restored homes and gardens, soft cinematic lighting with warm pastel tones and harmonious atmosphere, photorealistic blockbuster movie style with nostalgic and hopeful mood"
+      ]
+    },
+    {
+      "id": 2,
+      "type": "OllamaConnectivityV2",
+      "pos": [
+        -741.9964150772695,
+        339.2241986473272
+      ],
+      "size": [
+        305.2376331827585,
+        154
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "connection",
+          "type": "OLLAMA_CONNECTIVITY",
+          "links": [
+            1
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui-ollama",
+        "ver": "2.1.0",
+        "Node name for S&R": "OllamaConnectivityV2"
+      },
+      "widgets_values": [
+        "http://127.0.0.1:11434",
+        "danielsheep/Qwen3-Coder-30B-A3B-Instruct-1M-Unsloth:latest",
+        5,
+        "minutes",
+        null
+      ]
+    },
+    {
+      "id": 5,
+      "type": "Display Any (rgthree)",
+      "pos": [
+        344.82701113466595,
+        348.99358840702314
+      ],
+      "size": [
+        416.49670095232966,
+        251.5285880640139
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "dir": 3,
+          "name": "source",
+          "type": "*",
+          "link": 3
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "rgthree-comfy",
+        "ver": "2b9eb36d3e1741e88dbfccade0e08137f7fa2bfb",
+        "Node name for S&R": "Display Any (rgthree)"
+      },
+      "widgets_values": [
+        "{\n  \"imagePrompts\": {\n    \"scene1\": \"Next Scene: A brave female paladin with red hair embarks on a quest to save a village from an ancient dragon, standing at the edge of a medieval village under a dramatic sunset sky, golden sunlight casting long shadows across cobblestone streets, photorealistic cinematic lighting with warm tones and deep blue twilight in the background, blockbuster movie style with detailed armor textures and atmospheric perspective\",\n    \"scene2\": \"Next Scene: The paladin draws her sword as ancient dragon breathes fire from a nearby mountain peak, orange flames illuminating the darkened village square where frightened villagers scatter, stark contrast lighting between the dragon's fiery breath and the paladin's gleaming armor, photorealistic medieval fantasy elements with dynamic composition\",\n    \"scene3\": \"Next Scene: The paladin charges forward through a burning village street, her red hair flowing as she swings her sword at the beast, armor reflecting sparks from the dragon's flames, determined expression and powerful stance, dramatic chiaroscuro lighting with intense orange and red fire tones contrasting with deep shadows, photorealistic blockbuster movie style with heroic composition\",\n    \"scene4\": \"Next Scene: The paladin and ancient dragon face off in a climactic battle, massive dragon breathing golden fire while her sword glows with divine energy, both figures caught mid-motion with dramatic cinematic lighting, photorealistic epic fantasy scale and intense atmosphere\",\n    \"scene5\": \"Next Scene: The ancient dragon lies defeated on the scorched earth, paladin standing victorious with sword raised high, golden sunset casting long shadows over the restored village with villagers cheering in the background, warm cinematic lighting with triumphant color palette of golds and oranges, photorealistic blockbuster movie style with celebratory composition\",\n    \"scene6\": \"Next Scene: The paladin returns to the village as a peaceful morning scene unfolds, villagers gather around her with gratitude, gentle golden morning light illuminating their restored homes and gardens, soft cinematic lighting with warm pastel tones and harmonious atmosphere, photorealistic blockbuster movie style with nostalgic and hopeful mood\"\n  },\n  \"videoPrompts\": {\n    \"scene1\": \"Camera slowly zooms in from wide establishing shot of medieval village as paladin stands on the hilltop\\nCamera pans left to show the village's bustling activity below while paladin looks toward the horizon\\nCamera tilts down to focus on paladin's determined eyes reflecting golden morning light\",\n    \"scene2\": \"Camera tracks right across the burning village square as villagers flee from dragon fire\\nCamera zooms in on the ancient dragon's massive head breathing orange flames\\nCamera dollys forward to show paladin drawing sword and stepping into the foreground\",\n    \"scene3\": \"Camera follows paladin's heroic charge through the burning street with handheld movement\\nCamera tilts up to capture paladin's determined stance and glowing sword in action\\nCamera pans right to show sparks flying from dragon's fire as paladin swings her weapon\",\n    \"scene4\": \"Camera slowly circles around both figures as they face off in the epic battle\\nCamera zooms in on dragon's golden fire breath colliding with paladin's divine energy\\nCamera tracks back and forth between the two combatants as they clash with dramatic lighting\",\n    \"scene5\": \"Camera slowly pulls back from defeated dragon to reveal paladin standing victorious\\nCamera pans across the restored village as villagers gather in celebration\\nCamera tilts up to show paladin raising sword high as golden sunset creates triumphant glow\",\n    \"scene6\": \"Camera begins at dawn with gentle tracking shot over peaceful village rooftops\\nCamera follows paladin walking through the cheerful village square with warm morning light\\nCamera slowly zooms out to show the entire restored village with villagers waving and smiling\"\n  }\n}"
+      ]
+    },
+    {
+      "id": 7,
+      "type": "BoyoStoryboardPrompt",
+      "pos": [
+        -1195.8149921232493,
+        372.97801362269837
+      ],
+      "size": [
+        432.380752617242,
+        408.257814731742
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "formatted_prompt",
+          "type": "STRING",
+          "links": [
+            6
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "Boyonodes",
+        "ver": "29d38253e542950af1c0e297326a4609de728582",
+        "Node name for S&R": "BoyoStoryboardPrompt"
+      },
+      "widgets_values": [
+        "A brave female paladin with red hair embarks on a quest to save a village from an ancient dragon",
+        "A paladin in gleaming armor with determined eyes",
+        "Medieval fantasy, cinematic lighting, blockbuster movie photorealistic ",
+        "Next Scene:",
+        "",
+        "System Prompt 2 (Traveling Prompts)",
+        3,
+        ""
+      ]
+    },
+    {
+      "id": 16,
+      "type": "Display Any (rgthree)",
+      "pos": [
+        1771.6247109529081,
+        245.01878730020132
+      ],
+      "size": [
+        446.79168053576484,
+        140.86418013015407
+      ],
+      "flags": {},
+      "order": 14,
+      "mode": 0,
+      "inputs": [
+        {
+          "dir": 3,
+          "name": "source",
+          "type": "*",
+          "link": 14
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "rgthree-comfy",
+        "ver": "2b9eb36d3e1741e88dbfccade0e08137f7fa2bfb",
+        "Node name for S&R": "Display Any (rgthree)"
+      },
+      "widgets_values": [
+        "Camera slowly zooms in from wide establishing shot of medieval village as paladin stands on the hilltop\nCamera pans left to show the village's bustling activity below while paladin looks toward the horizon\nCamera tilts down to focus on paladin's determined eyes reflecting golden morning light"
+      ]
+    },
+    {
+      "id": 21,
+      "type": "Label (rgthree)",
+      "pos": [
+        -1452.9205835361345,
+        -87.61294150027186
+      ],
+      "size": [
+        3637.730712890625,
+        200
+      ],
+      "flags": {
+        "allow_interaction": true
+      },
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "Ollama Story Board Generation Example",
+      "properties": {
+        "fontSize": 200,
+        "fontFamily": "Arial",
+        "fontColor": "#ffffff",
+        "textAlign": "left",
+        "backgroundColor": "green",
+        "padding": 0,
+        "borderRadius": 0
+      },
+      "color": "#fff0",
+      "bgcolor": "#fff0"
+    }
+  ],
+  "links": [
+    [
+      1,
+      2,
+      0,
+      1,
+      0,
+      "OLLAMA_CONNECTIVITY"
+    ],
+    [
+      2,
+      3,
+      0,
+      1,
+      1,
+      "OLLAMA_OPTIONS"
+    ],
+    [
+      3,
+      1,
+      0,
+      5,
+      0,
+      "*"
+    ],
+    [
+      5,
+      1,
+      3,
+      6,
+      0,
+      "*"
+    ],
+    [
+      6,
+      7,
+      0,
+      1,
+      5,
+      "STRING"
+    ],
+    [
+      7,
+      1,
+      0,
+      8,
+      0,
+      "STRING"
+    ],
+    [
+      8,
+      8,
+      0,
+      9,
+      0,
+      "*"
+    ],
+    [
+      9,
+      8,
+      1,
+      10,
+      0,
+      "*"
+    ],
+    [
+      10,
+      8,
+      2,
+      11,
+      0,
+      "*"
+    ],
+    [
+      11,
+      8,
+      3,
+      12,
+      0,
+      "*"
+    ],
+    [
+      12,
+      8,
+      4,
+      14,
+      0,
+      "*"
+    ],
+    [
+      13,
+      8,
+      5,
+      13,
+      0,
+      "*"
+    ],
+    [
+      14,
+      8,
+      6,
+      16,
+      0,
+      "*"
+    ],
+    [
+      15,
+      8,
+      7,
+      17,
+      0,
+      "*"
+    ],
+    [
+      16,
+      8,
+      8,
+      18,
+      0,
+      "*"
+    ],
+    [
+      17,
+      8,
+      9,
+      15,
+      0,
+      "*"
+    ],
+    [
+      18,
+      8,
+      10,
+      20,
+      0,
+      "*"
+    ],
+    [
+      19,
+      8,
+      11,
+      19,
+      0,
+      "*"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.3150702253396874,
+      "offset": [
+        2308.414187471051,
+        375.49214763752764
+      ]
+    },
+    "frontendVersion": "1.28.8",
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true
+  },
+  "version": 0.4
+}
