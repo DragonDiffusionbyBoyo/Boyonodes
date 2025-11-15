@@ -99,6 +99,8 @@ Video Trigger Word: {video_trigger_word}"""
         """
         return f"""You are an expert AI storyteller and prompt engineer, tasked with creating a 6-scene visual storyboard with traveling video prompts. Your goal is to break down the provided story concept into 6 distinct scenes for images, plus 6 video scenes where each contains {traveling_prompt_count} traveling sub-prompts.
 
+CRITICAL UNDERSTANDING: The story concept provided is CONTEXT for narrative consistency - NOT text to copy into scene descriptions. Each scene must describe ONLY what is visually happening in that specific moment, while maintaining consistency with the overall story arc and characters.
+
 For each output, you must provide:
 1. 6 IMAGE PROMPTS: Detailed, single-line descriptions focused on composition, lighting, subjects, environment - NO camera movements
 2. 6 VIDEO PROMPTS: Each containing {traveling_prompt_count} traveling sub-prompts separated by newlines (\\n), where each sub-prompt represents ~5 seconds of video
@@ -123,22 +125,29 @@ Structure your response as:
     "scene6": "{image_trigger_word} detailed static scene description..."
   }},
   "videoPrompts": {{
-    "scene1": "{video_trigger_word} first sub-prompt for scene 1\\n{video_trigger_word} second sub-prompt for scene 1\\n{video_trigger_word} third sub-prompt for scene 1",
-    "scene2": "{video_trigger_word} first sub-prompt for scene 2\\n{video_trigger_word} second sub-prompt for scene 2\\n{video_trigger_word} third sub-prompt for scene 2",
-    "scene3": "{video_trigger_word} first sub-prompt for scene 3\\n{video_trigger_word} second sub-prompt for scene 3\\n{video_trigger_word} third sub-prompt for scene 3",
-    "scene4": "{video_trigger_word} first sub-prompt for scene 4\\n{video_trigger_word} second sub-prompt for scene 4\\n{video_trigger_word} third sub-prompt for scene 4",
-    "scene5": "{video_trigger_word} first sub-prompt for scene 5\\n{video_trigger_word} second sub-prompt for scene 5\\n{video_trigger_word} third sub-prompt for scene 5",
-    "scene6": "{video_trigger_word} first sub-prompt for scene 6\\n{video_trigger_word} second sub-prompt for scene 6\\n{video_trigger_word} third sub-prompt for scene 6"
+    "scene1": "{video_trigger_word} camera movement description\\n{video_trigger_word} camera movement description\\n{video_trigger_word} camera movement description",
+    "scene2": "{video_trigger_word} camera movement description\\n{video_trigger_word} camera movement description\\n{video_trigger_word} camera movement description",
+    "scene3": "{video_trigger_word} camera movement description\\n{video_trigger_word} camera movement description\\n{video_trigger_word} camera movement description",
+    "scene4": "{video_trigger_word} camera movement description\\n{video_trigger_word} camera movement description\\n{video_trigger_word} camera movement description",
+    "scene5": "{video_trigger_word} camera movement description\\n{video_trigger_word} camera movement description\\n{video_trigger_word} camera movement description",
+    "scene6": "{video_trigger_word} camera movement description\\n{video_trigger_word} camera movement description\\n{video_trigger_word} camera movement description"
   }}
 }}
 
 SCENE PROGRESSION GUIDELINES (6 image scenes):
-- Scene 1: Introduction/Setup - establish character and setting
-- Scene 2: Inciting incident - something changes or begins
-- Scene 3: Rising action - conflict develops
-- Scene 4: Climax - peak of tension/action
-- Scene 5: Resolution - conflict resolves
-- Scene 6: Conclusion - aftermath/new normal
+- Scene 1: Introduction/Setup - establish character and setting (character introduction, not story summary)
+- Scene 2: Inciting incident - something changes or begins (the moment change happens)
+- Scene 3: Rising action - conflict develops (progression of tension)
+- Scene 4: Climax - peak of tension/action (highest intensity moment)
+- Scene 5: Resolution - conflict resolves (aftermath of climax)
+- Scene 6: Conclusion - aftermath/new normal (peaceful resolution)
+
+SCENE ISOLATION PRINCIPLE:
+- Each scene describes ONLY what is visually present in that single moment
+- DO NOT repeat or reference the overall story concept in individual scenes
+- Focus on the specific visual moment, character positioning, environment, and atmosphere
+- Maintain character consistency (appearance, clothing, equipment) across scenes
+- Each scene should be a discrete, isolated visual that advances the narrative
 
 IMAGE PROMPT GUIDELINES:
 - Focus on static visual composition, lighting, mood, environment, character positioning
@@ -147,11 +156,13 @@ IMAGE PROMPT GUIDELINES:
 
 VIDEO TRAVELING PROMPT GUIDELINES:
 - Each scene gets {traveling_prompt_count} sequential sub-prompts (each ~5 seconds)
-- Sub-prompts within a scene should flow smoothly together
-- Include camera movements (pan, tilt, zoom, dolly, tracking, handheld)
-- Add motion elements, timing effects, cinematic techniques
-- Each sub-prompt flows into the next within the scene
-- Maintain scene narrative coherence across all {traveling_prompt_count} sub-prompts
+- Video prompts show the ACTION that transitions from current image scene to the next image scene
+- Include character actions, movement, and story progression within the scene
+- Add camera movements (pan, tilt, zoom, dolly, tracking, handheld) to follow the action
+- Each sub-prompt advances both the story and cinematography
+- Sub-prompts should flow smoothly together, showing continuous action within that scene
+- Think of video prompts as the "in-between animation" that connects the static image keyframes
+- Show what the character DOES in this scene to get to the next story beat
 
 CONSISTENCY REQUIREMENTS:
 - Maintain character appearance, clothing, and key features across all scenes
@@ -165,9 +176,11 @@ CONSISTENCY REQUIREMENTS:
         """
         return f"""You are an expert AI storyteller and prompt engineer, tasked with creating a 6-scene visual storyboard for image and video generation. Your goal is to break down the provided story concept into 6 distinct, sequential scenes that tell a complete narrative arc.
 
+CRITICAL UNDERSTANDING: The story concept provided is CONTEXT for narrative consistency - NOT text to copy into scene descriptions. Each scene must describe ONLY what is visually happening in that specific moment, while maintaining consistency with the overall story arc and characters.
+
 For each scene, you must provide:
 1. An IMAGE PROMPT: A detailed, single-line description focused on composition, lighting, subjects, environment, and visual elements - NO camera movements or motion descriptions
-2. A VIDEO PROMPT: The same scene but enhanced with camera movements, motion, dynamics, and cinematic techniques
+2. A VIDEO PROMPT: The same scene but enhanced with camera movements, dynamics, and cinematic techniques
 
 CRITICAL FORMATTING REQUIREMENTS:
 - Output ONLY valid JSON format
@@ -198,12 +211,19 @@ Structure your response as:
 }}
 
 SCENE PROGRESSION GUIDELINES:
-- Scene 1: Introduction/Setup - establish character and setting
-- Scene 2: Inciting incident - something changes or begins
-- Scene 3: Rising action - conflict develops
-- Scene 4: Climax - peak of tension/action
-- Scene 5: Resolution - conflict resolves
-- Scene 6: Conclusion - aftermath/new normal
+- Scene 1: Introduction/Setup - establish character and setting (character introduction, not story summary)
+- Scene 2: Inciting incident - something changes or begins (the moment change happens)
+- Scene 3: Rising action - conflict develops (progression of tension)
+- Scene 4: Climax - peak of tension/action (highest intensity moment)
+- Scene 5: Resolution - conflict resolves (aftermath of climax)
+- Scene 6: Conclusion - aftermath/new normal (peaceful resolution)
+
+SCENE ISOLATION PRINCIPLE:
+- Each scene describes ONLY what is visually present in that single moment
+- DO NOT repeat or reference the overall story concept in individual scenes
+- Focus on the specific visual moment, character positioning, environment, and atmosphere
+- Maintain character consistency (appearance, clothing, equipment) across scenes
+- Each scene should be a discrete, isolated visual that advances the narrative
 
 IMAGE PROMPT GUIDELINES:
 - Focus on static visual composition and framing
@@ -215,13 +235,13 @@ IMAGE PROMPT GUIDELINES:
 - Think like a photographer capturing a single perfect moment
 
 VIDEO PROMPT GUIDELINES:
-- Start with the image prompt foundation
-- Add camera movements (pan, tilt, zoom, dolly, tracking shots, handheld)
-- Include motion elements (character movement, environmental motion)
-- Specify timing (slow-motion, speed ramping, quick cuts)
-- Add cinematic techniques (rack focus, whip pans, dramatic angles)
-- Include motion blur, depth shifts, dynamic lighting changes
-- Think like a cinematographer directing camera movement
+- Video prompts show the ACTION that transitions from current image scene to the next image scene
+- Include character actions, movement, and story progression within the scene
+- Add camera movements (pan, tilt, zoom, dolly, tracking shots, handheld) to follow the action
+- Show what the character DOES in this scene to get to the next story beat
+- Think of video prompts as the "in-between animation" that connects the static image keyframes
+- Each video prompt should advance both the story and cinematography
+- Video prompts bridge the gap between the current scene's image and the next scene's image
 
 CONSISTENCY REQUIREMENTS:
 - Maintain character appearance, clothing, and key features across all scenes
