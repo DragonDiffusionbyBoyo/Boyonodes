@@ -25,6 +25,13 @@ from .boyo_lora_json_builder import BoyoLoRAJSONBuilder
 from .boyo_lora_paired_loader import BoyoLoRAPairedLoader
 from .boyo_lora_config_inspector import BoyoLoRAConfigInspector
 
+# Import the BoyoImageCrop node
+from .boyo_image_crop import BoyoImageCrop
+
+#Import the Video-Image-Storyboard Node
+from .boyo_storyboard_prompt import BoyoStoryboardPrompt
+from .boyo_storyboard_output import BoyoStoryboardOutput
+
 NODE_CLASS_MAPPINGS = {
     "BoyoVAEDecode": BoyoVAEDecode,
     "BoyoSaver": BoyoSaver,
@@ -40,7 +47,10 @@ NODE_CLASS_MAPPINGS = {
     "BoyoLoRAJSONBuilder": BoyoLoRAJSONBuilder,
     "BoyoLoRAPairedLoader": BoyoLoRAPairedLoader,
     "BoyoLoRAConfigInspector": BoyoLoRAConfigInspector,
-    "BoyoIncontextSaver": BoyoIncontextSaver
+    "BoyoIncontextSaver": BoyoIncontextSaver,
+    "BoyoStoryboardPrompt": BoyoStoryboardPrompt,
+    "BoyoStoryboardOutput": BoyoStoryboardOutput,
+    "BoyoImageCrop": BoyoImageCrop
 }
 
 # Update the mappings with all custom nodes
@@ -67,7 +77,10 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "BoyoLoRAConfigInspector": "Boyo LoRA Config Inspector",
     "BoyoQwenVLGrounding": "Boyo Qwen VL Grounding",
     "BoyoVision": "Boyo Vision",
-    "BoyoIncontextSaver": "Boyo Incontext Saver"
+    "BoyoIncontextSaver": "Boyo Incontext Saver",
+    "BoyoStoryboardPrompt": "Boyo Storyboard Prompt",
+    "BoyoStoryboardOutput": "Boyo Storyboard Output",
+    "BoyoImageCrop": "Boyo Image Crop"
 }
 
 # Update the display name mappings with all custom nodes

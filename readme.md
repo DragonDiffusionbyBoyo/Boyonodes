@@ -28,7 +28,7 @@ Automatically monitors directories and grabs the most recent image file - perfec
 - `timestamp`: Modification timestamp
 
 **Usage:**
-Perfect for workflows like: Original → "add a hat" → "make it red" → "change lighting" where each step automatically feeds into the next.
+Perfect for workflows like: Original â†' "add a hat" â†' "make it red" â†' "change lighting" where each step automatically feeds into the next.
 
 ### Boyo Paired Image Saver
 Saves original and edited image pairs with organised sequential naming - essential for creating datasets from semantic editing workflows.
@@ -153,21 +153,100 @@ Preview LoRA configuration contents before loading for informed decision-making.
 
 **Sample Output:**
 ```
-📋 LoRA Configuration: Character_Cyborg
-🎯 LoRA FILES:
-  📈 High Noise: ✅ cyborg_char_v2.safetensors
-  📉 Low Noise: ✅ cyborg_char_v2_low.safetensors
-  🎭 Type: PAIRED LoRA (different high/low files)
+ðŸ"‹ LoRA Configuration: Character_Cyborg
+ðŸŽ¯ LoRA FILES:
+  ðŸ"ˆ High Noise: âœ… cyborg_char_v2.safetensors
+  ðŸ"‰ Low Noise: âœ… cyborg_char_v2_low.safetensors
+  ðŸŽ­ Type: PAIRED LoRA (different high/low files)
 
-💬 PROMPTS (3 total):
+ðŸ'¬ PROMPTS (3 total):
   1. cyborg woman, metallic skin, glowing eyes
   2. android female, chrome details, futuristic
   3. robotic humanoid, synthetic appearance
 
-💡 USAGE RECOMMENDATIONS:
-  • Use 'Cycle Through' for variety
-  • Use 'Random' for experimentation
+ðŸ'¡ USAGE RECOMMENDATIONS:
+  â€¢ Use 'Cycle Through' for variety
+  â€¢ Use 'Random' for experimentation
 ```
+
+## AI Storyboard Generation System
+
+Automated storyboard prompt generation using ollama models for consistent multi-scene video workflows. Perfect for Next Scene LoRA workflows and traveling prompt video generation.
+
+### Boyo Storyboard Prompt
+Intelligent prompt generator that creates structured storyboard sequences using local ollama models.
+
+**Key Features:**
+- **Model-agnostic trigger words** - works with any LoRA or video model
+- **Two generation modes**: Standard 6-scene storyboards or traveling prompt sequences  
+- **Automatic JSON formatting** for clean workflow integration
+- **Consistent character/style maintenance** across all scenes
+- **Optimised for abliterated coder models** (Qwen 30B A3B Coder recommended)
+
+**Inputs:**
+- `story_concept`: Multi-line story description
+- `main_character`: Detailed character description  
+- `style_setting`: Art style, mood, technical specifications
+- `image_trigger_word`: Model-specific trigger (e.g., "Next Scene:", "Character:")
+- `video_trigger_word`: Video model trigger (e.g., "Motion:", "Camera:")
+- `system_prompt_type`: Choose generation mode
+- `traveling_prompt_count`: Number of sub-prompts per scene (System Prompt 2 only)
+- `additional_details`: Extra instructions (use for verbosity control)
+
+**System Prompt 1 (6 Scenes):**
+- Generates 6 detailed image prompts for storyboard
+- Generates 6 corresponding video prompts with camera movements
+- Perfect for Next Scene LoRA workflows requiring scene-by-scene consistency
+
+**System Prompt 2 (Traveling Prompts):**
+- Generates 6 detailed image prompts for storyboard foundation
+- Generates 6 video scenes, each containing multiple traveling sub-prompts
+- Each sub-prompt ≈ 5 seconds of video content
+- Example: 3 traveling prompts = 6 scenes × 3 prompts = 18 total video prompts
+
+**Outputs:**
+- Formatted prompt string ready for ollama integration
+
+**Recommended Models:**
+- **Best quality**: Qwen 30B A3B Coder Abliterated  
+- **Best speed/efficiency**: Nemo 7B with verbosity nudging
+- **Avoid**: Google models (Gemma), Meta coding variants, thinking models
+
+### Boyo Storyboard Output  
+Parses ollama JSON responses into separate prompt outputs for direct workflow integration.
+
+**Key Features:**
+- **Robust JSON parsing** with automatic markdown cleanup
+- **12 separate outputs** for System Prompt 1 (6 image + 6 video)
+- **Multi-line support** for traveling prompts in System Prompt 2
+- **Graceful error handling** with descriptive error messages
+- **Direct workflow connection** - outputs connect straight to prompt inputs
+
+**Input:**
+- `json_input`: Raw JSON response from ollama
+
+**Outputs:**
+- `image_scene1` through `image_scene6`: Individual image prompts
+- `video_scene1` through `video_scene6`: Individual video prompts (single or multi-line)
+
+**JSON Structure Handled:**
+```json
+{
+  "imagePrompts": {
+    "scene1": "Detailed image prompt...",
+    "scene2": "Detailed image prompt..."
+  },
+  "videoPrompts": {
+    "scene1": "Video prompt for System Prompt 1 OR multi-line traveling prompts for System Prompt 2",
+    "scene2": "Video prompt for System Prompt 1 OR multi-line traveling prompts for System Prompt 2"
+  }
+}
+```
+
+**Integration Workflow:**
+1. Boyo Storyboard Prompt → ollama Generate → Boyo Storyboard Output
+2. Connect 12 outputs directly to image/video generation workflows
+3. Supports both standard scene generation and extended traveling prompt sequences
 
 ## Workflow Enhancement Nodes
 
@@ -280,6 +359,28 @@ Restart ComfyUI after installation.
 3. Saves clean images + prompt documentation
 4. Ready for sharing without exposing workflows
 
+## Storyboard Generation Workflow Examples
+
+**Basic Storyboard Creation (System Prompt 1):**
+1. Configure story concept, character, and style in Boyo Storyboard Prompt
+2. Set trigger words for your specific image/video models
+3. Connect to ollama Generate node
+4. Parse results with Boyo Storyboard Output
+5. Connect 6 image outputs to Next Scene LoRA workflow
+6. Connect 6 video outputs to video generation pipeline
+
+**Extended Video Sequences (System Prompt 2):**
+1. Set traveling_prompt_count (e.g., 6 for 30-second scenes)
+2. Generate 6 storyboard images + 6 multi-line video prompt sequences
+3. Each video scene contains multiple traveling prompts for extended sequences
+4. Perfect for longer narrative videos with scene consistency
+
+**Character Consistency Workflow:**
+1. Use detailed character descriptions in main_character field
+2. Include style/lighting preferences in style_setting
+3. Leverage trigger words optimised for your LoRA models
+4. Generate consistent character appearance across all 6 scenes
+
 ## Troubleshooting
 
 **LoRA Management issues:**
@@ -299,11 +400,18 @@ Restart ComfyUI after installation.
 - Check file write permissions
 - Verify input image formats
 
+**Storyboard Generation issues:**
+- Use recommended ollama models (Qwen 30B A3B Coder Abliterated)
+- Add verbosity instructions in additional_details field
+- Verify JSON structure with Boyo Storyboard Output error messages
+- Check ollama connectivity and model availability
+
 **Performance tips:**
 - Large directories may slow Image Grab scanning
 - Organise files into smaller subdirectories
 - Use specific file extensions to reduce scanning
 - LoRA configs are cached for faster loading
+- Abliterated coder models perform best for storyboard generation
 
 ## Contributing
 
