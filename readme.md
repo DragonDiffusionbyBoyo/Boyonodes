@@ -1,4 +1,4 @@
-# Boyonodes
+# Boyonodes (Vision Nodes Disabled due to the dependencies causing conflicts, will resolve soon)
 
 Essential nodes for semantic image editing workflows with **Kontext**, **Qwen Image Edit**, and **HiDream E1.1** models. Streamlines iterative editing, dataset creation, and batch processing for next-generation semantic editing pipelines.
 Now with Lora loader for Wan2.2 which automatically selects pairs and any trigger words for you.
