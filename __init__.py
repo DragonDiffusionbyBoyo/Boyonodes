@@ -18,8 +18,6 @@ from .boyo_image_grab import NODE_CLASS_MAPPINGS as BOYOIMAGEGRAB_CLASS_MAPPINGS
 
 # Import the paired image saver nodes
 from .boyo_paired_image_saver import BoyoPairedImageSaver, BoyoIncontextSaver
-from .boyo_qwen_grounding import BoyoQwenVLGrounding
-from .boyo_vision import BoyoVision
 # Import Lora Loader stuff
 from .boyo_lora_json_builder import BoyoLoRAJSONBuilder
 from .boyo_lora_paired_loader import BoyoLoRAPairedLoader
@@ -42,8 +40,6 @@ NODE_CLASS_MAPPINGS = {
     "BoyoPairedImageSaver": BoyoPairedImageSaver,
     "BoyoVideoPairedSaver": BoyoVideoPairedSaver,
     "BoyoVideoSaver": BoyoVideoSaver,
-    "BoyoQwenVLGrounding": BoyoQwenVLGrounding,
-    "BoyoVision": BoyoVision,
     "BoyoLoRAJSONBuilder": BoyoLoRAJSONBuilder,
     "BoyoLoRAPairedLoader": BoyoLoRAPairedLoader,
     "BoyoLoRAConfigInspector": BoyoLoRAConfigInspector,
@@ -75,8 +71,6 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "BoyoLoRAJSONBuilder": "Boyo LoRA JSON Builder",
     "BoyoLoRAPairedLoader": "Boyo LoRA Paired Loader",
     "BoyoLoRAConfigInspector": "Boyo LoRA Config Inspector",
-    "BoyoQwenVLGrounding": "Boyo Qwen VL Grounding",
-    "BoyoVision": "Boyo Vision",
     "BoyoIncontextSaver": "Boyo Incontext Saver",
     "BoyoStoryboardPrompt": "Boyo Storyboard Prompt",
     "BoyoStoryboardOutput": "Boyo Storyboard Output",
