@@ -36,37 +36,22 @@ class BoyoLoRAPathForwarder:
     def INPUT_TYPES(cls) -> Dict[str, Any]:
         return {
             "required": {
-                "high_noise_path_1": ("STRING", {
-                    "default": "",
-                    "tooltip": "High noise LoRA path from Config Processor"
-                }),
-                "low_noise_path_1": ("STRING", {
-                    "default": "",
-                    "tooltip": "Low noise LoRA path from Config Processor"
-                }),
-                "high_noise_path_2": ("STRING", {
-                    "default": "",
-                    "tooltip": "High noise LoRA path from Config Processor"
-                }),
-                "low_noise_path_2": ("STRING", {
-                    "default": "",
-                    "tooltip": "Low noise LoRA path from Config Processor"
-                }),
-                "high_noise_path_3": ("STRING", {
-                    "default": "",
-                    "tooltip": "High noise LoRA path from Config Processor"
-                }),
-                "low_noise_path_3": ("STRING", {
-                    "default": "",
-                    "tooltip": "Low noise LoRA path from Config Processor"
-                }),
-            },
-            "optional": {
                 "force_refresh": ("BOOLEAN", {
                     "default": False,
                     "label_on": "Refresh",
                     "label_off": "Normal",
                     "tooltip": "Force refresh LoRA list if connections break"
+                }),
+            },
+            "optional": {
+                "config_data_1": ("DICT", {
+                    "tooltip": "Processed LoRA config data from Config Processor"
+                }),
+                "config_data_2": ("DICT", {
+                    "tooltip": "Processed LoRA config data from Config Processor"
+                }),
+                "config_data_3": ("DICT", {
+                    "tooltip": "Processed LoRA config data from Config Processor"
                 }),
             }
         }
@@ -76,16 +61,27 @@ class BoyoLoRAPathForwarder:
         if not path or path.strip() == "":
             return "none"
         
+        # Get current LoRA list (refresh if requested)
+        if force_refresh:
+            lora_list = refresh_cached_lora_list()
+        else:
+            lora_list = get_cached_lora_list()
+        
         # Clean the path
         clean_path = path.strip().replace("\\", "/")
         
-        # If we have a non-empty path from the config processor, trust it
-        # The config processor already validated it exists when loading the JSON
-        if clean_path:
-            print(f"Using LoRA path: '{clean_path}'")
+        # Check if path exists in available LoRAs
+        if clean_path in lora_list:
             return clean_path
         
-        # Only return none if the path was actually empty
+        # If not found, try to find a partial match
+        for available_lora in lora_list:
+            if available_lora != "none" and clean_path in available_lora:
+                print(f"LoRA path '{clean_path}' not found exactly, using '{available_lora}'")
+                return available_lora
+        
+        # If still not found, log warning and return none
+        print(f"Warning: LoRA path '{clean_path}' not found in available LoRAs")
         return "none"
     
     def extract_paths_from_config(self, config_data: Optional[Dict], force_refresh: bool = False) -> Tuple[str, str]:
@@ -116,42 +112,28 @@ class BoyoLoRAPathForwarder:
     CATEGORY = "Boyo/LoRA Tools"
     
     def forward_lora_paths(self, force_refresh: bool = False,
-                          high_noise_path_1: str = "", low_noise_path_1: str = "",
-                          high_noise_path_2: str = "", low_noise_path_2: str = "",
-                          high_noise_path_3: str = "", low_noise_path_3: str = "") -> Tuple[str, ...]:
+                          config_data_1: Optional[Dict] = None,
+                          config_data_2: Optional[Dict] = None, 
+                          config_data_3: Optional[Dict] = None) -> Tuple[str, ...]:
         """Main function to forward LoRA paths from processed config data."""
-        
-        # DEBUG: Print what we're receiving
-        print(f"Path Forwarder RECEIVED:")
-        print(f"  high_noise_path_1: '{high_noise_path_1}' (type: {type(high_noise_path_1)})")
-        print(f"  low_noise_path_1: '{low_noise_path_1}' (type: {type(low_noise_path_1)})")
-        print(f"  high_noise_path_2: '{high_noise_path_2}' (type: {type(high_noise_path_2)})")
-        print(f"  low_noise_path_2: '{low_noise_path_2}' (type: {type(low_noise_path_2)})")
-        print(f"  high_noise_path_3: '{high_noise_path_3}' (type: {type(high_noise_path_3)})")
-        print(f"  low_noise_path_3: '{low_noise_path_3}' (type: {type(low_noise_path_3)})")
-        
-        # Collect all path inputs
-        input_paths = [
-            high_noise_path_1, low_noise_path_1,
-            high_noise_path_2, low_noise_path_2,
-            high_noise_path_3, low_noise_path_3
-        ]
         
         lora_paths = []
         status_parts = []
         
-        # Process each pair of paths
-        for i in range(0, len(input_paths), 2):
-            high_path = self.validate_and_clean_path(input_paths[i], force_refresh)
-            low_path = self.validate_and_clean_path(input_paths[i + 1], force_refresh)
+        # Process each config data slot
+        config_data_list = [config_data_1, config_data_2, config_data_3]
+        
+        for i, config_data in enumerate(config_data_list, 1):
+            high_path, low_path = self.extract_paths_from_config(config_data, force_refresh)
             
             lora_paths.extend([high_path, low_path])
             
-            config_num = (i // 2) + 1
-            if high_path != "none" or low_path != "none":
-                status_parts.append(f"Config_{config_num}: H={high_path}, L={low_path}")
+            # Build status message
+            if config_data and config_data.get("has_config", False):
+                config_name = config_data.get("name", f"Config_{i}")
+                status_parts.append(f"{config_name}: H={high_path}, L={low_path}")
             else:
-                status_parts.append(f"Config_{config_num}: None")
+                status_parts.append(f"Config_{i}: None")
         
         # Create status message
         status_message = " | ".join(status_parts)
@@ -162,8 +144,7 @@ class BoyoLoRAPathForwarder:
         
         # Debug output
         print(f"Path Forwarder Debug:")
-        print(f"  Input paths: {input_paths}")
-        print(f"  Output LoRA paths: {lora_paths}")
+        print(f"  LoRA paths: {lora_paths}")
         print(f"  Status: {status_message}")
         
         # Return: 6 LoRA paths + 1 status string
