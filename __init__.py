@@ -22,6 +22,8 @@ from .boyo_paired_image_saver import BoyoPairedImageSaver, BoyoIncontextSaver
 from .boyo_lora_json_builder import BoyoLoRAJSONBuilder
 from .boyo_lora_paired_loader import BoyoLoRAPairedLoader
 from .boyo_lora_config_inspector import BoyoLoRAConfigInspector
+from .boyo_lora_config_processor import BoyoLoRAConfigProcessor
+from .boyo_lora_path_forwarder import BoyoLoRAPathForwarder
 
 # Import the BoyoImageCrop node
 from .boyo_image_crop import BoyoImageCrop
@@ -43,6 +45,8 @@ NODE_CLASS_MAPPINGS = {
     "BoyoLoRAJSONBuilder": BoyoLoRAJSONBuilder,
     "BoyoLoRAPairedLoader": BoyoLoRAPairedLoader,
     "BoyoLoRAConfigInspector": BoyoLoRAConfigInspector,
+    "BoyoLoRAConfigProcessor": BoyoLoRAConfigProcessor,
+    "BoyoLoRAPathForwarder": BoyoLoRAPathForwarder,
     "BoyoIncontextSaver": BoyoIncontextSaver,
     "BoyoStoryboardPrompt": BoyoStoryboardPrompt,
     "BoyoStoryboardOutput": BoyoStoryboardOutput,
@@ -71,6 +75,8 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "BoyoLoRAJSONBuilder": "Boyo LoRA JSON Builder",
     "BoyoLoRAPairedLoader": "Boyo LoRA Paired Loader",
     "BoyoLoRAConfigInspector": "Boyo LoRA Config Inspector",
+    "BoyoLoRAConfigProcessor": "Boyo LoRA Config Processor",
+    "BoyoLoRAPathForwarder": "Boyo LoRA Path Forwarder",
     "BoyoIncontextSaver": "Boyo Incontext Saver",
     "BoyoStoryboardPrompt": "Boyo Storyboard Prompt",
     "BoyoStoryboardOutput": "Boyo Storyboard Output",
