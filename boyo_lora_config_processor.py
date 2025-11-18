@@ -211,11 +211,11 @@ class BoyoLoRAConfigProcessor:
         
         return path if path.strip() else ""
     
-    # Return processed configuration data as structured dictionaries
-    RETURN_TYPES = ("DICT", "DICT", "DICT", "STRING", "STRING", "STRING", "STRING")
+    # Return individual path strings instead of dictionaries for better ComfyUI compatibility
+    RETURN_TYPES = ("STRING", "STRING", "STRING", "STRING", "STRING", "STRING", "STRING", "STRING", "STRING", "STRING")
     RETURN_NAMES = (
-        "config_data_1", "config_data_2", "config_data_3", 
-        "prompt_1", "prompt_2", "prompt_3", "combined_prompts"
+        "high_noise_path_1", "low_noise_path_1", "high_noise_path_2", "low_noise_path_2", 
+        "high_noise_path_3", "low_noise_path_3", "prompt_1", "prompt_2", "prompt_3", "combined_prompts"
     )
     FUNCTION = "process_lora_configs"
     CATEGORY = "Boyo/LoRA Tools"
@@ -225,7 +225,7 @@ class BoyoLoRAConfigProcessor:
                            lora_config_1: str = "None", prompt_strategy_1: str = "Concatenate",
                            lora_config_2: str = "None", prompt_strategy_2: str = "Concatenate", 
                            lora_config_3: str = "None", prompt_strategy_3: str = "Concatenate",
-                           seed: int = 0) -> Tuple[Dict, Dict, Dict, str, str, str, str]:
+                           seed: int = 0) -> Tuple[str, str, str, str, str, str, str, str, str, str]:
         """Main function to process LoRA configurations and return structured data."""
         
         # If refresh is requested, we could reload config files here in the future
@@ -293,9 +293,11 @@ class BoyoLoRAConfigProcessor:
             print(f"  Config {i}: {data}")
         print(f"  Prompts: {prompts}")
         
-        # Return: 3 config dictionaries + 4 prompt strings
+        # Return: 6 individual path strings + 4 prompt strings
         return (
-            config_data[0], config_data[1], config_data[2],
+            config_data[0]["high_noise_path"], config_data[0]["low_noise_path"],
+            config_data[1]["high_noise_path"], config_data[1]["low_noise_path"],
+            config_data[2]["high_noise_path"], config_data[2]["low_noise_path"],
             prompts[0], prompts[1], prompts[2], prompts[3]
         )
 
