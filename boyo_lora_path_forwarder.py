@@ -1,3 +1,8 @@
+"""
+BoyoLoRAPathForwarder - Hybrid version
+Uses the working architecture but adds intelligent path matching
+"""
+
 import folder_paths
 from typing import Dict, List, Optional, Any, Tuple
 
@@ -56,33 +61,61 @@ class BoyoLoRAPathForwarder:
             }
         }
     
-    def validate_and_clean_path(self, path: str, force_refresh: bool = False) -> str:
-        """Validate LoRA path and ensure it exists in the cached list."""
+    def find_matching_lora(self, path: str, lora_list: List[str], force_refresh: bool = False) -> str:
+        """
+        Find matching LoRA in the cached list using multiple strategies.
+        Returns the exact format expected by ComfyUI's LoRA loaders.
+        """
         if not path or path.strip() == "":
             return "none"
         
+        clean_path = path.strip()
+        print(f"🔍 Searching for LoRA: '{clean_path}'")
+        
+        # Strategy 1: Exact match (path already in correct format)
+        if clean_path in lora_list:
+            print(f"✅ Exact match found: '{clean_path}'")
+            return clean_path
+        
+        # Strategy 2: Look for filename-only match in subdirectories
+        import os
+        just_filename = os.path.basename(clean_path)
+        for lora_entry in lora_list:
+            if lora_entry != "none" and os.path.basename(lora_entry) == just_filename:
+                print(f"✅ Subdirectory match found: '{just_filename}' -> '{lora_entry}'")
+                return lora_entry
+        
+        # Strategy 3: Look for partial matches (in case of path format differences)
+        clean_normalized = clean_path.replace("\\", "/")
+        for lora_entry in lora_list:
+            if lora_entry != "none":
+                entry_normalized = lora_entry.replace("\\", "/")
+                if entry_normalized.endswith(clean_normalized):
+                    print(f"✅ Partial path match found: '{clean_path}' -> '{lora_entry}'")
+                    return lora_entry
+        
+        # Strategy 4: Check if the input filename exists somewhere in any path
+        for lora_entry in lora_list:
+            if lora_entry != "none" and clean_path in lora_entry:
+                print(f"✅ Contains match found: '{clean_path}' -> '{lora_entry}'")
+                return lora_entry
+        
+        # If no match found, show debugging info
+        print(f"❌ No match found for: '{clean_path}'")
+        print(f"🔍 First 5 entries: {lora_list[1:6]}")  # Skip "none"
+        
+        return "none"
+    
+    def validate_and_clean_path(self, path: str, force_refresh: bool = False) -> str:
+        """Validate LoRA path and ensure it exists in the cached list."""
         # Get current LoRA list (refresh if requested)
         if force_refresh:
             lora_list = refresh_cached_lora_list()
         else:
             lora_list = get_cached_lora_list()
         
-        # Clean the path
-        clean_path = path.strip().replace("\\", "/")
-        
-        # Check if path exists in available LoRAs
-        if clean_path in lora_list:
-            return clean_path
-        
-        # If not found, try to find a partial match
-        for available_lora in lora_list:
-            if available_lora != "none" and clean_path in available_lora:
-                print(f"LoRA path '{clean_path}' not found exactly, using '{available_lora}'")
-                return available_lora
-        
-        # If still not found, log warning and return none
-        print(f"Warning: LoRA path '{clean_path}' not found in available LoRAs")
-        return "none"
+        # Use intelligent matching instead of simple validation
+        return self.find_matching_lora(path, lora_list, force_refresh)
     
     def extract_paths_from_config(self, config_data: Optional[Dict], force_refresh: bool = False) -> Tuple[str, str]:
         """Extract and validate high/low noise paths from config data."""
@@ -100,7 +133,7 @@ class BoyoLoRAPathForwarder:
         
         return (high_path, low_path)
     
-    # Use cached LoRA list to prevent dynamic changes - same as original loader
+    # Use cached LoRA list to prevent dynamic changes - same as original working version
     RETURN_TYPES = (get_cached_lora_list(),) * 6 + ("STRING",)
     RETURN_NAMES = (
         "high_noise_path_1", "low_noise_path_1",
@@ -158,5 +191,5 @@ NODE_CLASS_MAPPINGS = {
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "BoyoLoRAPathForwarder": "Boyo LoRA Path Forwarder"
+    "BoyoLoRAPathForwarder": "Boyo LoRA Path Forwarder (Hybrid)"
 }
