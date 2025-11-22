@@ -161,11 +161,11 @@ Structure your response as:
     "scene6": "{image_trigger_word} detailed static scene description..."
   }},
   "videoPrompts": {{
-    "scene1": "{video_trigger_word} action transitioning from scene 1 to scene 2 with camera work...",
-    "scene2": "{video_trigger_word} action transitioning from scene 2 to scene 3 with camera work...",
-    "scene3": "{video_trigger_word} action transitioning from scene 3 to scene 4 with camera work...", 
-    "scene4": "{video_trigger_word} action transitioning from scene 4 to scene 5 with camera work...",
-    "scene5": "{video_trigger_word} action transitioning from scene 5 to scene 6 with camera work...",
+    "scene1": "{video_trigger_word} actions and movement within this scene location...",
+    "scene2": "{video_trigger_word} actions and movement within this scene location...",
+    "scene3": "{video_trigger_word} actions and movement within this scene location...", 
+    "scene4": "{video_trigger_word} actions and movement within this scene location...",
+    "scene5": "{video_trigger_word} actions and movement within this scene location...",
     "scene6": "{video_trigger_word} final scene completion with camera work..."
   }}
 }}
@@ -179,12 +179,12 @@ IMAGE PROMPT GUIDELINES:
 - NO camera movements or motion descriptions
 
 VIDEO PROMPT GUIDELINES:
-- Video prompts show the ACTION that transitions from current scene to the next scene
-- Include character actions, movement, and story progression
-- Add camera movements (pan, tilt, zoom, dolly, tracking shots, handheld) to follow the action
-- Show what the character DOES to get from the current scene moment to the next scene moment
-- Think of video prompts as the "in-between animation" that connects the static image keyframes
-- Final scene (scene 6) should show completion/resolution action rather than transition
+- Video prompts show the ACTION and movement that happens within each scene
+- Include character actions, gestures, and natural movement within the current location
+- Show what the character DOES during their time in this specific scene location
+- Think of video prompts as bringing life and movement to each static image keyframe
+- Each scene should show 5 seconds of engaging activity within that environment
+- Final scene (scene 6) should show completion/resolution action within the final location
 
 CONSISTENCY REQUIREMENTS:
 - Maintain character appearance exactly as described by the Movie Director
@@ -228,12 +228,12 @@ Structure your response as:
     "scene6": "{image_trigger_word} detailed static scene description..."
   }},
   "videoPrompts": {{
-    "scene1": "{video_trigger_word} camera movement description\\n{video_trigger_word} camera movement description\\n{video_trigger_word} camera movement description",
-    "scene2": "{video_trigger_word} camera movement description\\n{video_trigger_word} camera movement description\\n{video_trigger_word} camera movement description",
-    "scene3": "{video_trigger_word} camera movement description\\n{video_trigger_word} camera movement description\\n{video_trigger_word} camera movement description",
-    "scene4": "{video_trigger_word} camera movement description\\n{video_trigger_word} camera movement description\\n{video_trigger_word} camera movement description",
-    "scene5": "{video_trigger_word} camera movement description\\n{video_trigger_word} camera movement description\\n{video_trigger_word} camera movement description",
-    "scene6": "{video_trigger_word} camera movement description\\n{video_trigger_word} camera movement description\\n{video_trigger_word} camera movement description"
+    "scene1": "{video_trigger_word} actions and movement within this scene location\\n{video_trigger_word} actions and movement within this scene location\\n{video_trigger_word} actions and movement within this scene location",
+    "scene2": "{video_trigger_word} actions and movement within this scene location\\n{video_trigger_word} actions and movement within this scene location\\n{video_trigger_word} actions and movement within this scene location",
+    "scene3": "{video_trigger_word} actions and movement within this scene location\\n{video_trigger_word} actions and movement within this scene location\\n{video_trigger_word} actions and movement within this scene location",
+    "scene4": "{video_trigger_word} actions and movement within this scene location\\n{video_trigger_word} actions and movement within this scene location\\n{video_trigger_word} actions and movement within this scene location",
+    "scene5": "{video_trigger_word} actions and movement within this scene location\\n{video_trigger_word} actions and movement within this scene location\\n{video_trigger_word} actions and movement within this scene location",
+    "scene6": "{video_trigger_word} actions and movement within this scene location\\n{video_trigger_word} actions and movement within this scene location\\n{video_trigger_word} actions and movement within this scene location"
   }}
 }}
 
@@ -247,14 +247,12 @@ IMAGE PROMPT GUIDELINES:
 
 VIDEO TRAVELING PROMPT GUIDELINES:
 - Each scene gets {traveling_prompt_count} sequential sub-prompts (each ~5 seconds)
-- Video prompts show the ACTION that transitions from current scene to the next scene
-- Include character actions, movement, and story progression within the scene
-- Add camera movements (pan, tilt, zoom, dolly, tracking, handheld) to follow the action
-- Each sub-prompt advances both the story and cinematography
+- Video prompts show the ACTION and movement that happens within each scene location
+- Include character actions, gestures, and natural movement within the current scene environment
+- Each sub-prompt advances the activity and cinematography within that specific location
 - Sub-prompts should flow smoothly together, showing continuous action within that scene
-- Think of video prompts as the "in-between animation" that connects the static image keyframes
-- Show what the character DOES in this scene to get to the next story beat
-
+- Think of video prompts as bringing dynamic life and varied angles to each static image keyframe
+- Show what the character DOES during their time in this specific scene environment
 CONSISTENCY REQUIREMENTS:
 - Maintain character appearance exactly as described by the Movie Director
 - Keep consistent style, lighting mood, and color palette from the Movie Director's guidelines
