@@ -18,8 +18,19 @@ from .boyo_image_grab import NODE_CLASS_MAPPINGS as BOYOIMAGEGRAB_CLASS_MAPPINGS
 
 # Import the paired image saver nodes
 from .boyo_paired_image_saver import BoyoPairedImageSaver, BoyoIncontextSaver
-from .boyo_qwen_grounding import BoyoQwenVLGrounding
-from .boyo_vision import BoyoVision
+# Import Lora Loader stuff
+from .boyo_lora_json_builder import BoyoLoRAJSONBuilder
+from .boyo_lora_paired_loader import BoyoLoRAPairedLoader
+from .boyo_lora_config_inspector import BoyoLoRAConfigInspector
+from .boyo_lora_config_processor import BoyoLoRAConfigProcessor
+from .boyo_lora_path_forwarder import BoyoLoRAPathForwarder
+
+# Import the BoyoImageCrop node
+from .boyo_image_crop import BoyoImageCrop
+
+#Import the Video-Image-Storyboard Node
+from .boyo_storyboard_prompt import BoyoStoryboardPrompt
+from .boyo_storyboard_output import BoyoStoryboardOutput
 
 NODE_CLASS_MAPPINGS = {
     "BoyoVAEDecode": BoyoVAEDecode,
@@ -31,9 +42,15 @@ NODE_CLASS_MAPPINGS = {
     "BoyoPairedImageSaver": BoyoPairedImageSaver,
     "BoyoVideoPairedSaver": BoyoVideoPairedSaver,
     "BoyoVideoSaver": BoyoVideoSaver,
-    "BoyoQwenVLGrounding": BoyoQwenVLGrounding,
-    "BoyoVision": BoyoVision,
-    "BoyoIncontextSaver": BoyoIncontextSaver
+    "BoyoLoRAJSONBuilder": BoyoLoRAJSONBuilder,
+    "BoyoLoRAPairedLoader": BoyoLoRAPairedLoader,
+    "BoyoLoRAConfigInspector": BoyoLoRAConfigInspector,
+    "BoyoLoRAConfigProcessor": BoyoLoRAConfigProcessor,
+    "BoyoLoRAPathForwarder": BoyoLoRAPathForwarder,
+    "BoyoIncontextSaver": BoyoIncontextSaver,
+    "BoyoStoryboardPrompt": BoyoStoryboardPrompt,
+    "BoyoStoryboardOutput": BoyoStoryboardOutput,
+    "BoyoImageCrop": BoyoImageCrop
 }
 
 # Update the mappings with all custom nodes
@@ -55,9 +72,15 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "BoyoPairedImageSaver": "Boyo Paired Image Saver",
     "BoyoVideoPairedSaver": "Boyo Video Paired Saver",
     "BoyoVideoSaver": "Boyo Video Saver",
-    "BoyoQwenVLGrounding": "Boyo Qwen VL Grounding",
-    "BoyoVision": "Boyo Vision",
-    "BoyoIncontextSaver": "Boyo Incontext Saver"
+    "BoyoLoRAJSONBuilder": "Boyo LoRA JSON Builder",
+    "BoyoLoRAPairedLoader": "Boyo LoRA Paired Loader",
+    "BoyoLoRAConfigInspector": "Boyo LoRA Config Inspector",
+    "BoyoLoRAConfigProcessor": "Boyo LoRA Config Processor",
+    "BoyoLoRAPathForwarder": "Boyo LoRA Path Forwarder",
+    "BoyoIncontextSaver": "Boyo Incontext Saver",
+    "BoyoStoryboardPrompt": "Boyo Storyboard Prompt",
+    "BoyoStoryboardOutput": "Boyo Storyboard Output",
+    "BoyoImageCrop": "Boyo Image Crop"
 }
 
 # Update the display name mappings with all custom nodes
