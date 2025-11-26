@@ -1,9 +1,11 @@
 import json
+import re
 
 class BoyoStoryboardPrompt:
     """
     Input node for generating structured storyboard prompts using ollama models.
     Now accepts Movie Director output format for temporal reasoning and story structure.
+    Includes OVI audio integration with speech extraction and bypass.
     """
     
     @classmethod
@@ -23,7 +25,7 @@ class BoyoStoryboardPrompt:
                     "default": "Next Scene:",
                     "placeholder": "Trigger word for video model (e.g., 'Motion:', 'Camera:', etc.)"
                 }),
-                "system_prompt_type": (["System Prompt 1 (6 Scenes)", "System Prompt 2 (Traveling Prompts)"], {
+                "system_prompt_type": (["System Prompt 1 (6 Scenes)", "System Prompt 2 (Traveling Prompts)", "System Prompt 3 (OVI Audio)"], {
                     "default": "System Prompt 1 (6 Scenes)"
                 }),
                 "traveling_prompt_count": ("INT", {
@@ -43,24 +45,33 @@ class BoyoStoryboardPrompt:
             }
         }
     
-    RETURN_TYPES = ("STRING",)
-    RETURN_NAMES = ("formatted_prompt",)
+    RETURN_TYPES = ("STRING",) * 7  # Main prompt + 6 speech outputs
+    RETURN_NAMES = ("formatted_prompt", "speech_scene1", "speech_scene2", "speech_scene3", "speech_scene4", "speech_scene5", "speech_scene6")
     FUNCTION = "generate_prompt"
     CATEGORY = "Boyo/Storyboard"
     
     def generate_prompt(self, movie_director_output, image_trigger_word, video_trigger_word, system_prompt_type, traveling_prompt_count, additional_details=""):
         """
         Generate a formatted prompt for ollama based on Movie Director output.
+        For OVI mode, extracts speech and returns separately.
         """
         
+        # Initialize speech outputs (empty for non-OVI modes)
+        speech_outputs = [""] * 6
+        
         # Parse the Movie Director output
-        parsed_data = self._parse_movie_director_output(movie_director_output)
+        if system_prompt_type == "System Prompt 3 (OVI Audio)":
+            parsed_data, speech_outputs = self._parse_ovi_movie_director_output(movie_director_output)
+        else:
+            parsed_data = self._parse_movie_director_output(movie_director_output)
         
         # System Prompt selection
         if system_prompt_type == "System Prompt 1 (6 Scenes)":
             system_prompt = self._get_system_prompt_1(image_trigger_word, video_trigger_word, parsed_data)
         elif system_prompt_type == "System Prompt 2 (Traveling Prompts)":
             system_prompt = self._get_system_prompt_2(image_trigger_word, video_trigger_word, traveling_prompt_count, parsed_data)
+        elif system_prompt_type == "System Prompt 3 (OVI Audio)":
+            system_prompt = self._get_system_prompt_3_ovi(image_trigger_word, video_trigger_word, parsed_data)
         else:
             system_prompt = self._get_system_prompt_1(image_trigger_word, video_trigger_word, parsed_data)  # Default fallback
         
@@ -68,7 +79,7 @@ class BoyoStoryboardPrompt:
         if additional_details.strip():
             system_prompt += f"\n\nAdditional Instructions: {additional_details}"
         
-        return (system_prompt,)
+        return tuple([system_prompt] + speech_outputs)
     
     def _parse_movie_director_output(self, output):
         """
@@ -126,138 +137,156 @@ class BoyoStoryboardPrompt:
             
         return parsed
     
+    def _parse_ovi_movie_director_output(self, output):
+        """
+        Parse OVI Movie Director output, extracting speech and cleaning scenes.
+        Returns parsed data with cleaned scenes AND extracted speech.
+        """
+        parsed = {
+            "story_concept": "",
+            "main_character": "",
+            "style_setting": "",
+            "scenes": []
+        }
+        
+        speech_outputs = [""] * 6
+        
+        lines = output.split('\n')
+        current_section = None
+        current_scene_text = ""
+        
+        for line in lines:
+            line = line.strip()
+            if not line:
+                continue
+                
+            # Detect section headers
+            if line.startswith("STORY CONCEPT:"):
+                current_section = "story_concept"
+                parsed["story_concept"] = line.replace("STORY CONCEPT:", "").strip()
+            elif line.startswith("MAIN CHARACTER:"):
+                current_section = "main_character"
+                parsed["main_character"] = line.replace("MAIN CHARACTER:", "").strip()
+            elif line.startswith("STYLE & SETTING:"):
+                current_section = "style_setting"
+                parsed["style_setting"] = line.replace("STYLE & SETTING:", "").strip()
+            elif line.startswith("SCENE BREAKDOWN:"):
+                current_section = "scenes"
+            elif line.startswith("Scene ") and current_section == "scenes":
+                # Save previous scene if exists
+                if current_scene_text:
+                    parsed["scenes"].append(current_scene_text.strip())
+                current_scene_text = line
+            elif current_section == "scenes" and line:
+                # Continue building current scene
+                current_scene_text += " " + line
+            elif current_section and line:
+                # Continue building current section
+                if current_section == "story_concept":
+                    parsed["story_concept"] += " " + line
+                elif current_section == "main_character":
+                    parsed["main_character"] += " " + line
+                elif current_section == "style_setting":
+                    parsed["style_setting"] += " " + line
+        
+        # Don't forget the last scene
+        if current_scene_text:
+            parsed["scenes"].append(current_scene_text.strip())
+        
+        # Extract speech from scenes and clean them
+        cleaned_scenes = []
+        for i, scene in enumerate(parsed["scenes"]):
+            # Extract speech using regex
+            speech_match = re.search(r'<SPEECH>(.*?)</SPEECH>', scene)
+            if speech_match and i < 6:
+                speech_outputs[i] = speech_match.group(1)
+            
+            # Remove speech tags from scene
+            cleaned_scene = re.sub(r'<SPEECH>.*?</SPEECH>', '', scene).strip()
+            # Clean up any double spaces
+            cleaned_scene = re.sub(r'\s+', ' ', cleaned_scene)
+            cleaned_scenes.append(cleaned_scene)
+        
+        parsed["scenes"] = cleaned_scenes
+        return parsed, speech_outputs
+    
     def _get_system_prompt_1(self, image_trigger_word, video_trigger_word, parsed_data):
         """
-        System Prompt 1: Generates 6 image prompts and 6 corresponding video prompts using Movie Director structure.
+        System Prompt 1: Direct instructions for generating 6 image and 6 video prompts.
         """
-        return f"""You are an expert AI visual prompt engineer, tasked with converting structured movie direction into specific image and video prompts for AI generation. You have been provided with a complete story breakdown from a film director including character details, style guidelines, and scene-by-scene structure.
-
-CRITICAL UNDERSTANDING: Use the Movie Director's scene breakdowns as the foundation for your prompts. Each scene description provides the keyframe moment - your job is to convert these into detailed visual prompts while maintaining consistency.
+        return f"""Convert the Movie Director scenes into image and video prompts. Output valid JSON only.
 
 MOVIE DIRECTOR INPUT:
 Story: {parsed_data.get('story_concept', 'Not provided')}
 Character: {parsed_data.get('main_character', 'Not provided')}
 Style: {parsed_data.get('style_setting', 'Not provided')}
 
-Scene Structure:
+Scenes:
 {chr(10).join(parsed_data.get('scenes', []))}
 
-CRITICAL FORMATTING REQUIREMENTS:
-- Output ONLY valid JSON format
-- No explanatory text outside the JSON structure
-- Each prompt must be a single line with NO line breaks within the prompt text
-- Use proper JSON escaping for quotes and special characters
-- Start each image prompt with: "{image_trigger_word}"
-- Start each video prompt with: "{video_trigger_word}"
+TASK:
+Create exactly 6 image prompts and 6 video prompts from these scenes.
 
-Structure your response as:
-{{
-  "imagePrompts": {{
-    "scene1": "{image_trigger_word} detailed static scene description...",
-    "scene2": "{image_trigger_word} detailed static scene description...", 
-    "scene3": "{image_trigger_word} detailed static scene description...",
-    "scene4": "{image_trigger_word} detailed static scene description...",
-    "scene5": "{image_trigger_word} detailed static scene description...",
-    "scene6": "{image_trigger_word} detailed static scene description..."
-  }},
-  "videoPrompts": {{
-    "scene1": "{video_trigger_word} actions and movement within this scene location...",
-    "scene2": "{video_trigger_word} actions and movement within this scene location...",
-    "scene3": "{video_trigger_word} actions and movement within this scene location...", 
-    "scene4": "{video_trigger_word} actions and movement within this scene location...",
-    "scene5": "{video_trigger_word} actions and movement within this scene location...",
-    "scene6": "{video_trigger_word} final scene completion with camera work..."
-  }}
-}}
+IMAGE PROMPTS: 
+Start each with "{image_trigger_word}" then describe the static visual moment. Include character appearance, location details, lighting, and composition. Focus on the keyframe moment from each scene.
 
-IMAGE PROMPT GUIDELINES:
-- Convert each Movie Director scene description into a detailed static visual
-- Maintain the character description exactly as provided
-- Use the style and setting details consistently
-- Focus on the specific keyframe moment described in each scene
-- Include lighting, composition, and atmospheric details
-- NO camera movements or motion descriptions
+VIDEO PROMPTS:
+Start each with "{video_trigger_word}" then describe character movement and actions within that location. Show what the character does during 5 seconds in that scene. Include gestures, expressions, and natural movement.
 
-VIDEO PROMPT GUIDELINES:
-- Video prompts show the ACTION and movement that happens within each scene
-- Include character actions, gestures, and natural movement within the current location
-- Show what the character DOES during their time in this specific scene location
-- Think of video prompts as bringing life and movement to each static image keyframe
-- Each scene should show 5 seconds of engaging activity within that environment
-- Final scene (scene 6) should show completion/resolution action within the final location
-
-CONSISTENCY REQUIREMENTS:
-- Maintain character appearance exactly as described by the Movie Director
-- Keep consistent style, lighting mood, and color palette from the Movie Director's guidelines
-- Each scene should flow logically based on the Movie Director's structure
-- Character positioning and state should make sense in the sequence"""
+OUTPUT FORMAT:
+Return JSON with "imagePrompts" and "videoPrompts" sections. Each section has scene1 through scene6. Use proper JSON formatting."""
 
     def _get_system_prompt_2(self, image_trigger_word, video_trigger_word, traveling_prompt_count, parsed_data):
         """
         System Prompt 2: Generates 6 image prompts and 6 video prompts with multiple traveling sub-prompts using Movie Director structure.
         """
-        return f"""You are an expert AI visual prompt engineer, tasked with converting structured movie direction into specific image and traveling video prompts for AI generation. You have been provided with a complete story breakdown from a film director including character details, style guidelines, and scene-by-scene structure.
-
-CRITICAL UNDERSTANDING: Use the Movie Director's scene breakdowns as the foundation for your prompts. Each scene description provides the keyframe moment - your job is to convert these into detailed visual prompts and extended traveling video sequences while maintaining consistency.
+        return f"""Convert the Movie Director scenes into image and traveling video prompts. Output valid JSON only.
 
 MOVIE DIRECTOR INPUT:
 Story: {parsed_data.get('story_concept', 'Not provided')}
 Character: {parsed_data.get('main_character', 'Not provided')}
 Style: {parsed_data.get('style_setting', 'Not provided')}
 
-Scene Structure:
+Scenes:
 {chr(10).join(parsed_data.get('scenes', []))}
 
-CRITICAL FORMATTING REQUIREMENTS:
-- Output ONLY valid JSON format
-- No explanatory text outside the JSON structure
-- Each image prompt must be a single line with NO line breaks
-- Each video prompt contains {traveling_prompt_count} sub-prompts separated by \\n newlines
-- Use proper JSON escaping for quotes and special characters
-- Start each image prompt with: "{image_trigger_word}"
-- Start each video sub-prompt with: "{video_trigger_word}"
+TASK:
+Create exactly 6 image prompts and 6 traveling video prompts from these scenes.
 
-Structure your response as:
-{{
-  "imagePrompts": {{
-    "scene1": "{image_trigger_word} detailed static scene description...",
-    "scene2": "{image_trigger_word} detailed static scene description...", 
-    "scene3": "{image_trigger_word} detailed static scene description...",
-    "scene4": "{image_trigger_word} detailed static scene description...",
-    "scene5": "{image_trigger_word} detailed static scene description...",
-    "scene6": "{image_trigger_word} detailed static scene description..."
-  }},
-  "videoPrompts": {{
-    "scene1": "{video_trigger_word} actions and movement within this scene location\\n{video_trigger_word} actions and movement within this scene location\\n{video_trigger_word} actions and movement within this scene location",
-    "scene2": "{video_trigger_word} actions and movement within this scene location\\n{video_trigger_word} actions and movement within this scene location\\n{video_trigger_word} actions and movement within this scene location",
-    "scene3": "{video_trigger_word} actions and movement within this scene location\\n{video_trigger_word} actions and movement within this scene location\\n{video_trigger_word} actions and movement within this scene location",
-    "scene4": "{video_trigger_word} actions and movement within this scene location\\n{video_trigger_word} actions and movement within this scene location\\n{video_trigger_word} actions and movement within this scene location",
-    "scene5": "{video_trigger_word} actions and movement within this scene location\\n{video_trigger_word} actions and movement within this scene location\\n{video_trigger_word} actions and movement within this scene location",
-    "scene6": "{video_trigger_word} actions and movement within this scene location\\n{video_trigger_word} actions and movement within this scene location\\n{video_trigger_word} actions and movement within this scene location"
-  }}
-}}
+IMAGE PROMPTS:
+Start each with "{image_trigger_word}" then describe the static visual moment. Include character appearance, location details, lighting, and composition.
 
-IMAGE PROMPT GUIDELINES:
-- Convert each Movie Director scene description into a detailed static visual
-- Maintain the character description exactly as provided
-- Use the style and setting details consistently
-- Focus on the specific keyframe moment described in each scene
-- Include lighting, composition, and atmospheric details
-- NO camera movements, motion blur, or temporal effects
+VIDEO PROMPTS:
+Each video prompt contains {traveling_prompt_count} sub-prompts separated by newlines. Start each sub-prompt with "{video_trigger_word}". Show progression of actions within the same location over multiple shots.
 
-VIDEO TRAVELING PROMPT GUIDELINES:
-- Each scene gets {traveling_prompt_count} sequential sub-prompts (each ~5 seconds)
-- Video prompts show the ACTION and movement that happens within each scene location
-- Include character actions, gestures, and natural movement within the current scene environment
-- Each sub-prompt advances the activity and cinematography within that specific location
-- Sub-prompts should flow smoothly together, showing continuous action within that scene
-- Think of video prompts as bringing dynamic life and varied angles to each static image keyframe
-- Show what the character DOES during their time in this specific scene environment
-CONSISTENCY REQUIREMENTS:
-- Maintain character appearance exactly as described by the Movie Director
-- Keep consistent style, lighting mood, and color palette from the Movie Director's guidelines
-- Each scene should flow logically based on the Movie Director's structure
-- Within each scene, all {traveling_prompt_count} sub-prompts should maintain visual continuity"""
+OUTPUT FORMAT:
+Return JSON with "imagePrompts" and "videoPrompts" sections. Each section has scene1 through scene6. For video prompts, separate the {traveling_prompt_count} sub-prompts with \\n characters."""
+
+    def _get_system_prompt_3_ovi(self, image_trigger_word, video_trigger_word, parsed_data):
+        """
+        System Prompt 3: Generates 6 image prompts and 6 video prompts for OVI processing (speech handled separately).
+        """
+        return f"""Convert the Movie Director scenes into image and video prompts for OVI processing. Output valid JSON only.
+
+MOVIE DIRECTOR INPUT:
+Story: {parsed_data.get('story_concept', 'Not provided')}
+Character: {parsed_data.get('main_character', 'Not provided')}
+Style: {parsed_data.get('style_setting', 'Not provided')}
+
+Scenes:
+{chr(10).join(parsed_data.get('scenes', []))}
+
+TASK:
+Create exactly 6 image prompts and 6 video prompts from these scenes. Speech is handled separately.
+
+IMAGE PROMPTS:
+Start each with "{image_trigger_word}" then describe the static visual moment. Include character appearance, location details, lighting, and composition.
+
+VIDEO PROMPTS:
+Start each with "{video_trigger_word}" then describe character physical actions and movements within that location. Show gestures, expressions, and body language suitable for 10-second OVI scenes. Focus on movement that matches speaking.
+
+OUTPUT FORMAT:
+Return JSON with "imagePrompts" and "videoPrompts" sections. Each section has scene1 through scene6."""
 
 
 # Node mappings for ComfyUI

@@ -1,9 +1,11 @@
 import json
+import re
 
 class BoyoStoryboardOutput:
     """
     Output node for parsing structured storyboard JSON from ollama into separate prompt outputs.
     Takes JSON input and provides 12 separate text outputs (6 image + 6 video prompts).
+    For OVI mode, integrates bypassed speech back into video prompts with <S></S> formatting.
     """
     
     @classmethod
@@ -15,6 +17,14 @@ class BoyoStoryboardOutput:
                     "default": "",
                     "placeholder": "Paste JSON output from ollama here..."
                 }),
+            },
+            "optional": {
+                "speech_scene1": ("STRING", {"default": ""}),
+                "speech_scene2": ("STRING", {"default": ""}),
+                "speech_scene3": ("STRING", {"default": ""}),
+                "speech_scene4": ("STRING", {"default": ""}),
+                "speech_scene5": ("STRING", {"default": ""}),
+                "speech_scene6": ("STRING", {"default": ""}),
             }
         }
     
@@ -26,14 +36,21 @@ class BoyoStoryboardOutput:
     FUNCTION = "parse_storyboard"
     CATEGORY = "Boyo/Storyboard"
     
-    def parse_storyboard(self, json_input):
+    def parse_storyboard(self, json_input, speech_scene1="", speech_scene2="", speech_scene3="", speech_scene4="", speech_scene5="", speech_scene6=""):
         """
         Parse JSON storyboard into separate prompt outputs.
         Returns 12 strings: 6 image prompts + 6 video prompts.
+        For OVI mode, integrates speech back into video prompts.
         """
         
         # Initialize empty outputs
         outputs = [""] * 12
+        
+        # Collect speech inputs
+        speech_inputs = [speech_scene1, speech_scene2, speech_scene3, speech_scene4, speech_scene5, speech_scene6]
+        
+        # Check if we have speech inputs (indicates OVI mode)
+        has_speech = any(speech.strip() for speech in speech_inputs)
         
         try:
             # Clean and parse the JSON
@@ -64,7 +81,14 @@ class BoyoStoryboardOutput:
                 for i in range(1, 7):  # scene1 through scene6
                     scene_key = f"scene{i}"
                     if scene_key in video_prompts:
-                        outputs[5+i] = video_prompts[scene_key]  # Start at index 6
+                        base_video_prompt = video_prompts[scene_key]
+                        
+                        # If we have speech for this scene (OVI mode), integrate it
+                        if has_speech and i <= len(speech_inputs) and speech_inputs[i-1].strip():
+                            ovi_video_prompt = self._create_ovi_prompt(base_video_prompt, speech_inputs[i-1].strip())
+                            outputs[5+i] = ovi_video_prompt  # Start at index 6
+                        else:
+                            outputs[5+i] = base_video_prompt  # Standard video prompt
                     else:
                         outputs[5+i] = f"[Missing video prompt for scene {i}]"
         
@@ -81,6 +105,47 @@ class BoyoStoryboardOutput:
                 outputs[i] = error_msg
         
         return tuple(outputs)
+    
+    def _create_ovi_prompt(self, base_video_prompt, speech_text):
+        """
+        Create an OVI-formatted video prompt by integrating speech and audio descriptions.
+        """
+        # Add speech formatting
+        speech_formatted = f"<S>{speech_text}</S>"
+        
+        # Generate basic audio description based on speech
+        audio_description = self._generate_audio_description(speech_text)
+        
+        # Combine base prompt with speech and audio
+        ovi_prompt = f"{base_video_prompt} Character speaks: {speech_formatted}. {audio_description}"
+        
+        return ovi_prompt
+    
+    def _generate_audio_description(self, speech_text):
+        """
+        Generate basic audio description based on speech content and common patterns.
+        """
+        # Basic audio patterns based on speech characteristics
+        audio_elements = []
+        
+        # Determine voice characteristics based on speech content
+        if any(word in speech_text.lower() for word in ['!', 'amazing', 'wonderful', 'fantastic', 'incredible']):
+            audio_elements.append("excited voice")
+        elif any(word in speech_text.lower() for word in ['?', 'what', 'how', 'where', 'when', 'why']):
+            audio_elements.append("curious voice")
+        elif any(word in speech_text.lower() for word in ['whisper', 'quiet', 'soft']):
+            audio_elements.append("soft whispered voice")
+        elif any(word in speech_text.lower() for word in ['shout', 'loud', 'call']):
+            audio_elements.append("loud clear voice")
+        else:
+            audio_elements.append("natural speaking voice")
+        
+        # Add common ambient sounds (can be made more sophisticated)
+        ambient_sounds = ["ambient room tone", "soft background atmosphere", "subtle environmental sounds"]
+        audio_elements.append(ambient_sounds[0])  # Default to room tone
+        
+        # Format as Audio: description
+        return f"Audio: {', '.join(audio_elements)}"
 
 
 # Node mappings for ComfyUI
