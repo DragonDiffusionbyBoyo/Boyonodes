@@ -16,6 +16,7 @@ from .BoyoControl import NODE_CLASS_MAPPINGS as BOYOCONTROL_CLASS_MAPPINGS, NODE
 # Import the new BoyoImageGrab node
 from .boyo_image_grab import NODE_CLASS_MAPPINGS as BOYOIMAGEGRAB_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS as BOYOIMAGEGRAB_DISPLAY_NAME_MAPPINGS
 
+
 # Import the paired image saver nodes
 from .boyo_paired_image_saver import BoyoPairedImageSaver, BoyoIncontextSaver
 # Import Lora Loader stuff
@@ -37,6 +38,9 @@ from .boyo_loop_reset import NODE_CLASS_MAPPINGS as BOYOLOOPRESET_CLASS_MAPPINGS
 # Import the custom for loop nodes
 from .boyo_for_loops_exact import NODE_CLASS_MAPPINGS as BOYOFORLOOPS_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS as BOYOFORLOOPS_DISPLAY_NAME_MAPPINGS
 
+from .boyo_asset_grabber_simple import BoyoAssetGrabberSimple
+from .boyo_asset_grabber_advanced import BoyoAssetGrabberAdvanced
+
 NODE_CLASS_MAPPINGS = {
     "BoyoVAEDecode": BoyoVAEDecode,
     "BoyoSaver": BoyoSaver,
@@ -55,6 +59,8 @@ NODE_CLASS_MAPPINGS = {
     "BoyoIncontextSaver": BoyoIncontextSaver,
     "BoyoStoryboardPrompt": BoyoStoryboardPrompt,
     "BoyoStoryboardOutput": BoyoStoryboardOutput,
+    "BoyoAssetGrabberSimple": BoyoAssetGrabberSimple,
+    "BoyoAssetGrabberAdvanced": BoyoAssetGrabberAdvanced,
     "BoyoImageCrop": BoyoImageCrop
 }
 
@@ -87,6 +93,8 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "BoyoIncontextSaver": "Boyo Incontext Saver",
     "BoyoStoryboardPrompt": "Boyo Storyboard Prompt",
     "BoyoStoryboardOutput": "Boyo Storyboard Output",
+    "BoyoAssetGrabberSimple": "Boyo Asset Grabber (Simple)",
+    "BoyoAssetGrabberAdvanced": "Boyo Asset Grabber (Advanced)",
     "BoyoImageCrop": "Boyo Image Crop"
 }
 
