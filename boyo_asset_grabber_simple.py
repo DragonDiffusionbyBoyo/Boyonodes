@@ -16,13 +16,31 @@ class BoyoAssetGrabberSimple:
         
     @classmethod
     def INPUT_TYPES(cls):
+        # Get Boyonodes directory and look for assetJsons folder within it
+        try:
+            current_dir = os.path.dirname(os.path.abspath(__file__))
+            boyonodes_dir = current_dir  # We're already in the Boyonodes directory
+            asset_json_dir = os.path.join(boyonodes_dir, "assetJsons")
+            
+            # Create folder if it doesn't exist
+            os.makedirs(asset_json_dir, exist_ok=True)
+            
+            # Scan for JSON files
+            json_files = []
+            if os.path.exists(asset_json_dir):
+                for f in os.listdir(asset_json_dir):
+                    if os.path.isfile(os.path.join(asset_json_dir, f)) and f.lower().endswith('.json'):
+                        json_files.append(f)
+            
+            if not json_files:
+                json_files = ["No JSON files found - add files to custom_nodes/Boyonodes/assetJsons/"]
+                
+        except Exception as e:
+            json_files = [f"Error scanning folder: {str(e)}"]
+        
         return {
             "required": {
-                "json_file_path": ("STRING", {
-                    "multiline": False,
-                    "default": "path/to/asset_manifest.json",
-                    "placeholder": "Path to JSON asset manifest"
-                }),
+                "json_file": (sorted(json_files),),
                 "download_trigger": ("BOOLEAN", {
                     "default": False,
                     "label_on": "Download Assets",
@@ -36,7 +54,7 @@ class BoyoAssetGrabberSimple:
     FUNCTION = "download_assets"
     CATEGORY = "Boyo/Asset Management"
     
-    def download_assets(self, json_file_path: str, download_trigger: bool) -> Tuple[str]:
+    def download_assets(self, json_file: str, download_trigger: bool) -> Tuple[str]:
         if not download_trigger:
             return ("Ready to download assets",)
             
@@ -44,15 +62,25 @@ class BoyoAssetGrabberSimple:
             return (f"Currently downloading: {self.progress_message}",)
             
         try:
-            # Load the JSON manifest
+            # Handle dropdown selection - construct full path
+            if not json_file or json_file.strip() == "":
+                return ("ERROR: No JSON file selected",)
+                
+            if json_file.startswith("No JSON files found") or json_file.startswith("Error scanning"):
+                return ("ERROR: " + json_file,)
+            
+            # Get Boyonodes directory and construct path to JSON file
+            current_dir = os.path.dirname(os.path.abspath(__file__))
+            asset_json_dir = os.path.join(current_dir, "assetJsons")
+            json_file_path = os.path.join(asset_json_dir, json_file)
+            
             if not os.path.exists(json_file_path):
                 return (f"ERROR: JSON file not found at {json_file_path}",)
                 
             with open(json_file_path, 'r') as f:
                 manifest = json.load(f)
                 
-            # Get ComfyUI root directory (assuming we're in custom_nodes/boyo_nodes)
-            current_dir = os.path.dirname(os.path.abspath(__file__))
+            # Get ComfyUI root directory for installing assets
             comfyui_root = os.path.dirname(os.path.dirname(current_dir))
             
             self.downloading = True
