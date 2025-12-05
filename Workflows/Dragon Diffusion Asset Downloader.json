@@ -1,0 +1,170 @@
+{
+  "id": "3a2d26a1-62fd-41e8-91bf-62aebe160412",
+  "revision": 0,
+  "last_node_id": 4,
+  "last_link_id": 1,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "Display Any (rgthree)",
+      "pos": [
+        -2150.2345700049723,
+        -2148.8309170139974
+      ],
+      "size": [
+        412.3346166674054,
+        430.051669209076
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "dir": 3,
+          "name": "source",
+          "type": "*",
+          "link": 1
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "rgthree-comfy",
+        "ver": "2b9eb36d3e1741e88dbfccade0e08137f7fa2bfb",
+        "Node name for S&R": "Display Any (rgthree)"
+      },
+      "widgets_values": [
+        "SUCCESS: Detected pip environment - Virtual Environment (E:\\Comfyui2\\ComfyUI\\venv)\nSKIP: ComfyUI-HunyuanVideo-Foley already exists\nSKIP: ComfyUI-MiniCPM already exists\nSKIP: ComfyUI-Custom-Scripts already exists\nSKIP: ComfyUI-MMAudio already exists\nSKIP: hunyuanvideo_foley_fp8_e4m3fn.safetensors already exists\nSKIP: vae_128d_48k_fp16.safetensors already exists\nSKIP: synchformer_state_dict_fp16.safetensors already exists\nSKIP: mmaudio_large_44k_nsfw_gold_8.5k_final_fp16.safetensors already exists\nSKIP: mmaudio_vae_44k_fp16.safetensors already exists\nSKIP: mmaudio_synchformer_fp16.safetensors already exists\nSKIP: apple_DFN5B-CLIP-ViT-H-14-384_fp16.safetensors already exists"
+      ]
+    },
+    {
+      "id": 2,
+      "type": "BoyoAssetGrabberSimple",
+      "pos": [
+        -2504.723598656392,
+        -2141.590116123905
+      ],
+      "size": [
+        282.1333374023437,
+        82
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "status",
+          "type": "STRING",
+          "links": [
+            1
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "Boyonodes",
+        "ver": "b8b3981939f8257f47d61681c3ef305bb872263d",
+        "Node name for S&R": "BoyoAssetGrabberSimple"
+      },
+      "widgets_values": [
+        "audio_workflow_manifest.json",
+        true
+      ]
+    },
+    {
+      "id": 3,
+      "type": "Note",
+      "pos": [
+        -2820.129443242331,
+        -1975.146218006846
+      ],
+      "size": [
+        550.9756206828201,
+        259.90390245169783
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        "Lots of assets take some time so be paitent"
+      ],
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 4,
+      "type": "Label (rgthree)",
+      "pos": [
+        -3100.2632692878906,
+        -2421.1685664904967
+      ],
+      "size": [
+        1582.13330078125,
+        100
+      ],
+      "flags": {
+        "allow_interaction": true
+      },
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "Dragon Diffusion Asset Downloader",
+      "properties": {
+        "fontSize": 100,
+        "fontFamily": "Arial",
+        "fontColor": "#ffffff",
+        "textAlign": "left",
+        "backgroundColor": "green",
+        "padding": 0,
+        "borderRadius": 0
+      },
+      "color": "#fff0",
+      "bgcolor": "#fff0"
+    }
+  ],
+  "links": [
+    [
+      1,
+      2,
+      0,
+      1,
+      0,
+      "*"
+    ]
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "title": "Asset downloader",
+      "bounding": [
+        -2997.7552842255236,
+        -2275.96166625524,
+        1355.7554903913065,
+        641.8788596763729
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.9849732675807887,
+      "offset": [
+        3348.4799463219465,
+        2543.668232138039
+      ]
+    },
+    "workflowRendererVersion": "LG",
+    "frontendVersion": "1.32.9",
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true
+  },
+  "version": 0.4
+}
