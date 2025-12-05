@@ -85,6 +85,10 @@ Saves clean images with accompanying prompt files - perfect for publication and 
 - Creating training datasets with prompt annotations
 - Maintaining reproducible results
 
+## Asset Downloader System
+
+The Boyo Asset Grabber provides one-click installation of all dependencies for ComfyUI workflows. Instead of manually hunting down custom nodes and models, users simply drop a JSON manifest file into `custom_nodes/Boyonodes/assetJsons/`, restart ComfyUI, and select the workflow from a dropdown menu. The system automatically clones required GitHub repositories, installs Python dependencies via pip, downloads models from direct URLs, and handles all the tedious setup that typically frustrates users. Available in both Simple (auto-detects paths) and Advanced (custom path support) versions to handle standard portable installations and scattered desktop setups. Complete documentation including JSON schema validation and creation guidelines can be found in [README_Asset_Manifests.md](./README_Asset_Manifests.md). This eliminates the "download this, install that, put files here" complexity and provides your customers with a genuinely foolproof installation experience.
+
 ## LoRA Management System
 
 Revolutionary paired LoRA management with intelligent prompt handling - perfect for complex workflows requiring multiple LoRA types (utility, character, style) with sophisticated prompt strategies.
