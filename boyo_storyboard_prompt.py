@@ -143,14 +143,12 @@ class BoyoStoryboardPrompt:
                     parsed["style_setting"] = match.group(1).strip()
                     break
             
-            # Extract scenes with flexible patterns
+            # Extract scenes with specific pattern for timestamp format
             scene_patterns = [
                 r"SCENE BREAKDOWN:(.+?)$",
                 r"Scene Breakdown:(.+?)$", 
                 r"SCENES:(.+?)$",
-                r"Scenes:(.+?)$",
-                r"SCENE STRUCTURE:(.+?)$",
-                r"Scene Structure:(.+?)$"
+                r"Scenes:(.+?)$"
             ]
             
             scene_section = ""
@@ -164,20 +162,35 @@ class BoyoStoryboardPrompt:
             if not scene_section:
                 scene_section = output
             
-            # Extract individual scenes with flexible numbering
-            individual_scene_patterns = [
-                r"Scene\s+(\d+):?\s*(.+?)(?=Scene\s+\d+|$)",
-                r"SCENE\s+(\d+):?\s*(.+?)(?=SCENE\s+\d+|$)",
-                r"(\d+)\.\s*(.+?)(?=\d+\.|$)",
-                r"Scene\s+(\w+):?\s*(.+?)(?=Scene\s+\w+|$)"  # Handles "Scene One", etc.
-            ]
-            
+            # UPDATED: Extract individual scenes with timestamp pattern
             scenes_found = []
-            for pattern in individual_scene_patterns:
-                matches = re.findall(pattern, scene_section, re.IGNORECASE | re.DOTALL)
+            
+            # Primary pattern for: **Scene 1 (0-5s): [composition]** - Description
+            timestamp_pattern = r"\*\*Scene\s+\d+\s*\([^)]+\):[^*]+\*\*\s*-\s*(.+?)(?=\*\*Scene\s+\d+|\*\*TEMPORAL|$)"
+            matches = re.findall(timestamp_pattern, scene_section, re.IGNORECASE | re.DOTALL)
+            
+            if matches:
+                scenes_found = [match.strip() for match in matches]
+            else:
+                # Fallback: Try without markdown
+                simple_timestamp_pattern = r"Scene\s+\d+\s*\([^)]+\):[^-]+-\s*(.+?)(?=Scene\s+\d+|$)"
+                matches = re.findall(simple_timestamp_pattern, scene_section, re.IGNORECASE | re.DOTALL)
+                
                 if matches:
-                    scenes_found = [match[1].strip() for match in matches]
-                    break
+                    scenes_found = [match.strip() for match in matches]
+                else:
+                    # Final fallback: standard scene patterns
+                    standard_patterns = [
+                        r"Scene\s+\d+:?\s*(.+?)(?=Scene\s+\d+|$)",
+                        r"SCENE\s+\d+:?\s*(.+?)(?=SCENE\s+\d+|$)",
+                        r"\d+\.\s*(.+?)(?=\d+\.|$)"
+                    ]
+                    
+                    for pattern in standard_patterns:
+                        matches = re.findall(pattern, scene_section, re.IGNORECASE | re.DOTALL)
+                        if matches:
+                            scenes_found = [match.strip() for match in matches]
+                            break
             
             # If still no scenes, try splitting on common delimiters
             if not scenes_found:
