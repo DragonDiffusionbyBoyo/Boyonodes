@@ -277,7 +277,7 @@ OUTPUT FORMAT:
 Return JSON with "imagePrompts" and "videoPrompts" sections. Each section has scene1 through scene6. Use proper JSON formatting."""
 
     def _get_system_prompt_2(self, image_trigger_word, video_trigger_word, traveling_prompt_count, parsed_data):
-        """System Prompt 2: Traveling prompts with robust parsing."""
+        """System Prompt 2: Traveling prompts with explicit line break requirements."""
         return f"""Convert Movie Director scenes into JSON format. Do NOT copy the template - create actual content.
 
 MOVIE DIRECTOR INPUT:
@@ -288,30 +288,38 @@ Style: {parsed_data.get('style_setting', 'Not provided')}
 SCENES TO PROCESS:
 {chr(10).join(parsed_data.get('scenes', []))}
 
-DIRECT COMMANDS:
-1. Generate 6 image prompts starting with "{image_trigger_word}"
-2. Generate 6 video prompts with {traveling_prompt_count} sub-prompts each  
-3. Start each video sub-prompt with "{video_trigger_word}"
-4. Separate sub-prompts with \\n characters
+CRITICAL REQUIREMENTS:
+1. IMAGE PROMPTS: Single line each, start with "{image_trigger_word}"
+2. VIDEO PROMPTS: EXACTLY {traveling_prompt_count} traveling sub-prompts per scene
+3. Each video sub-prompt MUST start with "{video_trigger_word}" 
+4. Separate video sub-prompts with \\n - EACH SUB-PROMPT ON NEW LINE
 5. Output valid JSON only
 
-EXAMPLE FORMAT (create your own content):
+TRAVELING VIDEO FORMAT:
+Each video prompt = {traveling_prompt_count} separate actions on new lines:
+"scene1": "{video_trigger_word} first action\\n{video_trigger_word} second action\\n{video_trigger_word} third action"
+
+JSON STRUCTURE REQUIRED:
 {{
   "imagePrompts": {{
-    "scene1": "{image_trigger_word} woman sitting at wooden desk writing, soft window light, warm colors",
-    "scene2": "{image_trigger_word} same woman walking through garden, flowers blooming, golden hour",
-    "scene3": "{image_trigger_word} woman standing in doorway looking worried, dramatic shadows",
-    "scene4": "{image_trigger_word} woman running down cobblestone street, rain falling, urgent mood",
-    "scene5": "{image_trigger_word} woman embracing someone at train platform, emotional lighting",
-    "scene6": "{image_trigger_word} woman smiling peacefully at sunset, resolution, warm glow"
+    "scene1": "{image_trigger_word} single line description",
+    "scene2": "{image_trigger_word} single line description",
+    "scene3": "{image_trigger_word} single line description",
+    "scene4": "{image_trigger_word} single line description",
+    "scene5": "{image_trigger_word} single line description",
+    "scene6": "{image_trigger_word} single line description"
   }},
   "videoPrompts": {{
-    "scene1": "{video_trigger_word} woman picks up pen and begins writing\\n{video_trigger_word} camera slowly zooms on her focused expression\\n{video_trigger_word} her hand moves gracefully across the paper",
-    "scene2": "{video_trigger_word} woman opens garden gate and steps inside\\n{video_trigger_word} she bends down to smell the roses\\n{video_trigger_word} camera follows her walking down garden path"
+    "scene1": "{video_trigger_word} action one\\n{video_trigger_word} action two\\n{video_trigger_word} action three",
+    "scene2": "{video_trigger_word} action one\\n{video_trigger_word} action two\\n{video_trigger_word} action three",
+    "scene3": "{video_trigger_word} action one\\n{video_trigger_word} action two\\n{video_trigger_word} action three",
+    "scene4": "{video_trigger_word} action one\\n{video_trigger_word} action two\\n{video_trigger_word} action three",
+    "scene5": "{video_trigger_word} action one\\n{video_trigger_word} action two\\n{video_trigger_word} action three",
+    "scene6": "{video_trigger_word} action one\\n{video_trigger_word} action two\\n{video_trigger_word} action three"
   }}
 }}
 
-IMPORTANT: Create your own story content based on the Movie Director scenes above, not this example."""
+MANDATORY: Each scene must have EXACTLY {traveling_prompt_count} video sub-prompts. Create content based on Movie Director scenes above."""
 
     def _get_system_prompt_3_ovi(self, image_trigger_word, video_trigger_word, parsed_data):
         """System Prompt 3: OVI processing (speech handled separately)."""
