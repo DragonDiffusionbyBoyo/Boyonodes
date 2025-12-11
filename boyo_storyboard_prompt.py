@@ -5,8 +5,7 @@ class BoyoStoryboardPrompt:
     """
     Input node for generating structured storyboard prompts using ollama models.
     Now accepts Movie Director output format for temporal reasoning and story structure.
-    Includes OVI audio integration with speech extraction and bypass.
-    FIXED: Prevents ollama from copying template text by using direct commands and realistic examples.
+    ROBUST PARSER: Handles variations from GPT, Gemini, Claude, etc.
     """
     
     @classmethod
@@ -46,25 +45,25 @@ class BoyoStoryboardPrompt:
             }
         }
     
-    RETURN_TYPES = ("STRING",) * 7  # Main prompt + 6 speech outputs
-    RETURN_NAMES = ("formatted_prompt", "speech_scene1", "speech_scene2", "speech_scene3", "speech_scene4", "speech_scene5", "speech_scene6")
+    RETURN_TYPES = ("STRING", "STRING", "STRING") + ("STRING",) * 6
+    RETURN_NAMES = ("formatted_prompt", "image_trigger_word", "video_trigger_word", "speech_scene1", "speech_scene2", "speech_scene3", "speech_scene4", "speech_scene5", "speech_scene6")
     FUNCTION = "generate_prompt"
     CATEGORY = "Boyo/Storyboard"
     
     def generate_prompt(self, movie_director_output, image_trigger_word, video_trigger_word, system_prompt_type, traveling_prompt_count, additional_details=""):
         """
         Generate a formatted prompt for ollama based on Movie Director output.
-        For OVI mode, extracts speech and returns separately.
+        Uses robust parsing to handle different LLM output formats.
         """
         
         # Initialize speech outputs (empty for non-OVI modes)
         speech_outputs = [""] * 6
         
-        # Parse the Movie Director output
+        # Parse the Movie Director output with robust parser
         if system_prompt_type == "System Prompt 3 (OVI Audio)":
-            parsed_data, speech_outputs = self._parse_ovi_movie_director_output(movie_director_output)
+            parsed_data, speech_outputs = self._parse_ovi_movie_director_output_robust(movie_director_output)
         else:
-            parsed_data = self._parse_movie_director_output(movie_director_output)
+            parsed_data = self._parse_movie_director_output_robust(movie_director_output)
         
         # System Prompt selection
         if system_prompt_type == "System Prompt 1 (6 Scenes)":
@@ -74,18 +73,18 @@ class BoyoStoryboardPrompt:
         elif system_prompt_type == "System Prompt 3 (OVI Audio)":
             system_prompt = self._get_system_prompt_3_ovi(image_trigger_word, video_trigger_word, parsed_data)
         else:
-            system_prompt = self._get_system_prompt_1(image_trigger_word, video_trigger_word, parsed_data)  # Default fallback
+            system_prompt = self._get_system_prompt_1(image_trigger_word, video_trigger_word, parsed_data)
         
         # Add additional details if provided
         if additional_details.strip():
             system_prompt += f"\n\nAdditional Instructions: {additional_details}"
         
-        return tuple([system_prompt] + speech_outputs)
+        return tuple([system_prompt, image_trigger_word, video_trigger_word] + speech_outputs)
     
-    def _parse_movie_director_output(self, output):
+    def _parse_movie_director_output_robust(self, output):
         """
-        Parse Movie Director output format into structured data.
-        Handles both GPT and Gemini style outputs.
+        ROBUST parser that handles variations from different LLMs.
+        Uses flexible regex patterns to extract story elements.
         """
         parsed = {
             "story_concept": "",
@@ -94,127 +93,154 @@ class BoyoStoryboardPrompt:
             "scenes": []
         }
         
-        lines = output.split('\n')
-        current_section = None
-        current_scene_text = ""
+        # Fallback: if parsing fails, use entire input as story concept
+        fallback_text = output.strip()
         
-        for line in lines:
-            line = line.strip()
-            if not line:
-                continue
-                
-            # Detect section headers
-            if line.startswith("STORY CONCEPT:"):
-                current_section = "story_concept"
-                parsed["story_concept"] = line.replace("STORY CONCEPT:", "").strip()
-            elif line.startswith("MAIN CHARACTER:"):
-                current_section = "main_character"
-                parsed["main_character"] = line.replace("MAIN CHARACTER:", "").strip()
-            elif line.startswith("STYLE & SETTING:"):
-                current_section = "style_setting"
-                parsed["style_setting"] = line.replace("STYLE & SETTING:", "").strip()
-            elif line.startswith("SCENE BREAKDOWN:"):
-                current_section = "scenes"
-            elif line.startswith("Scene ") and current_section == "scenes":
-                # Save previous scene if exists
-                if current_scene_text:
-                    parsed["scenes"].append(current_scene_text.strip())
-                current_scene_text = line
-            elif current_section == "scenes" and line:
-                # Continue building current scene
-                current_scene_text += " " + line
-            elif current_section and line:
-                # Continue building current section
-                if current_section == "story_concept":
-                    parsed["story_concept"] += " " + line
-                elif current_section == "main_character":
-                    parsed["main_character"] += " " + line
-                elif current_section == "style_setting":
-                    parsed["style_setting"] += " " + line
-        
-        # Don't forget the last scene
-        if current_scene_text:
-            parsed["scenes"].append(current_scene_text.strip())
+        try:
+            # Multiple patterns for story concept
+            story_patterns = [
+                r"STORY CONCEPT:\s*(.+?)(?=MAIN CHARACTER|CHARACTER|STYLE|SCENE|$)",
+                r"Story Concept:\s*(.+?)(?=Main Character|Character|Style|Scene|$)",
+                r"Story:\s*(.+?)(?=Character|Main Character|Style|Scene|$)",
+                r"STORY:\s*(.+?)(?=CHARACTER|MAIN CHARACTER|STYLE|SCENE|$)",
+                r"Concept:\s*(.+?)(?=Character|Main Character|Style|Scene|$)"
+            ]
             
+            # Multiple patterns for character
+            character_patterns = [
+                r"MAIN CHARACTER:\s*(.+?)(?=STYLE|SCENE|STORY|$)",
+                r"Main Character:\s*(.+?)(?=Style|Scene|Story|$)", 
+                r"CHARACTER:\s*(.+?)(?=STYLE|SCENE|STORY|$)",
+                r"Character:\s*(.+?)(?=Style|Scene|Story|$)"
+            ]
+            
+            # Multiple patterns for style/setting
+            style_patterns = [
+                r"STYLE & SETTING:\s*(.+?)(?=SCENE|STORY|CHARACTER|$)",
+                r"Style & Setting:\s*(.+?)(?=Scene|Story|Character|$)",
+                r"STYLE:\s*(.+?)(?=SCENE|STORY|CHARACTER|$)",
+                r"Style:\s*(.+?)(?=Scene|Story|Character|$)",
+                r"SETTING:\s*(.+?)(?=SCENE|STORY|CHARACTER|$)",
+                r"Setting:\s*(.+?)(?=Scene|Story|Character|$)"
+            ]
+            
+            # Try each pattern until one works
+            for pattern in story_patterns:
+                match = re.search(pattern, output, re.IGNORECASE | re.DOTALL)
+                if match:
+                    parsed["story_concept"] = match.group(1).strip()
+                    break
+                    
+            for pattern in character_patterns:
+                match = re.search(pattern, output, re.IGNORECASE | re.DOTALL)
+                if match:
+                    parsed["main_character"] = match.group(1).strip()
+                    break
+                    
+            for pattern in style_patterns:
+                match = re.search(pattern, output, re.IGNORECASE | re.DOTALL)
+                if match:
+                    parsed["style_setting"] = match.group(1).strip()
+                    break
+            
+            # Extract scenes with flexible patterns
+            scene_patterns = [
+                r"SCENE BREAKDOWN:(.+?)$",
+                r"Scene Breakdown:(.+?)$", 
+                r"SCENES:(.+?)$",
+                r"Scenes:(.+?)$",
+                r"SCENE STRUCTURE:(.+?)$",
+                r"Scene Structure:(.+?)$"
+            ]
+            
+            scene_section = ""
+            for pattern in scene_patterns:
+                match = re.search(pattern, output, re.IGNORECASE | re.DOTALL)
+                if match:
+                    scene_section = match.group(1).strip()
+                    break
+            
+            # If no scene section found, try to find individual scenes in the whole text
+            if not scene_section:
+                scene_section = output
+            
+            # Extract individual scenes with flexible numbering
+            individual_scene_patterns = [
+                r"Scene\s+(\d+):?\s*(.+?)(?=Scene\s+\d+|$)",
+                r"SCENE\s+(\d+):?\s*(.+?)(?=SCENE\s+\d+|$)",
+                r"(\d+)\.\s*(.+?)(?=\d+\.|$)",
+                r"Scene\s+(\w+):?\s*(.+?)(?=Scene\s+\w+|$)"  # Handles "Scene One", etc.
+            ]
+            
+            scenes_found = []
+            for pattern in individual_scene_patterns:
+                matches = re.findall(pattern, scene_section, re.IGNORECASE | re.DOTALL)
+                if matches:
+                    scenes_found = [match[1].strip() for match in matches]
+                    break
+            
+            # If still no scenes, try splitting on common delimiters
+            if not scenes_found:
+                # Try splitting on newlines and look for scene-like content
+                lines = scene_section.split('\n')
+                current_scene = ""
+                for line in lines:
+                    line = line.strip()
+                    if re.match(r'(Scene|SCENE|\d+\.)', line, re.IGNORECASE):
+                        if current_scene:
+                            scenes_found.append(current_scene.strip())
+                        current_scene = line
+                    elif current_scene and line:
+                        current_scene += " " + line
+                        
+                # Add the last scene
+                if current_scene:
+                    scenes_found.append(current_scene.strip())
+            
+            parsed["scenes"] = scenes_found
+            
+            # If we got nothing, use fallback strategy
+            if not any([parsed["story_concept"], parsed["main_character"], parsed["style_setting"], parsed["scenes"]]):
+                # Use entire input as story concept and try to extract scenes from it
+                parsed["story_concept"] = fallback_text
+                # Basic scene extraction as fallback
+                lines = fallback_text.split('\n')
+                scenes_fallback = [line.strip() for line in lines if line.strip() and len(line.strip()) > 20]
+                parsed["scenes"] = scenes_fallback[:6]  # Take first 6 substantial lines
+                
+        except Exception as e:
+            # Complete fallback: treat entire input as story concept
+            parsed["story_concept"] = fallback_text
+            parsed["scenes"] = [fallback_text]
+        
         return parsed
     
-    def _parse_ovi_movie_director_output(self, output):
+    def _parse_ovi_movie_director_output_robust(self, output):
         """
-        Parse OVI Movie Director output, extracting speech and cleaning scenes.
-        Returns parsed data with cleaned scenes AND extracted speech.
+        Robust OVI parser with speech extraction.
         """
-        parsed = {
-            "story_concept": "",
-            "main_character": "",
-            "style_setting": "",
-            "scenes": []
-        }
-        
+        parsed_data = self._parse_movie_director_output_robust(output)
         speech_outputs = [""] * 6
         
-        lines = output.split('\n')
-        current_section = None
-        current_scene_text = ""
-        
-        for line in lines:
-            line = line.strip()
-            if not line:
-                continue
-                
-            # Detect section headers
-            if line.startswith("STORY CONCEPT:"):
-                current_section = "story_concept"
-                parsed["story_concept"] = line.replace("STORY CONCEPT:", "").strip()
-            elif line.startswith("MAIN CHARACTER:"):
-                current_section = "main_character"
-                parsed["main_character"] = line.replace("MAIN CHARACTER:", "").strip()
-            elif line.startswith("STYLE & SETTING:"):
-                current_section = "style_setting"
-                parsed["style_setting"] = line.replace("STYLE & SETTING:", "").strip()
-            elif line.startswith("SCENE BREAKDOWN:"):
-                current_section = "scenes"
-            elif line.startswith("Scene ") and current_section == "scenes":
-                # Save previous scene if exists
-                if current_scene_text:
-                    parsed["scenes"].append(current_scene_text.strip())
-                current_scene_text = line
-            elif current_section == "scenes" and line:
-                # Continue building current scene
-                current_scene_text += " " + line
-            elif current_section and line:
-                # Continue building current section
-                if current_section == "story_concept":
-                    parsed["story_concept"] += " " + line
-                elif current_section == "main_character":
-                    parsed["main_character"] += " " + line
-                elif current_section == "style_setting":
-                    parsed["style_setting"] += " " + line
-        
-        # Don't forget the last scene
-        if current_scene_text:
-            parsed["scenes"].append(current_scene_text.strip())
-        
-        # Extract speech from scenes and clean them
+        # Extract speech from scenes
         cleaned_scenes = []
-        for i, scene in enumerate(parsed["scenes"]):
+        for i, scene in enumerate(parsed_data["scenes"]):
             # Extract speech using regex
-            speech_match = re.search(r'<SPEECH>(.*?)</SPEECH>', scene)
+            speech_match = re.search(r'<SPEECH>(.*?)</SPEECH>', scene, re.IGNORECASE | re.DOTALL)
             if speech_match and i < 6:
-                speech_outputs[i] = speech_match.group(1)
+                speech_outputs[i] = speech_match.group(1).strip()
             
             # Remove speech tags from scene
-            cleaned_scene = re.sub(r'<SPEECH>.*?</SPEECH>', '', scene).strip()
-            # Clean up any double spaces
+            cleaned_scene = re.sub(r'<SPEECH>.*?</SPEECH>', '', scene, flags=re.IGNORECASE | re.DOTALL).strip()
             cleaned_scene = re.sub(r'\s+', ' ', cleaned_scene)
             cleaned_scenes.append(cleaned_scene)
         
-        parsed["scenes"] = cleaned_scenes
-        return parsed, speech_outputs
+        parsed_data["scenes"] = cleaned_scenes
+        return parsed_data, speech_outputs
     
+    # [Rest of the methods remain the same...]
     def _get_system_prompt_1(self, image_trigger_word, video_trigger_word, parsed_data):
-        """
-        System Prompt 1: Direct instructions for generating 6 image and 6 video prompts.
-        """
+        """System Prompt 1: Direct instructions for generating 6 image and 6 video prompts."""
         return f"""Convert the Movie Director scenes into image and video prompts. Output valid JSON only.
 
 MOVIE DIRECTOR INPUT:
@@ -238,9 +264,7 @@ OUTPUT FORMAT:
 Return JSON with "imagePrompts" and "videoPrompts" sections. Each section has scene1 through scene6. Use proper JSON formatting."""
 
     def _get_system_prompt_2(self, image_trigger_word, video_trigger_word, traveling_prompt_count, parsed_data):
-        """
-        FIXED System Prompt 2: Direct commands with concrete example to prevent ollama template copying.
-        """
+        """System Prompt 2: Traveling prompts with robust parsing."""
         return f"""Convert Movie Director scenes into JSON format. Do NOT copy the template - create actual content.
 
 MOVIE DIRECTOR INPUT:
@@ -277,9 +301,7 @@ EXAMPLE FORMAT (create your own content):
 IMPORTANT: Create your own story content based on the Movie Director scenes above, not this example."""
 
     def _get_system_prompt_3_ovi(self, image_trigger_word, video_trigger_word, parsed_data):
-        """
-        System Prompt 3: Generates 6 image prompts and 6 video prompts for OVI processing (speech handled separately).
-        """
+        """System Prompt 3: OVI processing (speech handled separately)."""
         return f"""Convert the Movie Director scenes into image and video prompts for OVI processing. Output valid JSON only.
 
 MOVIE DIRECTOR INPUT:
