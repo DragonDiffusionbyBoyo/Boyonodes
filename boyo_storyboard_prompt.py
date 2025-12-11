@@ -6,6 +6,7 @@ class BoyoStoryboardPrompt:
     Input node for generating structured storyboard prompts using ollama models.
     Now accepts Movie Director output format for temporal reasoning and story structure.
     Includes OVI audio integration with speech extraction and bypass.
+    FIXED: Prevents ollama from copying template text by using direct commands and realistic examples.
     """
     
     @classmethod
@@ -238,29 +239,42 @@ Return JSON with "imagePrompts" and "videoPrompts" sections. Each section has sc
 
     def _get_system_prompt_2(self, image_trigger_word, video_trigger_word, traveling_prompt_count, parsed_data):
         """
-        System Prompt 2: Generates 6 image prompts and 6 video prompts with multiple traveling sub-prompts using Movie Director structure.
+        FIXED System Prompt 2: Direct commands with concrete example to prevent ollama template copying.
         """
-        return f"""Convert the Movie Director scenes into image and traveling video prompts. Output valid JSON only.
+        return f"""Convert Movie Director scenes into JSON format. Do NOT copy the template - create actual content.
 
 MOVIE DIRECTOR INPUT:
 Story: {parsed_data.get('story_concept', 'Not provided')}
 Character: {parsed_data.get('main_character', 'Not provided')}
 Style: {parsed_data.get('style_setting', 'Not provided')}
 
-Scenes:
+SCENES TO PROCESS:
 {chr(10).join(parsed_data.get('scenes', []))}
 
-TASK:
-Create exactly 6 image prompts and 6 traveling video prompts from these scenes.
+DIRECT COMMANDS:
+1. Generate 6 image prompts starting with "{image_trigger_word}"
+2. Generate 6 video prompts with {traveling_prompt_count} sub-prompts each  
+3. Start each video sub-prompt with "{video_trigger_word}"
+4. Separate sub-prompts with \\n characters
+5. Output valid JSON only
 
-IMAGE PROMPTS:
-Start each with "{image_trigger_word}" then describe the static visual moment. Include character appearance, location details, lighting, and composition.
+EXAMPLE FORMAT (create your own content):
+{{
+  "imagePrompts": {{
+    "scene1": "{image_trigger_word} woman sitting at wooden desk writing, soft window light, warm colors",
+    "scene2": "{image_trigger_word} same woman walking through garden, flowers blooming, golden hour",
+    "scene3": "{image_trigger_word} woman standing in doorway looking worried, dramatic shadows",
+    "scene4": "{image_trigger_word} woman running down cobblestone street, rain falling, urgent mood",
+    "scene5": "{image_trigger_word} woman embracing someone at train platform, emotional lighting",
+    "scene6": "{image_trigger_word} woman smiling peacefully at sunset, resolution, warm glow"
+  }},
+  "videoPrompts": {{
+    "scene1": "{video_trigger_word} woman picks up pen and begins writing\\n{video_trigger_word} camera slowly zooms on her focused expression\\n{video_trigger_word} her hand moves gracefully across the paper",
+    "scene2": "{video_trigger_word} woman opens garden gate and steps inside\\n{video_trigger_word} she bends down to smell the roses\\n{video_trigger_word} camera follows her walking down garden path"
+  }}
+}}
 
-VIDEO PROMPTS:
-Each video prompt contains {traveling_prompt_count} sub-prompts separated by newlines. Start each sub-prompt with "{video_trigger_word}". Show progression of actions within the same location over multiple shots.
-
-OUTPUT FORMAT:
-Return JSON with "imagePrompts" and "videoPrompts" sections. Each section has scene1 through scene6. For video prompts, separate the {traveling_prompt_count} sub-prompts with \\n characters."""
+IMPORTANT: Create your own story content based on the Movie Director scenes above, not this example."""
 
     def _get_system_prompt_3_ovi(self, image_trigger_word, video_trigger_word, parsed_data):
         """
