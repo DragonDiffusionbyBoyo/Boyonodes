@@ -105,13 +105,12 @@ ComfyUI custom nodes for Chatterbox Turbo text-to-speech with voice cloning capa
 1. **Install Dependencies**:
 ```bash
    pip install librosa transformers safetensors huggingface_hub resemble-perth pyloudnorm soundfile
-    pip install chatterbox-tts --no-deps
-    pip install resemble-perth --no-deps
+        pip install resemble-perth --no-deps
 ```
    
 2. **Install Chatterbox TTS**:
 ```bash
-   pip install chatterbox-tts
+   pip install chatterbox-tts --no-deps
 ```
 
 3. **Add Node Files**: Copy the node files to your ComfyUI `custom_nodes` directory
