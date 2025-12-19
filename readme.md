@@ -104,7 +104,7 @@ ComfyUI custom nodes for Chatterbox Turbo text-to-speech with voice cloning capa
 
 1. **Install Dependencies**:
 ```bash
-   pip install librosa transformers safetensors huggingface_hub resemble-perth pyloudnorm soundfile
+   pip install -r requirements.txt
         pip install resemble-perth --no-deps
 ```
    
