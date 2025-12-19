@@ -1,0 +1,322 @@
+{
+  "id": "6133307a-d9e6-46bd-a634-f8752a7e520a",
+  "revision": 0,
+  "last_node_id": 7,
+  "last_link_id": 4,
+  "nodes": [
+    {
+      "id": 3,
+      "type": "VHS_LoadAudioUpload",
+      "pos": [
+        -10001.465230784226,
+        -921.9347300721201
+      ],
+      "size": [
+        251.29629516601562,
+        204
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "links": [
+            2
+          ]
+        },
+        {
+          "name": "duration",
+          "type": "FLOAT",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui-videohelpersuite",
+        "ver": "537f3a02269e14ab4b0350d4189a52034e9a3b12",
+        "Node name for S&R": "VHS_LoadAudioUpload"
+      },
+      "widgets_values": {
+        "audio": "ghoul.wav",
+        "start_time": 0,
+        "duration": 0,
+        "choose audio to upload": "image",
+        "audiopreview": {
+          "params": {
+            "start_time": 0,
+            "duration": 0,
+            "filename": "ghoul.wav",
+            "type": "input"
+          }
+        }
+      },
+      "color": "#232",
+      "bgcolor": "#353"
+    },
+    {
+      "id": 1,
+      "type": "BoyoChatterboxTurboLoader",
+      "pos": [
+        -10012.97951595435,
+        -1063.728235770242
+      ],
+      "size": [
+        302.45555725097654,
+        82
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "model",
+          "type": "CHATTERBOX_MODEL",
+          "links": [
+            1
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "Boyonodes",
+        "ver": "549fcf39a35d34e5d7185b1eb33388b9e70bb818",
+        "Node name for S&R": "BoyoChatterboxTurboLoader"
+      },
+      "widgets_values": [
+        "auto"
+      ],
+      "color": "#222",
+      "bgcolor": "#000"
+    },
+    {
+      "id": 4,
+      "type": "PreviewAudio",
+      "pos": [
+        -9154.738866014897,
+        -1025.198222515119
+      ],
+      "size": [
+        270,
+        88
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 3
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.4.0",
+        "Node name for S&R": "PreviewAudio"
+      },
+      "widgets_values": [],
+      "color": "#323",
+      "bgcolor": "#535"
+    },
+    {
+      "id": 5,
+      "type": "SaveAudio",
+      "pos": [
+        -9156.419586061718,
+        -894.6547999575536
+      ],
+      "size": [
+        270,
+        112
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 4
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.4.0",
+        "Node name for S&R": "SaveAudio"
+      },
+      "widgets_values": [
+        "audio/ComfyUI"
+      ],
+      "color": "#323",
+      "bgcolor": "#535"
+    },
+    {
+      "id": 6,
+      "type": "Label (rgthree)",
+      "pos": [
+        -10159.47065000383,
+        -1307.1006900530913
+      ],
+      "size": [
+        2662.666748046875,
+        150
+      ],
+      "flags": {
+        "allow_interaction": true
+      },
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "Dragon Diffusion Chatterbox Turbo TTS",
+      "properties": {
+        "fontSize": 150,
+        "fontFamily": "Arial",
+        "fontColor": "#ffffff",
+        "textAlign": "left",
+        "backgroundColor": "green",
+        "padding": 0,
+        "borderRadius": 0,
+        "angle": 0
+      },
+      "color": "#fff0",
+      "bgcolor": "#fff0"
+    },
+    {
+      "id": 2,
+      "type": "BoyoChatterboxTurboGenerate",
+      "pos": [
+        -9650.016029440754,
+        -1047.7807799241084
+      ],
+      "size": [
+        400,
+        324
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "CHATTERBOX_MODEL",
+          "link": 1
+        },
+        {
+          "name": "reference_audio",
+          "type": "AUDIO",
+          "link": 2
+        }
+      ],
+      "outputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "links": [
+            3,
+            4
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "Boyonodes",
+        "ver": "549fcf39a35d34e5d7185b1eb33388b9e70bb818",
+        "Node name for S&R": "BoyoChatterboxTurboGenerate"
+      },
+      "widgets_values": [
+        "Hello, this is a test of the Boyo Nodes Chatterbox Turbo text to speech system.[clear throat] [sigh] [shush] [cough] [groan] [sniff] [gasp] [chuckle] [laugh] ",
+        0.8,
+        0.95,
+        1000,
+        1.2,
+        1669972665,
+        "randomize",
+        0,
+        0,
+        true
+      ],
+      "color": "#223",
+      "bgcolor": "#335"
+    },
+    {
+      "id": 7,
+      "type": "Note",
+      "pos": [
+        -10396.760365429422,
+        -1049.9143042749383
+      ],
+      "size": [
+        347.49158048048594,
+        352.8427716514216
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "RTFM",
+      "properties": {},
+      "widgets_values": [
+        "Emotions to use. \n\nclear throat] [sigh] [shush] [cough] [groan] [sniff] [gasp] [chuckle] [laugh] \n\nThis TTS is limited to 300 chars"
+      ],
+      "color": "#432",
+      "bgcolor": "#653"
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      2,
+      0,
+      "CHATTERBOX_MODEL"
+    ],
+    [
+      2,
+      3,
+      0,
+      2,
+      1,
+      "AUDIO"
+    ],
+    [
+      3,
+      2,
+      0,
+      4,
+      0,
+      "AUDIO"
+    ],
+    [
+      4,
+      2,
+      0,
+      5,
+      0,
+      "AUDIO"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.555991731349225,
+      "offset": [
+        11264.888069015458,
+        1730.6577474388118
+      ]
+    },
+    "workflowRendererVersion": "LG",
+    "frontendVersion": "1.34.8",
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true
+  },
+  "version": 0.4
+}
