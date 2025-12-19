@@ -15,3 +15,7 @@ pyloudnorm>=0.1.0
 soundfile>=0.12.0
 s3tokenizer
 conformer
+omegaconf
+pykakasi==2.3.0
+spacy-pkuseg
+gradio==5.44.1

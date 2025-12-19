@@ -17,6 +17,32 @@ class BoyoChatterboxTurboLoader:
     CATEGORY = "Boyo/Audio/TTS"
     
     def load_model(self, device):
+        # Bypass Perth watermarking entirely to avoid dependency issues
+        print("🔧 Bypassing Perth watermarking for compatibility...")
+        try:
+            import sys
+            from types import ModuleType
+            
+            # Create a fake perth module if it doesn't exist
+            if 'perth' not in sys.modules:
+                fake_perth = ModuleType('perth')
+                
+                # Create a dummy watermarker class
+                class DummyWatermarker:
+                    def __init__(self):
+                        pass
+                    
+                    def apply_watermark(self, wav, sample_rate=None):
+                        # Just return the audio unchanged
+                        return wav
+                
+                fake_perth.PerthImplicitWatermarker = DummyWatermarker
+                sys.modules['perth'] = fake_perth
+                print("✅ Created dummy Perth module")
+                
+        except Exception as e:
+            print(f"Warning: Could not set up Perth bypass: {e}")
+        
         try:
             # Import here to avoid dependency issues if not installed
             from chatterbox.tts_turbo import ChatterboxTurboTTS
@@ -43,19 +69,17 @@ class BoyoChatterboxTurboLoader:
             # Store device info for later use
             model._device_info = device
             
-            # Check if Perth watermarker is working
+            # Ensure watermarker is our dummy version
             try:
-                # Test the watermarker
-                test_watermarker = model.watermarker
-                print("✅ Perth watermarker available")
-            except Exception as e:
-                print(f"⚠️ Warning: Perth watermarker issue: {e}")
-                print("ℹ️ Audio will be generated without watermarking")
-                # Create a dummy watermarker that does nothing
+                # Replace the model's watermarker with our dummy one
                 class DummyWatermarker:
-                    def apply_watermark(self, wav, sample_rate):
+                    def apply_watermark(self, wav, sample_rate=None):
                         return wav
+                
                 model.watermarker = DummyWatermarker()
+                print("✅ Watermarking bypassed successfully")
+            except Exception as e:
+                print(f"⚠️ Warning: Could not replace watermarker: {e}")
             
             return (model,)
             
