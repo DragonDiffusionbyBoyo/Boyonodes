@@ -103,52 +103,75 @@ ComfyUI custom nodes for Chatterbox Turbo text-to-speech with voice cloning capa
 ## Installation
 
 1. **Install Dependencies**:
-   ```bash
+```bash
    pip install librosa transformers safetensors huggingface_hub resemble-perth pyloudnorm soundfile
-    2. Install Chatterbox TTS:
-       pip install chatterbox-tts
-    3. Add Node Files: Copy the node files to your ComfyUI custom_nodes directory
-    4. Restart ComfyUI
-Usage
-Basic Workflow
-    1. Load Model: Add "Boyo Chatterbox Turbo Loader" node 
-    2. Load Reference Audio: Use ComfyUI's "Load Audio" node (5+ seconds of speech) 
-    3. Generate Speech: Add "Boyo Chatterbox Turbo Generate" node 
-    4. Connect Everything: Model → Generate ← Audio, Text 
-    5. Save Output: Use "Save Audio" node 
-Emotion Tags
+```
+   
+2. **Install Chatterbox TTS**:
+```bash
+   pip install chatterbox-tts
+```
+
+3. **Add Node Files**: Copy the node files to your ComfyUI `custom_nodes` directory
+
+4. **Restart ComfyUI**
+
+## Usage
+
+### Basic Workflow
+
+1. **Load Model**: Add "Boyo Chatterbox Turbo Loader" node
+2. **Load Reference Audio**: Use ComfyUI's "Load Audio" node (5+ seconds of speech)
+3. **Generate Speech**: Add "Boyo Chatterbox Turbo Generate" node
+4. **Connect Everything**: Model → Generate ← Audio, Text
+5. **Save Output**: Use "Save Audio" node
+
+### Emotion Tags
+
 Add natural expressions to your text using these emotion tags:
-    • [clear throat] - Throat clearing 
-    • [sigh] - Sighing sound 
-    • [shush] - Shushing/quiet sound 
-    • [cough] - Coughing 
-    • [groan] - Groaning sound 
-    • [sniff] - Sniffing 
-    • [gasp] - Surprise gasp 
-    • [chuckle] - Light laughter 
-    • [laugh] - Full laughter 
-Example Text
+
+- **`[clear throat]`** - Throat clearing
+- **`[sigh]`** - Sighing sound  
+- **`[shush]`** - Shushing/quiet sound
+- **`[cough]`** - Coughing
+- **`[groan]`** - Groaning sound
+- **`[sniff]`** - Sniffing
+- **`[gasp]`** - Surprise gasp
+- **`[chuckle]`** - Light laughter
+- **`[laugh]`** - Full laughter
+
+### Example Text
+```
 Oh, that's interesting! [chuckle] Well, I suppose we could try a different approach. [sigh] 
 Let me think about this for a moment. [clear throat] Actually, yes, that might work perfectly!
-Parameters
-    • Temperature (0.05-2.0): Controls randomness and expressiveness 
-    • Top P (0.0-1.0): Nucleus sampling for natural speech 
-    • Top K (0-1000): Vocabulary filtering 
-    • Repetition Penalty (1.0-2.0): Reduces repetitive speech 
-    • Seed: For reproducible generation 
-Requirements
-    • CUDA GPU (recommended) or CPU 
-    • 5+ second reference audio for voice cloning 
-    • ~2GB disk space for model download (first run) 
-Troubleshooting
-    • Audio too fast: Try adjusting sample rate in the output 
-    • Model loading errors: Ensure all dependencies are installed 
-    • CUDA issues: Set device to "cpu" if GPU causes problems 
-Notes
-    • First run downloads model weights (~2GB) 
-    • Reference audio quality affects output quality 
-    • Supports MP3, WAV, FLAC input formats 
-    • Outputs 24kHz audio 
+```
+
+## Parameters
+
+- **Temperature** (0.05-2.0): Controls randomness and expressiveness
+- **Top P** (0.0-1.0): Nucleus sampling for natural speech
+- **Top K** (0-1000): Vocabulary filtering
+- **Repetition Penalty** (1.0-2.0): Reduces repetitive speech
+- **Seed**: For reproducible generation
+
+## Requirements
+
+- CUDA GPU (recommended) or CPU
+- 5+ second reference audio for voice cloning
+- ~2GB disk space for model download (first run)
+
+## Troubleshooting
+
+- **Audio too fast**: Try adjusting sample rate in the output
+- **Model loading errors**: Ensure all dependencies are installed
+- **CUDA issues**: Set device to "cpu" if GPU causes problems
+
+## Notes
+
+- First run downloads model weights (~2GB)
+- Reference audio quality affects output quality
+- Supports MP3, WAV, FLAC input formats
+- Outputs 24kHz audio
 
 
 ## Asset Downloader System
