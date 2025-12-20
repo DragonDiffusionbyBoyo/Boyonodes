@@ -1,6 +1,6 @@
 # Boyonodes (Vision Nodes Disabled due to the dependencies causing conflicts, will resolve soon)
 
-Added Chatterbox Turbo TTS
+Added Chatterbox Turbo TTS/ Audio padding nodes
 
 Essential nodes for semantic image editing workflows with **Kontext**, **Qwen Image Edit**, and **HiDream E1.1** models. Streamlines iterative editing, dataset creation, and batch processing for next-generation semantic editing pipelines.
 Now with Lora loader for Wan2.2 which automatically selects pairs and any trigger words for you.
@@ -174,6 +174,35 @@ Let me think about this for a moment. [clear throat] Actually, yes, that might w
 - Supports MP3, WAV, FLAC input formats
 - Outputs 24kHz audio
 
+🎵 Audio Padding & Synchronization
+Finally solved the community's lip-sync timing challenge! Precision audio padding nodes for perfect video-audio synchronization.
+Key Nodes
+
+BoyoAudioDurationAnalyzer - Extract precise duration from any audio tensor
+BoyoAudioPadder - Add intelligent silence padding with auto-centering
+
+Perfect for:
+
+Lip-sync workflows - Match audio duration to video length exactly
+TTS integration - Pad generated speech for video timing
+Audio sequencing - Precise timing control for audio tracks
+Batch processing - Standardize audio lengths across projects
+
+Why It Works When Others Failed
+Community attempts at audio padding typically failed due to:
+
+ComfyUI's inconsistent audio tensor formats
+Sample rate mismatches causing "too fast" playback
+Lack of intelligent feedback for proper timing
+Memory issues with large audio files
+
+Our solution handles:
+✅ All ComfyUI audio formats ((batch,channels,samples) vs (batch,samples,channels))
+✅ Automatic 12kHz output for proper playback speed
+✅ Intelligent status feedback: 📊 Audio: 3.2s + Padding: 7.3s = Total: 10.5s ✅ Perfect match!
+✅ Memory-efficient padding for large files
+✅ Auto-centering with target duration matching
+Quick Start
 
 ## Asset Downloader System
 
