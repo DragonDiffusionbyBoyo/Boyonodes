@@ -1,0 +1,875 @@
+{
+  "id": "33da75b5-04ab-4d77-80d3-543dd488c290",
+  "revision": 0,
+  "last_node_id": 19,
+  "last_link_id": 12,
+  "nodes": [
+    {
+      "id": 5,
+      "type": "VHS_LoadVideo",
+      "pos": [
+        -11314.69296133475,
+        -1437.588705479059
+      ],
+      "size": [
+        255.29629516601562,
+        559.2962951660156
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 4,
+      "inputs": [
+        {
+          "name": "meta_batch",
+          "shape": 7,
+          "type": "VHS_BatchManager",
+          "link": null
+        },
+        {
+          "name": "vae",
+          "shape": 7,
+          "type": "VAE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            5
+          ]
+        },
+        {
+          "name": "frame_count",
+          "type": "INT",
+          "links": null
+        },
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "links": null
+        },
+        {
+          "name": "video_info",
+          "type": "VHS_VIDEOINFO",
+          "links": [
+            1
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui-videohelpersuite",
+        "ver": "537f3a02269e14ab4b0350d4189a52034e9a3b12",
+        "Node name for S&R": "VHS_LoadVideo"
+      },
+      "widgets_values": {
+        "video": "Scene1_00002.mp4",
+        "force_rate": 0,
+        "custom_width": 0,
+        "custom_height": 0,
+        "frame_load_cap": 0,
+        "skip_first_frames": 0,
+        "select_every_nth": 1,
+        "format": "AnimateDiff",
+        "choose video to upload": "image",
+        "videopreview": {
+          "hidden": false,
+          "paused": false,
+          "params": {
+            "filename": "Scene1_00002.mp4",
+            "type": "input",
+            "format": "video/mp4",
+            "force_rate": 0,
+            "custom_width": 0,
+            "custom_height": 0,
+            "frame_load_cap": 0,
+            "skip_first_frames": 0,
+            "select_every_nth": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 6,
+      "type": "VHS_VideoInfo",
+      "pos": [
+        -11023.096240895558,
+        -1234.204806291043
+      ],
+      "size": [
+        232.8888931274414,
+        206
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 4,
+      "inputs": [
+        {
+          "name": "video_info",
+          "type": "VHS_VIDEOINFO",
+          "link": 1
+        }
+      ],
+      "outputs": [
+        {
+          "name": "source_fps🟨",
+          "type": "FLOAT",
+          "links": null
+        },
+        {
+          "name": "source_frame_count🟨",
+          "type": "INT",
+          "links": null
+        },
+        {
+          "name": "source_duration🟨",
+          "type": "FLOAT",
+          "links": [
+            4
+          ]
+        },
+        {
+          "name": "source_width🟨",
+          "type": "INT",
+          "links": null
+        },
+        {
+          "name": "source_height🟨",
+          "type": "INT",
+          "links": null
+        },
+        {
+          "name": "loaded_fps🟦",
+          "type": "FLOAT",
+          "links": null
+        },
+        {
+          "name": "loaded_frame_count🟦",
+          "type": "INT",
+          "links": null
+        },
+        {
+          "name": "loaded_duration🟦",
+          "type": "FLOAT",
+          "links": null
+        },
+        {
+          "name": "loaded_width🟦",
+          "type": "INT",
+          "links": null
+        },
+        {
+          "name": "loaded_height🟦",
+          "type": "INT",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui-videohelpersuite",
+        "ver": "537f3a02269e14ab4b0350d4189a52034e9a3b12",
+        "Node name for S&R": "VHS_VideoInfo"
+      },
+      "widgets_values": {}
+    },
+    {
+      "id": 9,
+      "type": "GetImageSizeAndCount",
+      "pos": [
+        -11019.516794703646,
+        -1366.0271358362402
+      ],
+      "size": [
+        195.67777099609376,
+        86
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 4,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 5
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            6
+          ]
+        },
+        {
+          "label": "512 width",
+          "name": "width",
+          "type": "INT",
+          "links": null
+        },
+        {
+          "label": "512 height",
+          "name": "height",
+          "type": "INT",
+          "links": null
+        },
+        {
+          "label": "162 count",
+          "name": "count",
+          "type": "INT",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui-kjnodes",
+        "ver": "ff7f876c09ff5a53be051073c3c1731b96ee31a3",
+        "Node name for S&R": "GetImageSizeAndCount"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 11,
+      "type": "PreviewImage",
+      "pos": [
+        -10754.850759650908,
+        -1112.6877286258175
+      ],
+      "size": [
+        140,
+        26
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 16,
+      "mode": 4,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 7
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.4.0",
+        "Node name for S&R": "PreviewImage"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 8,
+      "type": "Display Any (rgthree)",
+      "pos": [
+        -11031.617333026114,
+        -984.5639968660184
+      ],
+      "size": [
+        210,
+        88
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 4,
+      "inputs": [
+        {
+          "dir": 3,
+          "name": "source",
+          "type": "*",
+          "link": 4
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "rgthree-comfy",
+        "ver": "1.0.2512092137",
+        "Node name for S&R": "Display Any (rgthree)"
+      },
+      "widgets_values": [
+        "10.125"
+      ]
+    },
+    {
+      "id": 1,
+      "type": "BoyoAudioDurationAnalyzer",
+      "pos": [
+        -9970.314483769816,
+        -1285.535514021941
+      ],
+      "size": [
+        235.23332824707032,
+        46
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 2
+        }
+      ],
+      "outputs": [
+        {
+          "name": "duration_seconds",
+          "type": "FLOAT",
+          "links": [
+            9
+          ]
+        },
+        {
+          "name": "info_text",
+          "type": "STRING",
+          "links": [
+            10
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "Boyonodes",
+        "ver": "189225a86f2379dfb8192d83c2acdec7cb9626a2",
+        "Node name for S&R": "BoyoAudioDurationAnalyzer",
+        "aux_id": "DragonDiffusionbyBoyo/Boyonodes"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 7,
+      "type": "LoadAudio",
+      "pos": [
+        -10298.345956575205,
+        -1242.9803131909111
+      ],
+      "size": [
+        280,
+        136
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "AUDIO",
+          "type": "AUDIO",
+          "links": [
+            2,
+            3
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.4.0",
+        "Node name for S&R": "LoadAudio"
+      },
+      "widgets_values": [
+        "Will AI love him back.wav",
+        null,
+        null
+      ]
+    },
+    {
+      "id": 13,
+      "type": "Display Any (rgthree)",
+      "pos": [
+        -9676.969825896305,
+        -1268.4348186874226
+      ],
+      "size": [
+        210,
+        88
+      ],
+      "flags": {},
+      "order": 12,
+      "mode": 0,
+      "inputs": [
+        {
+          "dir": 3,
+          "name": "source",
+          "type": "*",
+          "link": 10
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "rgthree-comfy",
+        "ver": "1.0.2512092137",
+        "Node name for S&R": "Display Any (rgthree)"
+      },
+      "widgets_values": [
+        "📊 Audio: 7.76s | 186,240 samples @ 24000Hz"
+      ]
+    },
+    {
+      "id": 15,
+      "type": "Display Any (rgthree)",
+      "pos": [
+        -9667.249386554186,
+        -1113.579440547688
+      ],
+      "size": [
+        210,
+        88
+      ],
+      "flags": {},
+      "order": 14,
+      "mode": 0,
+      "inputs": [
+        {
+          "dir": 3,
+          "name": "source",
+          "type": "*",
+          "link": 11
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "rgthree-comfy",
+        "ver": "1.0.2512092137",
+        "Node name for S&R": "Display Any (rgthree)"
+      },
+      "widgets_values": [
+        "10.76"
+      ]
+    },
+    {
+      "id": 16,
+      "type": "Display Any (rgthree)",
+      "pos": [
+        -9661.019406677231,
+        -985.6571814409774
+      ],
+      "size": [
+        210.56737006816184,
+        194.66268709937367
+      ],
+      "flags": {},
+      "order": 15,
+      "mode": 0,
+      "inputs": [
+        {
+          "dir": 3,
+          "name": "source",
+          "type": "*",
+          "link": 12
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "rgthree-comfy",
+        "ver": "1.0.2512092137",
+        "Node name for S&R": "Display Any (rgthree)"
+      },
+      "widgets_values": [
+        "📊 Audio: 7.76s | + Padding: 3.00s | = Total: 10.76s | ⚠️ 0.66s longer than target | 💡 Try auto_center or 1.17s each"
+      ]
+    },
+    {
+      "id": 4,
+      "type": "BoyoAudioPadder",
+      "pos": [
+        -9976.07754141287,
+        -1169.254970877579
+      ],
+      "size": [
+        270,
+        170
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 3
+        }
+      ],
+      "outputs": [
+        {
+          "name": "padded_audio",
+          "type": "AUDIO",
+          "links": [
+            8
+          ]
+        },
+        {
+          "name": "total_duration",
+          "type": "FLOAT",
+          "links": [
+            11
+          ]
+        },
+        {
+          "name": "status_text",
+          "type": "STRING",
+          "links": [
+            12
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "Boyonodes",
+        "ver": "189225a86f2379dfb8192d83c2acdec7cb9626a2",
+        "Node name for S&R": "BoyoAudioPadder",
+        "aux_id": "DragonDiffusionbyBoyo/Boyonodes"
+      },
+      "widgets_values": [
+        0,
+        3,
+        10.1,
+        false
+      ]
+    },
+    {
+      "id": 12,
+      "type": "SaveAudio",
+      "pos": [
+        -9399.31370948872,
+        -1143.4825842338762
+      ],
+      "size": [
+        270,
+        112
+      ],
+      "flags": {},
+      "order": 13,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 8
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.4.0",
+        "Node name for S&R": "SaveAudio"
+      },
+      "widgets_values": [
+        "audio/ComfyUI"
+      ]
+    },
+    {
+      "id": 14,
+      "type": "Display Any (rgthree)",
+      "pos": [
+        -9676.592292327767,
+        -1405.8719402759941
+      ],
+      "size": [
+        210,
+        88
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+        {
+          "dir": 3,
+          "name": "source",
+          "type": "*",
+          "link": 9
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "rgthree-comfy",
+        "ver": "1.0.2512092137",
+        "Node name for S&R": "Display Any (rgthree)"
+      },
+      "widgets_values": [
+        "7.76"
+      ]
+    },
+    {
+      "id": 10,
+      "type": "GetImageRangeFromBatch",
+      "pos": [
+        -11007.536780866783,
+        -830.8415899788463
+      ],
+      "size": [
+        349.0481475830078,
+        102
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 9,
+      "mode": 4,
+      "inputs": [
+        {
+          "name": "images",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 6
+        },
+        {
+          "name": "masks",
+          "shape": 7,
+          "type": "MASK",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            7
+          ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui-kjnodes",
+        "ver": "ff7f876c09ff5a53be051073c3c1731b96ee31a3",
+        "Node name for S&R": "GetImageRangeFromBatch"
+      },
+      "widgets_values": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": 18,
+      "type": "Fast Groups Bypasser (rgthree)",
+      "pos": [
+        -11868.587877220889,
+        -1497.5091743025555
+      ],
+      "size": [
+        244.9,
+        82
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "OPT_CONNECTION",
+          "type": "*",
+          "links": null
+        }
+      ],
+      "properties": {
+        "matchColors": "",
+        "matchTitle": "",
+        "showNav": true,
+        "showAllGraphs": true,
+        "sort": "position",
+        "customSortAlphabet": "",
+        "toggleRestriction": "default"
+      }
+    },
+    {
+      "id": 19,
+      "type": "Note",
+      "pos": [
+        -11994.921597188586,
+        -1357.4648121385674
+      ],
+      "size": [
+        364.26679786569,
+        539.8722444172743
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        "the video length side helps you get the video length just upload a video and run.\n\nThe padding side allows you to enter the video length and then the padding either auto centre or x amount pre or post the original file. \n\nThe audio analyser gets the exact length of a given audio file "
+      ],
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 17,
+      "type": "Label (rgthree)",
+      "pos": [
+        -11710.915541774873,
+        -1750.176581030374
+      ],
+      "size": [
+        2778.25927734375,
+        150
+      ],
+      "flags": {
+        "allow_interaction": true
+      },
+      "order": 4,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "Dragon Diffusion Audio Padding Example",
+      "properties": {
+        "fontSize": 150,
+        "fontFamily": "Arial",
+        "fontColor": "#ffffff",
+        "textAlign": "left",
+        "backgroundColor": "green",
+        "padding": 0,
+        "borderRadius": 0,
+        "angle": 0
+      },
+      "color": "#fff0",
+      "bgcolor": "#fff0"
+    }
+  ],
+  "links": [
+    [
+      1,
+      5,
+      3,
+      6,
+      0,
+      "VHS_VIDEOINFO"
+    ],
+    [
+      2,
+      7,
+      0,
+      1,
+      0,
+      "AUDIO"
+    ],
+    [
+      3,
+      7,
+      0,
+      4,
+      0,
+      "AUDIO"
+    ],
+    [
+      4,
+      6,
+      2,
+      8,
+      0,
+      "FLOAT"
+    ],
+    [
+      5,
+      5,
+      0,
+      9,
+      0,
+      "IMAGE"
+    ],
+    [
+      6,
+      9,
+      0,
+      10,
+      0,
+      "IMAGE"
+    ],
+    [
+      7,
+      10,
+      0,
+      11,
+      0,
+      "IMAGE"
+    ],
+    [
+      8,
+      4,
+      0,
+      12,
+      0,
+      "AUDIO"
+    ],
+    [
+      9,
+      1,
+      0,
+      14,
+      0,
+      "FLOAT"
+    ],
+    [
+      10,
+      1,
+      1,
+      13,
+      0,
+      "STRING"
+    ],
+    [
+      11,
+      4,
+      1,
+      15,
+      0,
+      "FLOAT"
+    ],
+    [
+      12,
+      4,
+      2,
+      16,
+      0,
+      "STRING"
+    ]
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "title": "Get video Length ",
+      "bounding": [
+        -11592.199007597688,
+        -1547.781418330396,
+        1146.7524618633888,
+        856.6095843501682
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "Audio Pad ",
+      "bounding": [
+        -10433.106150681197,
+        -1545.2786965518371,
+        1378.8538554854113,
+        849.7542798558068
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.45949729863572536,
+      "offset": [
+        12877.408277381594,
+        2033.8112770522375
+      ]
+    },
+    "workflowRendererVersion": "LG",
+    "frontendVersion": "1.34.8",
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true
+  },
+  "version": 0.4
+}
