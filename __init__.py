@@ -25,6 +25,7 @@ from .boyo_lora_paired_loader import BoyoLoRAPairedLoader
 from .boyo_lora_config_inspector import BoyoLoRAConfigInspector
 from .boyo_lora_config_processor import BoyoLoRAConfigProcessor
 from .boyo_lora_path_forwarder import BoyoLoRAPathForwarder
+from .boyo_lora_info_sender import BoyoLorainforsender
 
 # Import the BoyoImageCrop node
 from .boyo_image_crop import BoyoImageCrop
@@ -56,6 +57,16 @@ from .boyo_chatterbox_turbo_generate import NODE_CLASS_MAPPINGS as CHATTERBOX_GE
 from .boyo_audio_duration_analyzer import NODE_CLASS_MAPPINGS as AUDIO_DURATION_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS as AUDIO_DURATION_DISPLAY_NAME_MAPPINGS
 from .boyo_audio_padder import NODE_CLASS_MAPPINGS as AUDIO_PADDER_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS as AUDIO_PADDER_DISPLAY_NAME_MAPPINGS
 
+# Import the latent switch node
+from .boyo_latent_switch import BoyoLatentSwitch
+from .boyo_frame_counter import BoyoFrameCounter
+from .boyo_latent_cache_updater import BoyoLatentCacheUpdater
+from .boyo_overlap_switch import BoyoOverlapSwitch
+from .boyo_video_length_calculator import BoyoVideoLengthCalculator
+from .boyo_video_cutter import BoyoVideoCutter
+#SVI fix
+from .boyo_painter_svi import BoyoPainterSVI
+
 NODE_CLASS_MAPPINGS = {
     "BoyoVAEDecode": BoyoVAEDecode,
     "BoyoSaver": BoyoSaver,
@@ -76,7 +87,15 @@ NODE_CLASS_MAPPINGS = {
     "BoyoStoryboardOutput": BoyoStoryboardOutput,
     "BoyoAssetGrabberSimple": BoyoAssetGrabberSimple,
     "BoyoAssetGrabberAdvanced": BoyoAssetGrabberAdvanced,
-    "BoyoImageCrop": BoyoImageCrop
+    "BoyoImageCrop": BoyoImageCrop,
+    "BoyoFrameCounter": BoyoFrameCounter,
+    "BoyoLatentCacheUpdater": BoyoLatentCacheUpdater,
+    "BoyoOverlapSwitch": BoyoOverlapSwitch,
+    "BoyoVideoLengthCalculator": BoyoVideoLengthCalculator,
+    "BoyoVideoCutter": BoyoVideoCutter,
+    "BoyoPainterSVI": BoyoPainterSVI,
+    "BoyoLorainforsender": BoyoLorainforsender,
+    "BoyoLatentSwitch": BoyoLatentSwitch
 }
 
 # Update the mappings with all custom nodes
@@ -119,7 +138,15 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "BoyoStoryboardOutput": "Boyo Storyboard Output",
     "BoyoAssetGrabberSimple": "Boyo Asset Grabber (Simple)",
     "BoyoAssetGrabberAdvanced": "Boyo Asset Grabber (Advanced)",
-    "BoyoImageCrop": "Boyo Image Crop"
+    "BoyoImageCrop": "Boyo Image Crop",
+    "BoyoFrameCounter": "Boyo Frame Counter",
+    "BoyoLatentCacheUpdater": "Boyo Latent Cache Updater",
+    "BoyoOverlapSwitch": "Boyo Overlap Switch",
+    "BoyoVideoLengthCalculator": "Boyo Video Length Calculator",
+    "BoyoVideoCutter": "Boyo Video Cutter",
+    "BoyoPainterSVI": "Boyo Painter SVI (Motion + Infinite Length)",
+    "BoyoLorainforsender": "Boyo LoRA Info Sender",
+    "BoyoLatentSwitch": "Boyo Latent Switch"
 }
 
 # Update the display name mappings with all custom nodes
