@@ -1,9 +1,7 @@
 # Boyonodes
-
 Essential ComfyUI nodes for semantic image editing, audio processing, LoRA management, and automated workflow generation. Streamlines complex pipelines with intelligent automation and robust error handling.
 
 ## 🚀 Quick Installation
-
 ```bash
 git clone https://github.com/DragonDiffusionbyBoyo/Boyonodes.git
 cp -r Boyonodes /path/to/ComfyUI/custom_nodes/
@@ -19,13 +17,15 @@ cp -r Boyonodes /path/to/ComfyUI/custom_nodes/
 - Workflow Enhancement nodes
 - Basic Utility nodes
 
-### Audio Processing Nodes
+### Audio Processing Nodes (Basic)
 ```bash
 pip install librosa transformers safetensors huggingface_hub pyloudnorm soundfile
 pip install chatterbox-tts --no-deps
 pip install resemble-perth --no-deps
-pip install -r requirement.txt
 ```
+
+### Advanced Audio Enhancement (Seed-VC)
+**See installation instructions at the top of this README**
 
 ### Mandelbrot Video Generator
 ```bash
@@ -36,8 +36,6 @@ pip install numpy==1.26 matplotlib pillow tqdm torch
 - **Windows**: Download from ffmpeg.org or `choco install ffmpeg`
 - **macOS**: `brew install ffmpeg`
 - **Linux**: `sudo apt-get install ffmpeg`
-
----
 
 ## 🎵 Audio Processing & TTS
 
