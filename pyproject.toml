@@ -1,7 +1,7 @@
 [project]
 name = "boyonodes"
 description = "Added Chatterbox TTS Turbo nodes plus audio padding nodes and as always, essential nodes for semantic image editing workflows with Kontext, Qwen Image Edit, and HiDream E1.1 models. Features automated iterative editing with Boyo Image Grab, organised dataset creation with paired image/prompt savers, and comprehensive file management tools. Perfect for batch processing, training data preparation, and streamlined semantic editing pipelines. Added Uncensored Qwen VL abliterated model node and downloader! Added BoyoLora loader and utils. Added Ollama Image and Video Story boards for Qwen edit and Wan video but not limited to."
-version = "3.7.0"
+version = "4.0.0"
 license = {file = "LICENSE"}
 dependencies = ["torchvision", "numpy", "pillow"]
 
@@ -13,5 +13,6 @@ Repository = "https://github.com/DragonDiffusionbyBoyo/Boyonodes"
 PublisherId = ""
 DisplayName = "Boyonodes"
 Icon = ""
+
 
 
