@@ -1,3 +1,48 @@
+# ⚠️ IMPORTANT: Installation for Audio Enhancement Features
+
+**If you want the voice enhancement and advanced audio processing nodes (Seed-VC integration), you MUST complete the additional setup:**
+
+### Option 1: Portable ComfyUI (Recommended)
+Simply run the provided batch file:
+```bash
+Portable_auto_install_nodes.bat
+```
+This will automatically:
+- Initialize the seed-vc git submodule
+- Install all required dependencies
+- Set up audio processing packages
+
+### Option 2: Manual Installation (venv/conda)
+If you're using a virtual environment or conda:
+
+**Step 1: Initialize seed-vc submodule**
+```bash
+cd /path/to/ComfyUI/custom_nodes/Boyonodes
+git submodule add https://github.com/Plachtaa/seed-vc.git seed-vc
+git submodule update --init --recursive
+```
+
+**Step 2: Install dependencies**
+```bash
+# Core audio dependencies
+pip install librosa>=0.10.0 transformers>=4.30.0 safetensors>=0.3.0
+pip install huggingface_hub>=0.15.0 pyloudnorm>=0.1.0 soundfile>=0.12.0
+
+# Seed-VC specific requirements
+pip install hydra-core>=1.3.0 omegaconf munch descript-audio-codec
+
+# TTS packages (no dependencies to avoid conflicts)
+pip install chatterbox-tts --no-deps
+pip install resemble-perth --no-deps
+
+# Install remaining requirements
+pip install -r requirements.txt
+```
+
+**Step 3: Restart ComfyUI**
+
+---
+
 # Boyonodes
 Essential ComfyUI nodes for semantic image editing, audio processing, LoRA management, and automated workflow generation. Streamlines complex pipelines with intelligent automation and robust error handling.
 
@@ -37,6 +82,7 @@ pip install numpy==1.26 matplotlib pillow tqdm torch
 - **macOS**: `brew install ffmpeg`
 - **Linux**: `sudo apt-get install ffmpeg`
 
+---
 ## 🎵 Audio Processing & TTS
 
 ### Chatterbox Turbo TTS Integration
