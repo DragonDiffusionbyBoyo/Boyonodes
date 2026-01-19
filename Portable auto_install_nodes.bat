@@ -55,6 +55,38 @@ if "!PYTHON_PATH!"=="" (
 echo Using Python: !PYTHON_PATH!
 echo.
 
+rem Handle seed-vc git submodule
+echo ===================================
+echo    Checking seed-vc submodule
+echo ===================================
+
+if exist "seed-vc\.git" (
+    echo seed-vc submodule already initialized, updating...
+    git submodule update --remote seed-vc
+    if errorlevel 1 (
+        echo WARNING: Failed to update seed-vc submodule
+        echo This is non-critical, continuing...
+    ) else (
+        echo seed-vc updated successfully.
+    )
+) else (
+    if exist ".git" (
+        echo Initializing seed-vc submodule...
+        git submodule add https://github.com/Plachtaa/seed-vc.git seed-vc 2>nul
+        git submodule update --init --recursive seed-vc
+        if errorlevel 1 (
+            echo WARNING: Failed to initialize seed-vc submodule
+            echo You may need to manually run: git submodule add https://github.com/Plachtaa/seed-vc.git seed-vc
+        ) else (
+            echo seed-vc submodule initialized successfully.
+        )
+    ) else (
+        echo WARNING: Not a git repository, skipping submodule setup
+        echo If you need seed-vc, manually clone it: git clone https://github.com/Plachtaa/seed-vc.git seed-vc
+    )
+)
+echo.
+
 rem Install requirements if file exists
 if exist "requirements.txt" (
     echo Installing requirements from requirements.txt...
