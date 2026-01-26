@@ -33,6 +33,7 @@ from .boyo_image_crop import BoyoImageCrop
 #Import the Video-Image-Storyboard Node
 from .boyo_storyboard_prompt import BoyoStoryboardPrompt
 from .boyo_storyboard_output import BoyoStoryboardOutput
+from .boyo_storyboard_json_parser import BoyoStoryboardJsonParser
 
 # Import the loop reset nodes
 from .boyo_loop_reset import NODE_CLASS_MAPPINGS as BOYOLOOPRESET_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS as BOYOLOOPRESET_DISPLAY_NAME_MAPPINGS
@@ -86,6 +87,7 @@ NODE_CLASS_MAPPINGS = {
     "BoyoIncontextSaver": BoyoIncontextSaver,
     "BoyoStoryboardPrompt": BoyoStoryboardPrompt,
     "BoyoStoryboardOutput": BoyoStoryboardOutput,
+    "BoyoStoryboardJsonParser": BoyoStoryboardJsonParser,
     "BoyoAssetGrabberSimple": BoyoAssetGrabberSimple,
     "BoyoAssetGrabberAdvanced": BoyoAssetGrabberAdvanced,
     "BoyoImageCrop": BoyoImageCrop,
@@ -138,6 +140,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "BoyoIncontextSaver": "Boyo Incontext Saver",
     "BoyoStoryboardPrompt": "Boyo Storyboard Prompt",
     "BoyoStoryboardOutput": "Boyo Storyboard Output",
+    "BoyoStoryboardJsonParser": "Boyo Storyboard JSON Parser",
     "BoyoAssetGrabberSimple": "Boyo Asset Grabber (Simple)",
     "BoyoAssetGrabberAdvanced": "Boyo Asset Grabber (Advanced)",
     "BoyoImageCrop": "Boyo Image Crop",
