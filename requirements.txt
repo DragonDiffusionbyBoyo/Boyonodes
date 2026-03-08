@@ -11,7 +11,6 @@ huggingface_hub>=0.15.0
 perth>=0.1.0
 pyloudnorm>=0.1.0
 soundfile>=0.12.0
-conformer
 omegaconf
 pykakasi==2.3.0
 spacy-pkuseg
@@ -22,5 +21,8 @@ munch
 gitpython
 descript-audio-codec
 diffusers
+protobuf>=3.20.0
+onnxruntime
+funasr
 
 
