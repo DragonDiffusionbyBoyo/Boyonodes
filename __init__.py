@@ -71,7 +71,6 @@ from .boyo_painter_svi import BoyoPainterSVI
 from .boyo_voice_enhancer import NODE_CLASS_MAPPINGS as VOICE_ENHANCER_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS as VOICE_ENHANCER_DISPLAY_NAME_MAPPINGS
 from .boyo_video_clipper import NODE_CLASS_MAPPINGS as video_clipper_mappings
 from .boyo_video_clipper import NODE_DISPLAY_NAME_MAPPINGS as video_clipper_display
-from .boyo_mega_prompt import BoyoMegaPrompt
 
 NODE_CLASS_MAPPINGS = {
     "BoyoVAEDecode": BoyoVAEDecode,
@@ -102,7 +101,6 @@ NODE_CLASS_MAPPINGS = {
     "BoyoVideoCutter": BoyoVideoCutter,
     "BoyoPainterSVI": BoyoPainterSVI,
     "BoyoLorainforsender": BoyoLorainforsender,
-    "BoyoMegaPrompt": BoyoMegaPrompt,
     "BoyoLatentSwitch": BoyoLatentSwitch
 }
 
@@ -157,7 +155,6 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "BoyoVideoCutter": "Boyo Video Cutter",
     "BoyoPainterSVI": "Boyo Painter SVI (Motion + Infinite Length)",
     "BoyoLorainforsender": "Boyo LoRA Info Sender",
-    "BoyoMegaPrompt": "Boyo Mega Prompt",
     "BoyoLatentSwitch": "Boyo Latent Switch"
 }
 
