@@ -1,3 +1,5 @@
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/E1E01W3X6E)
+
 # ⚠️ IMPORTANT: Installation for Audio Enhancement Features
 
 **If you want the voice enhancement and advanced audio processing nodes (Seed-VC integration), you MUST complete the additional setup:**
