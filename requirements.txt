@@ -4,7 +4,7 @@ scipy
 tqdm
 bitsandbytes
 librosa>=0.10.0
-transformers>=4.30.0
+transformers>=4.30.0,<5.0.0
 safetensors>=0.3.0
 huggingface_hub>=0.15.0
 perth>=0.1.0
