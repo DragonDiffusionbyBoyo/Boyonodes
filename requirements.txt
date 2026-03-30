@@ -3,7 +3,6 @@ matplotlib
 scipy
 tqdm
 bitsandbytes
-soundfile
 librosa>=0.10.0
 transformers>=4.30.0
 safetensors>=0.3.0
@@ -16,7 +15,6 @@ pykakasi==2.3.0
 spacy-pkuseg
 gradio==5.44.1
 hydra-core>=1.3.0
-hydra-core
 munch
 gitpython
 descript-audio-codec
