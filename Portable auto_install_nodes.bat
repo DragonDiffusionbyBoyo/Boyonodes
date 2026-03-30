@@ -99,12 +99,30 @@ if exist "requirements.txt" (
     echo.
 )
 
+echo Pinning transformers to 4.x for ComfyUI compatibility...
+"!PYTHON_PATH!" -m pip install "transformers>=4.50.3,<5.0.0"
+if errorlevel 1 (
+    echo WARNING: Failed to pin transformers version
+) else (
+    echo transformers pinned successfully.
+)
+echo.
+
 echo Installing resemble-perth (no dependencies)...
 "!PYTHON_PATH!" -m pip install resemble-perth --no-deps
 if errorlevel 1 (
     echo WARNING: Failed to install resemble-perth
 ) else (
     echo resemble-perth installed successfully.
+)
+echo.
+
+echo Installing build dependencies...
+"!PYTHON_PATH!" -m pip install pdm
+if errorlevel 1 (
+    echo WARNING: Failed to install pdm build backend
+) else (
+    echo pdm installed successfully.
 )
 echo.
 
