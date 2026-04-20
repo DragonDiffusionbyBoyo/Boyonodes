@@ -6,6 +6,8 @@ import folder_paths
 import subprocess
 import tempfile
 import shutil
+import wave
+import struct
 
 class BoyoVideoPairedSaver:
     def __init__(self):
@@ -22,6 +24,9 @@ class BoyoVideoPairedSaver:
                 "fps": ("FLOAT", {"default": 24.0, "min": 1.0, "max": 60.0, "step": 0.1}),
                 "codec": (["libx264", "libx265", "av1"], {"default": "libx264"}),
                 "quality": (["high", "medium", "low"], {"default": "high"}),
+            },
+            "optional": {
+                "audio": ("AUDIO",),
             }
         }
 
@@ -30,7 +35,7 @@ class BoyoVideoPairedSaver:
     OUTPUT_NODE = True
     CATEGORY = "Boyonodes"
 
-    def save_video_and_prompt(self, images, enhanced_prompt, folder_name, filename_prefix, fps, codec, quality):
+    def save_video_and_prompt(self, images, enhanced_prompt, folder_name, filename_prefix, fps, codec, quality, audio=None):
         # Get the output directory from ComfyUI
         output_dir = folder_paths.get_output_directory()
         
@@ -100,23 +105,51 @@ class BoyoVideoPairedSaver:
             
             # Build ffmpeg command
             input_pattern = os.path.join(temp_dir, "frame_%06d.png")
-            
-            cmd = [
-                "ffmpeg", "-y",  # Overwrite output file
-                "-framerate", str(fps),
-                "-i", input_pattern,
-                "-c:v", codec,
-                "-preset", preset,
-                "-crf", crf,
-                "-pix_fmt", "yuv420p",
-                "-vf", "pad=ceil(iw/2)*2:ceil(ih/2)*2",  # Ensure even dimensions
-                video_path
-            ]
-            
+
+            audio_ready = False
+            if audio is not None:
+                try:
+                    audio_path = os.path.join(temp_dir, "audio.wav")
+                    _save_audio_to_wav(audio, audio_path)
+                    audio_ready = True
+                    print(f"Audio detected - muxing into video...")
+                except Exception as audio_err:
+                    print(f"Audio input present but could not be loaded (no audio stream?) - saving video only. Reason: {audio_err}")
+
+            if audio_ready:
+                cmd = [
+                    "ffmpeg", "-y",
+                    "-framerate", str(fps),
+                    "-i", input_pattern,
+                    "-i", audio_path,
+                    "-c:v", codec,
+                    "-preset", preset,
+                    "-crf", crf,
+                    "-pix_fmt", "yuv420p",
+                    "-vf", "pad=ceil(iw/2)*2:ceil(ih/2)*2",
+                    "-c:a", "aac",
+                    "-b:a", "192k",
+                    "-shortest",
+                    video_path
+                ]
+            else:
+                print(f"No audio - saving video only...")
+                cmd = [
+                    "ffmpeg", "-y",
+                    "-framerate", str(fps),
+                    "-i", input_pattern,
+                    "-c:v", codec,
+                    "-preset", preset,
+                    "-crf", crf,
+                    "-pix_fmt", "yuv420p",
+                    "-vf", "pad=ceil(iw/2)*2:ceil(ih/2)*2",
+                    video_path
+                ]
+
             # Run ffmpeg
             print(f"Creating video with ffmpeg: {codec} codec, {fps} fps, {quality} quality...")
             result = subprocess.run(cmd, capture_output=True, text=True, check=True)
-            
+
             # Save the enhanced prompt text
             with open(text_path, 'w', encoding='utf-8') as f:
                 f.write(enhanced_prompt)
@@ -157,6 +190,9 @@ class BoyoVideoSaver:
                 "fps": ("FLOAT", {"default": 24.0, "min": 1.0, "max": 60.0, "step": 0.1}),
                 "codec": (["libx264", "libx265", "av1"], {"default": "libx264"}),
                 "quality": (["high", "medium", "low"], {"default": "high"}),
+            },
+            "optional": {
+                "audio": ("AUDIO",),
             }
         }
 
@@ -166,7 +202,7 @@ class BoyoVideoSaver:
     OUTPUT_NODE = True
     CATEGORY = "Boyonodes"
 
-    def save_video(self, images, folder_name, filename_prefix, fps, codec, quality):
+    def save_video(self, images, folder_name, filename_prefix, fps, codec, quality, audio=None):
         # Get the output directory from ComfyUI
         output_dir = folder_paths.get_output_directory()
         
@@ -232,23 +268,51 @@ class BoyoVideoSaver:
             
             # Build ffmpeg command
             input_pattern = os.path.join(temp_dir, "frame_%06d.png")
-            
-            cmd = [
-                "ffmpeg", "-y",  # Overwrite output file
-                "-framerate", str(fps),
-                "-i", input_pattern,
-                "-c:v", codec,
-                "-preset", preset,
-                "-crf", crf,
-                "-pix_fmt", "yuv420p",
-                "-vf", "pad=ceil(iw/2)*2:ceil(ih/2)*2",  # Ensure even dimensions
-                video_path
-            ]
-            
+
+            audio_ready = False
+            if audio is not None:
+                try:
+                    audio_path = os.path.join(temp_dir, "audio.wav")
+                    _save_audio_to_wav(audio, audio_path)
+                    audio_ready = True
+                    print(f"Audio detected - muxing into video...")
+                except Exception as audio_err:
+                    print(f"Audio input present but could not be loaded (no audio stream?) - saving video only. Reason: {audio_err}")
+
+            if audio_ready:
+                cmd = [
+                    "ffmpeg", "-y",
+                    "-framerate", str(fps),
+                    "-i", input_pattern,
+                    "-i", audio_path,
+                    "-c:v", codec,
+                    "-preset", preset,
+                    "-crf", crf,
+                    "-pix_fmt", "yuv420p",
+                    "-vf", "pad=ceil(iw/2)*2:ceil(ih/2)*2",
+                    "-c:a", "aac",
+                    "-b:a", "192k",
+                    "-shortest",
+                    video_path
+                ]
+            else:
+                print(f"No audio - saving video only...")
+                cmd = [
+                    "ffmpeg", "-y",
+                    "-framerate", str(fps),
+                    "-i", input_pattern,
+                    "-c:v", codec,
+                    "-preset", preset,
+                    "-crf", crf,
+                    "-pix_fmt", "yuv420p",
+                    "-vf", "pad=ceil(iw/2)*2:ceil(ih/2)*2",
+                    video_path
+                ]
+
             # Run ffmpeg
             print(f"Creating video with ffmpeg: {codec} codec, {fps} fps, {quality} quality...")
             result = subprocess.run(cmd, capture_output=True, text=True, check=True)
-            
+
             print(f"Saved video: {video_filename} in {folder_name}/")
             print(f"Video details: {batch_size} frames, {fps} fps, {codec} codec")
             
@@ -266,6 +330,48 @@ class BoyoVideoSaver:
             shutil.rmtree(temp_dir, ignore_errors=True)
         
         return (video_path,)
+
+
+def _save_audio_to_wav(audio, path):
+    """
+    Save a ComfyUI AUDIO dict (waveform tensor + sample_rate) to a WAV file.
+    Waveform shape is expected to be [batch, channels, samples].
+    Handles both 'waveform' and 'audio' key variants defensively.
+    """
+    # Handle both key variants seen in the wild
+    if "waveform" in audio:
+        waveform = audio["waveform"]
+    elif "audio" in audio:
+        waveform = audio["audio"]
+    else:
+        raise ValueError(f"No recognisable audio tensor in AUDIO dict. Keys found: {list(audio.keys())}")
+    sample_rate = audio["sample_rate"]
+
+    # Take first item in batch, squeeze to [C, S]
+    waveform = waveform[0]
+
+    # Mix down to mono if multichannel, or keep stereo
+    num_channels = waveform.shape[0]
+    if num_channels > 2:
+        waveform = waveform[:2]  # Trim to stereo max
+        num_channels = 2
+
+    # Convert to numpy, clamp to [-1, 1], scale to int16
+    audio_np = waveform.cpu().numpy()
+    audio_np = np.clip(audio_np, -1.0, 1.0)
+    audio_int16 = (audio_np * 32767).astype(np.int16)
+
+    num_samples = audio_int16.shape[1]
+
+    with wave.open(path, 'w') as wf:
+        wf.setnchannels(num_channels)
+        wf.setsampwidth(2)  # 16-bit
+        wf.setframerate(sample_rate)
+        # Interleave channels if stereo: [C, S] -> [S, C] -> flatten
+        interleaved = audio_int16.T.flatten()
+        wf.writeframes(struct.pack(f'<{len(interleaved)}h', *interleaved))
+
+    print(f"Audio saved to WAV: {num_channels}ch, {sample_rate}Hz, {num_samples} samples")
 
 
 NODE_CLASS_MAPPINGS = {
