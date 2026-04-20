@@ -1,0 +1,10 @@
+__pycache__/
+lora_configs/
+mega_prompts/
+prompts/
+*.zip
+boyo_batch_counters.json
+import_scan_results.txt
+init_diff.txt
+scan_imports.ps1
+*.local
