@@ -22,5 +22,6 @@ diffusers
 protobuf>=3.20.0
 onnxruntime
 funasr
+colour-science
 
 

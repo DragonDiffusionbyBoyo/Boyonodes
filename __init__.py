@@ -51,6 +51,8 @@ from .BoyoLoadVideoDirectory import NODE_CLASS_MAPPINGS as BOYOLOADVIDEO_CLASS_M
 from .boyo_load_image_batch import NODE_CLASS_MAPPINGS as BOYOIMAGEBATCH_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS as BOYOIMAGEBATCH_DISPLAY_NAME_MAPPINGS
 from .BoyoWatermarks import NODE_CLASS_MAPPINGS as WM_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS as WM_NAMES
 from .boyo_prompt_relay_nodes import NODE_CLASS_MAPPINGS as BOYOPR_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS as BOYOPR_DISPLAY_NAME_MAPPINGS
+from .boyo_lut import BoyoApplyLUT
+
 
 NODE_CLASS_MAPPINGS = {
     "BoyoVAEDecode": BoyoVAEDecode,
@@ -76,6 +78,7 @@ NODE_CLASS_MAPPINGS = {
     "BoyoImageCrop": BoyoImageCrop,
     "BoyoFrameCounter": BoyoFrameCounter,
     "BoyoLatentCacheUpdater": BoyoLatentCacheUpdater,
+    "BoyoApplyLUT": BoyoApplyLUT,
     "BoyoOverlapSwitch": BoyoOverlapSwitch,
     "BoyoVideoLengthCalculator": BoyoVideoLengthCalculator,
     "BoyoVideoCutter": BoyoVideoCutter,
@@ -136,6 +139,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "BoyoOverlapSwitch": "Boyo Overlap Switch",
     "BoyoVideoLengthCalculator": "Boyo Video Length Calculator",
     "BoyoVideoCutter": "Boyo Video Cutter",
+    "BoyoApplyLUT": "Boyo Apply LUT",
     "BoyoPainterSVI": "Boyo Painter SVI (Motion + Infinite Length)",
     "BoyoLorainforsender": "Boyo LoRA Info Sender",
     "BoyoLatentSwitch": "Boyo Latent Switch",
