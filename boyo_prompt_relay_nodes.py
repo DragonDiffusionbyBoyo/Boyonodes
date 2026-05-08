@@ -244,7 +244,7 @@ class BoyoPromptRelayEncodeTimeline(io.ComfyNode):
 
 # ── BoyoPromptRelayLoraGate ───────────────────────────────────────────────────
 
-class _TemporalGatedLoRA(nn.Module):
+class _TemporalGatedLoRA:
     """Wraps a linear layer and adds a temporally-gated LoRA delta.
 
     For video tokens, each token's contribution from the LoRA is scaled by a
@@ -258,7 +258,6 @@ class _TemporalGatedLoRA(nn.Module):
     """
 
     def __init__(self, original, lora_down, lora_up, scale, strength, gate_weights, tokens_per_frame):
-        super().__init__()
         self.original = original
         # Store as plain tensors — device/dtype are reconciled in forward
         self._lora_down = lora_down.cpu()
@@ -343,68 +342,68 @@ def _apply_gated_lora(model_clone, lora_path, segment, strength, tokens_per_fram
     Skips conv weights, bias terms, and anything that isn't a plain linear LoRA pair.
     """
     try:
-        import comfy.loras
+        try:
+            import comfy.loras as _lora_mod
+        except ImportError:
+            import comfy.lora as _lora_mod
         import comfy.utils
     except ImportError:
-        log.error("[BoyoLoraGate] comfy.loras not available in this ComfyUI build — cannot apply LoRA gate.")
+        log.error("[BoyoLoraGate] comfy.loras/comfy.lora not available in this ComfyUI build — cannot apply LoRA gate.")
         return
 
     lora_file = comfy.utils.load_torch_file(lora_path, safe_load=True)
 
     key_map = {}
     try:
-        comfy.loras.model_lora_keys_unet(model_clone.model, key_map)
+        _lora_mod.model_lora_keys_unet(model_clone.model, key_map)
     except Exception as e:
         log.error("[BoyoLoraGate] Failed to build LoRA key map: %s", e)
         return
 
     try:
-        patches = comfy.loras.load_lora(lora_file, key_map)
+        patches = _lora_mod.load_lora(lora_file, key_map)
     except Exception as e:
         log.error("[BoyoLoraGate] Failed to parse LoRA file: %s", e)
         return
-
     gate_weights = _build_gate_weights(segment, latent_frames)
     diffusion_model = model_clone.get_model_object("diffusion_model")
-
     applied = 0
-    skipped = 0
-
+    skipped_not_weight = 0
+    skipped_not_diffusion = 0
+    skipped_bad_data = 0
+    skipped_not_linear = 0
+    _logged_patch_sample = False
     for param_key, patch_data in patches.items():
+        if not _logged_patch_sample:
+            log.info("[BoyoLoraGate] patch_data sample — key=%s attrs=%s", param_key, [a for a in dir(patch_data) if not a.startswith("_")])
+            log.info("[BoyoLoraGate] patch_data.weights=%s multiplier=%s", repr(patch_data.weights), repr(patch_data.multiplier))
+            _logged_patch_sample = True
         # param_key e.g. "diffusion_model.transformer_blocks.0.attn1.to_q.weight"
         if not param_key.endswith(".weight"):
-            skipped += 1
+            skipped_not_weight += 1
             continue
-
         module_path = param_key[:-7]  # strip ".weight" → module path
-
         if not module_path.startswith("diffusion_model."):
-            skipped += 1
+            skipped_not_diffusion += 1
             continue
-
         local_path = module_path[len("diffusion_model."):]
-
         # Unpack (alpha, lora_up, lora_down [, optional extras])
         try:
-            alpha = patch_data[0]
-            lora_up = patch_data[1]
-            lora_down = patch_data[2]
-        except (TypeError, IndexError):
-            skipped += 1
+            lora_up = patch_data.weights[0]
+            lora_down = patch_data.weights[1]
+            alpha = patch_data.multiplier
+        except (TypeError, IndexError, AttributeError):
+            skipped_bad_data += 1
             continue
-
         if lora_up is None or lora_down is None:
-            skipped += 1
+            skipped_bad_data += 1
             continue
-
         # Only handle plain linear LoRA — skip conv layers etc.
         if lora_down.dim() != 2 or lora_up.dim() != 2:
-            skipped += 1
+            skipped_not_linear += 1
             continue
-
         rank = lora_down.shape[0]
         scale = float(alpha) / rank if alpha is not None else 1.0
-
         # If a previous LoraGate already patched this module path, wrap that
         # wrapper so both gates stack correctly rather than the second replacing the first
         if module_path in model_clone.object_patches:
@@ -413,11 +412,10 @@ def _apply_gated_lora(model_clone, lora_path, segment, strength, tokens_per_fram
             try:
                 target = _get_module(diffusion_model, local_path)
             except AttributeError:
-                skipped += 1
+                skipped_not_diffusion += 1
                 continue
-
         wrapped = _TemporalGatedLoRA(
-            original=target,
+            original=target.forward,
             lora_down=lora_down,
             lora_up=lora_up,
             scale=scale,
@@ -425,13 +423,12 @@ def _apply_gated_lora(model_clone, lora_path, segment, strength, tokens_per_fram
             gate_weights=gate_weights,
             tokens_per_frame=tokens_per_frame,
         )
-
-        model_clone.add_object_patch(module_path, wrapped)
+        model_clone.add_object_patch(module_path + ".forward", wrapped.forward)
         applied += 1
-
     log.info(
-        "[BoyoLoraGate] Segment midpoint=%.1f window=%.1f — applied %d patches, skipped %d",
-        float(segment["midpoint"]), float(segment["window"]), applied, skipped,
+        "[BoyoLoraGate] Segment midpoint=%.1f window=%.1f — applied %d, not_weight=%d, not_diffusion=%d, bad_data=%d, not_linear=%d",
+        float(segment["midpoint"]), float(segment["window"]), applied,
+        skipped_not_weight, skipped_not_diffusion, skipped_bad_data, skipped_not_linear,
     )
 
 
