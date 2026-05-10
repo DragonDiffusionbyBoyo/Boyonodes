@@ -1,343 +1,143 @@
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/E1E01W3X6E)
 
-# ⚠️ IMPORTANT: Installation for Audio Enhancement Features
+# Boyonodes
 
-**If you want the voice enhancement and advanced audio processing nodes (Seed-VC integration), you MUST complete the additional setup:**
+Custom ComfyUI nodes for audio/TTS, video generation, LoRA management, looping workflows, semantic image editing, and general pipeline utilities.
 
-### Option 1: Portable ComfyUI (Recommended)
-Simply run the provided batch file:
-```bash
-Portable_auto_install_nodes.bat
-```
-This will automatically:
-- Initialize the seed-vc git submodule
-- Install all required dependencies
-- Set up audio processing packages
-
-### Option 2: Manual Installation (venv/conda)
-If you're using a virtual environment or conda:
-
-**Step 1: Initialize seed-vc submodule**
-```bash
-cd /path/to/ComfyUI/custom_nodes/Boyonodes
-git submodule add https://github.com/Plachtaa/seed-vc.git seed-vc
-git submodule update --init --recursive
-```
-
-**Step 2: Install dependencies**
-```bash
-# Core audio dependencies
-pip install librosa>=0.10.0 transformers>=4.30.0 safetensors>=0.3.0
-pip install huggingface_hub>=0.15.0 pyloudnorm>=0.1.0 soundfile>=0.12.0
-
-# Seed-VC specific requirements
-pip install hydra-core>=1.3.0 omegaconf munch descript-audio-codec
-
-# TTS packages (no dependencies to avoid conflicts)
-pip install chatterbox-tts --no-deps
-pip install resemble-perth --no-deps
-
-# Install remaining requirements
-pip install -r requirements.txt
-```
-
-**Step 3: Restart ComfyUI**
+Full documentation for every node is in [NODESREADME.md](NODESREADME.md).
 
 ---
 
-# Boyonodes
-Essential ComfyUI nodes for semantic image editing, audio processing, LoRA management, and automated workflow generation. Streamlines complex pipelines with intelligent automation and robust error handling.
+## Installation
 
-## 🚀 Quick Installation
 ```bash
 git clone https://github.com/DragonDiffusionbyBoyo/Boyonodes.git
 cp -r Boyonodes /path/to/ComfyUI/custom_nodes/
 ```
 
-**Restart ComfyUI** after installation. Most nodes work immediately with no additional dependencies.
+Restart ComfyUI. Most nodes need no additional dependencies.
 
-## 📋 Installation Requirements
-
-### Core Nodes (No additional dependencies)
-- Semantic Image Editing nodes
-- LoRA Management System  
-- Workflow Enhancement nodes
-- Basic Utility nodes
-
-### Audio Processing Nodes (Basic)
+### Audio & TTS nodes
 ```bash
 pip install librosa transformers safetensors huggingface_hub pyloudnorm soundfile
 pip install chatterbox-tts --no-deps
 pip install resemble-perth --no-deps
 ```
 
-### Advanced Audio Enhancement (Seed-VC)
-**See installation instructions at the top of this README**
-
-### Mandelbrot Video Generator
+### Voice enhancement (Seed-VC)
 ```bash
-pip install numpy==1.26 matplotlib pillow tqdm torch
+git submodule add https://github.com/Plachtaa/seed-vc.git seed-vc
+git submodule update --init --recursive
+pip install hydra-core omegaconf munch descript-audio-codec
+pip install -r requirements.txt
+```
+A portable batch installer is provided: `Portable_auto_install_nodes.bat`
+
+### LUT node
+```bash
+pip install colour-science
 ```
 
-### FFmpeg (for video output)
-- **Windows**: Download from ffmpeg.org or `choco install ffmpeg`
+### Qwen grounding node
+```bash
+pip install qwen-vl-utils
+```
+
+### FFmpeg (video output)
+- **Windows**: `choco install ffmpeg` or download from ffmpeg.org
 - **macOS**: `brew install ffmpeg`
 - **Linux**: `sudo apt-get install ffmpeg`
 
 ---
-## 🎵 Audio Processing & TTS
 
-### Chatterbox Turbo TTS Integration
-High-quality voice cloning and text-to-speech generation with emotion support.
+## Nodes — Quick Reference
 
-**Key Features:**
-- **Voice Cloning**: Clone any voice from 5+ second reference audio
-- **Emotion Tags**: Natural expressions like `[chuckle]`, `[sigh]`, `[gasp]`
-- **GPU Accelerated**: CUDA support for fast generation
-- **24kHz Quality**: Professional audio output
+### Audio & TTS
+| Node | Summary |
+|------|---------|
+| Boyo Chatterbox Turbo Loader | Load the Chatterbox Turbo TTS model onto GPU or CPU. |
+| Boyo Chatterbox Turbo Generate | Generate speech from text with emotion tags and optional voice cloning. |
+| Boyo Audio Duration Analyzer | Extract the precise duration in seconds from any ComfyUI audio tensor. |
+| Boyo Audio Padder | Pad audio with silence to hit a target duration; essential for lip-sync timing. |
+| Boyo Voice Enhancer | Enhance or convert voice characteristics via Seed-VC. |
+| Boyo Audio Eval | Convert an audio file's duration to a frame count at a given FPS. |
 
-**Available Emotion Tags:**
-`[clear throat]` `[sigh]` `[shush]` `[cough]` `[groan]` `[sniff]` `[gasp]` `[chuckle]` `[laugh]`
-
-**Workflow:**
-1. **Boyo Chatterbox Turbo Loader** - Load TTS model
-2. **Boyo Chatterbox Turbo Generate** - Create speech with emotion
-3. Standard ComfyUI audio nodes for processing
-
-### Audio Padding & Synchronization
-**Finally solved the community's lip-sync timing challenge!** Precision audio padding for perfect video-audio synchronization.
-
-**Key Nodes:**
-- **BoyoAudioDurationAnalyzer** - Extract precise duration from any audio tensor
-- **BoyoAudioPadder** - Intelligent silence padding with auto-centering
-
-**Why These Nodes Succeed:**
-- ✅ Handles all ComfyUI audio formats (`(batch,channels,samples)` vs `(batch,samples,channels)`)
-- ✅ Automatic 12kHz output for proper playback speed  
-- ✅ Intelligent feedback: `📊 Audio: 3.2s + Padding: 7.3s = Total: 10.5s ✅ Perfect match!`
-- ✅ Memory-efficient processing for large files
-- ✅ Auto-centering with target duration matching
-
-**Quick Workflow:**
-```
-Load Audio → BoyoAudioPadder (target_duration: 10.5s, auto_center: true) → Save Audio
-```
-
----
-
-## 🎨 Semantic Image Editing System
-
-Perfect for **Kontext**, **Qwen Image Edit**, and **HiDream E1.1** workflows with automated iteration and dataset creation.
-
-### Core Editing Nodes
-
-**Boyo Image Grab**
-- Auto-monitors directories for newest images
-- Enables seamless iterative editing chains
-- Perfect for progressive semantic modifications
-- Real-time directory monitoring
-
-**Boyo Paired Image Saver**
-- Saves original/edited pairs with sequential naming
-- Dataset creation for training workflows
-- ControlNet format compatibility
-- Organized file management
-
-**Boyo Incontext Saver**
-- Specialized for semantic editing outputs
-- Dataset-ready organization
-- Maintains editing relationships
-
-**Boyo Universal Image + Prompt Saver**
-- Strips metadata for clean publication
-- Saves actual prompts (crucial for wildcard workflows)
-- Creates organized image/text pairs
-- Publication-ready outputs
-
-### Workflow Example
-```
-Original → Semantic Edit → Paired Saver → Image Grab (auto-feeds next iteration)
-```
-
----
-
-## 🎯 LoRA Management System
-
-Revolutionary paired LoRA management with intelligent prompt handling for complex workflows requiring multiple LoRA types.
-
-### Boyo LoRA JSON Builder
-Create and save LoRA configurations with flexible prompt management.
-
-**Key Features:**
-- Supports paired LoRAs (high/low noise variants)
-- Multiple prompts per configuration
-- Handles utility LoRAs (no prompts needed)
-- Auto-saves to organized directory
-
-### Boyo LoRA Paired Loader
-Load multiple LoRA configurations simultaneously with advanced prompt strategies.
-
-**Key Features:**
-- **3 simultaneous config slots** for layered effects
-- **Prompt strategies**: Mute, Concatenate, Merge per config
-- **Prompt modes**: First Only, Cycle Through, Random (seed-based)
-- **6 LoRA path outputs** + **4 prompt string outputs**
-- Direct connection to standard LoRA loaders
-
-### Boyo LoRA Config Inspector
-Preview and analyze LoRA configurations before loading.
-
-**Sample Output:**
-```
-📋 LoRA Configuration: Character_Cyborg
-🎯 LoRA FILES:
-  📈 High Noise: ✅ cyborg_char_v2.safetensors
-  📉 Low Noise: ✅ cyborg_char_v2_low.safetensors
-  🎭 Type: PAIRED LoRA
-
-💬 PROMPTS (3 total):
-  1. cyborg woman, metallic skin, glowing eyes
-  2. android female, chrome details, futuristic
-  3. robotic humanoid, synthetic appearance
-
-💡 USAGE RECOMMENDATIONS:
-  • Use 'Cycle Through' for variety
-  • Use 'Random' for experimentation
-```
-
----
-
-## 📖 AI Storyboard Generation
-
-Automated storyboard creation using local ollama models for consistent multi-scene video workflows.
-
-### Boyo Storyboard Prompt
-Intelligent prompt generator for structured storyboard sequences.
-
-**Key Features:**
-- **Model-agnostic trigger words** - works with any LoRA/video model
-- **Two modes**: 6-scene storyboards or traveling prompt sequences
-- **Consistent character/style** across all scenes
-- **Optimized for abliterated coder models** (Qwen 30B A3B Coder recommended)
-
-**System Prompt 1 (Standard):** 6 image + 6 video prompts for Next Scene LoRA workflows  
-**System Prompt 2 (Traveling):** 6 images + 6 multi-line video sequences for extended content
-
-### Boyo Storyboard Output
-Parses ollama JSON responses into 12 separate prompt outputs for direct workflow integration.
-
-**Workflow:**
-```
-Storyboard Prompt → ollama Generate → Storyboard Output → 12 individual prompts
-```
-
----
-
-## 🛠️ Utility & Enhancement Nodes
-
-### Asset Downloader System
-**One-click workflow dependency installation.** Drop JSON manifest files to automatically download custom nodes, models, and dependencies.
-
-**Features:**
-- Automatic GitHub repository cloning
-- Python dependency installation via pip  
-- Model downloads from direct URLs
-- Available in Simple (auto-detect) and Advanced (custom paths) versions
-
-### Workflow Enhancement
-- **Boyo Empty Latent** - Smart aspect ratio calculator
-- **Load Image List** - Batch image processor for mass operations
-- **Boyo VAE Decode** - Stealth NSFW filtering for controlled environments
-- **Boyo Tiled VAE Decode** - Memory-efficient large image processing
-
-### Creative Tools
-- **Mandelbrot Video Generator** - Fractal art for creative projects
-- **BoyoVision Node** - Qwen2.5VL vision with abliterated model compatibility
-
----
-
-## 📚 Workflow Examples
-
-### Multi-LoRA Character Generation
-1. Create configs for utility (lightning), character, and style LoRAs
-2. Load all three simultaneously in Paired Loader
-3. Set strategies: utility = "Mute", character/style = "Concatenate"  
-4. Get combined prompts and all LoRA paths in one node
-
-### Iterative Semantic Editing
-1. Load initial image
-2. Apply semantic edit (Kontext/Qwen/HiDream)
-3. Boyo Paired Image Saver stores original + edit
-4. Boyo Image Grab auto-feeds edit for next iteration
-5. Repeat for progressive modifications
-
-### Video Lip-Sync Workflow
-1. Load Video → VideoHelperSuite Info → get duration
-2. Generate TTS audio → BoyoAudioPadder with auto-center
-3. Perfect timing match for lip-sync models
-
-### Storyboard-to-Video Pipeline
-1. Configure story/character in Storyboard Prompt  
-2. Generate via ollama → parse with Storyboard Output
-3. Connect 6 image outputs to Next Scene LoRA
-4. Connect 6 video outputs to video generation
-
----
-
-## 🔧 Troubleshooting
-
-### Audio Issues
-- **Audio too fast**: Node automatically outputs 12kHz for proper ComfyUI playback
-- **TTS loading errors**: Ensure dependencies installed with `--no-deps` flags
-- **CUDA problems**: Set device to "cpu" in loader node
+### Image
+| Node | Summary |
+|------|---------|
+| Boyo Image Grab | Monitor a directory and automatically load the newest image for iterative editing chains. |
+| Boyo Paired Image Saver | Save original/edited image pairs with sequential naming for datasets and ControlNet. |
+| Boyo Image Crop | Tile-crop a large image into overlapping patches and save them to disk. |
+| Boyo Qwen VL Grounding | Run Qwen2.5-VL visual grounding to detect and annotate objects with bounding boxes. |
 
 ### LoRA Management
-- **Config not loading**: Use Inspector node to verify file paths and JSON syntax
-- **Missing LoRA files**: Check paths use forward slashes, verify file existence
-- **Prompt issues**: Inspector shows available prompts and recommendations
+| Node | Summary |
+|------|---------|
+| Boyo LoRA JSON Builder | Create and save LoRA configuration JSON files with paired high/low noise paths and multiple prompts. |
+| Boyo LoRA Paired Loader | Load up to three LoRA configs simultaneously with per-slot prompt strategies. |
+| Boyo LoRA Config Inspector | Preview a LoRA config file and get usage recommendations before loading. |
+| Boyo LoRA Config Processor | Process a LoRA config and handle prompt cycling, merging, or muting logic. |
+| Boyo LoRA Path Forwarder | Buffer and forward LoRA paths to standard ComfyUI LoRA loader nodes. |
+| Boyo LoRA Info Sender | Simple dropdown selector that outputs the chosen LoRA filename as a string. |
+| Boyo FramePack LoRA Loader | Apply a LoRA to a FramePack/Hunyuan Video model via path string. |
 
-### Semantic Editing
-- **Image Grab not updating**: Verify directory path exists, check auto_refresh enabled
-- **Paired Saver failing**: Confirm output directory exists and has write permissions
-- **Slow performance**: Organize files into smaller subdirectories
+### Storyboard
+| Node | Summary |
+|------|---------|
+| Boyo Storyboard Prompt | Generate structured multi-scene storyboard prompts for an ollama model. |
+| Boyo Storyboard Output | Parse the ollama JSON response into 6 image and 6 video prompt outputs. |
+| Boyo Storyboard JSON Parser | Alternative JSON parser for storyboard responses, identical 12-output structure. |
 
-### Storyboard Generation  
-- **Poor outputs**: Use recommended ollama models (Qwen 30B A3B Coder Abliterated)
-- **JSON parse errors**: Add verbosity instructions in additional_details field
-- **Avoid**: Google models (Gemma), Meta coding variants, thinking models
+### Video
+| Node | Summary |
+|------|---------|
+| Boyo Video Clipper | Clip a video from the input directory to an exact frame count at a given FPS and start time. |
+| Boyo Video Cutter | Remove overlap frames from an image sequence at specified positions. |
+| Boyo Video Length Calculator | Calculate total frames, loop count, and trim positions for a target video duration. |
+| Boyo Video Paired Saver | Render an image batch to video and save it alongside its prompt text. |
+| Boyo Load Video Directory | Load all video files from a directory as a batch. |
+| Boyo Frame Counter | Compute `frames_processed = counter × chunk_size + offset` for audio/video sync in loops. |
+| Boyo Overlap Switch | Output a different overlap value for the first loop iteration versus subsequent ones. |
+| Boyo Watermarks | Stamp a watermark image onto every frame of a video batch. |
+
+### Looping & Flow Control
+| Node | Summary |
+|------|---------|
+| Boyo While Loop Start/End | While loop nodes with custom execution management for complex iterative workflows. |
+| Boyo For Loop Start/End | For loop nodes replicating EasyUse loop logic without the EasyUse dependency. |
+| Boyo Loop Reset | Reset one or more loop counters to zero when triggered by a completion signal. |
+| Boyo Loop Counter | Increment and track a loop iteration count across executions. |
+| Boyo Math Int | Perform basic integer arithmetic inside a loop or workflow. |
+| Boyo Compare | Compare two values and output a boolean for conditional branching. |
+| Boyo Prompt Loop | Iterate through prompts from a `.txt` file sequentially, randomly, or at a fixed index. |
+| Boyo Loop Collector / Loop Image Saver | Accumulate images across loop iterations and optionally save them to disk. |
+
+### Latent & Conditioning
+| Node | Summary |
+|------|---------|
+| Boyo Latent Cache Updater | Write latent data to the loop cache and pass it through unchanged, avoiding graph cycles. |
+| Boyo Latent Switch | Select the start latent on loop iteration 0 and the cached latent on all subsequent ones. |
+| Boyo Latent Passthrough / Execution Barrier | Pass a latent through unchanged; use the barrier variant to enforce execution order. |
+| Boyo Painter SVI | Merge PainterI2V motion amplitude conditioning with SVI context preservation for infinite video. |
+| Boyo VACE Injector | Inject VACE control data directly into a model for use without conditioning nodes. |
+| Boyo VACE Viewer | Inspect and preview VACE control data attached to a model. |
+
+### Utilities
+| Node | Summary |
+|------|---------|
+| Boyo Resolution Calc | Output width and height from a base width and a named aspect ratio preset. |
+| Boyo Apply LUT | Apply a `.cube`, `.3dl`, or `.spi3d` colour-grading LUT to an image. |
+| Boyo Mask To Image | Convert a mask tensor to a 3-channel image for nodes that expect IMAGE input. |
+| Boyo Asset Grabber Simple | Download nodes, models, and pip packages listed in a JSON manifest (auto-detects paths). |
+| Boyo Asset Grabber Advanced | Same as Simple but with explicit custom path overrides. |
+| Boyo Prompt Relay Encode | Port of kijai's Prompt Relay — encode temporally-segmented prompts for video models. |
+| Boyo Prompt Relay Encode Timeline | Timeline-based variant of Prompt Relay for fine-grained per-segment control. |
+| Boyo Prompt Relay LoRA Gate | Apply a LoRA to a single temporal segment using Gaussian gating, as an extension of Prompt Relay. |
 
 ---
 
-## 🏗️ Node Categories
+## Licence
 
-- **Boyo/Audio/TTS** - Text-to-speech and voice cloning
-- **Boyo/Audio/Analysis** - Audio duration and analysis tools
-- **Boyo/Audio/Processing** - Padding and timing control  
-- **Boyo/Image/Editing** - Semantic editing workflow tools
-- **Boyo/LoRA** - LoRA management and configuration
-- **Boyo/Storyboard** - AI storyboard generation
-- **Boyo/Utility** - General workflow enhancement tools
+MIT — see LICENSE file.
 
----
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create feature branch (`git checkout -b feature-name`)
-3. Commit changes
-4. Push to branch  
-5. Open pull request
-
-Documentation for new features is appreciated.
-
----
-
-## 📄 License
-
-MIT License - see LICENSE file for details.
-
-**Built by DragonDiffusionbyBoyo for the semantic editing revolution.**
-
----
-
-*Note: Vision nodes currently disabled due to dependency conflicts. Resolution in progress.*
+*Built by DragonDiffusionbyBoyo.*
