@@ -138,6 +138,6 @@ pip install qwen-vl-utils
 
 ## Licence
 
-MIT — see LICENSE file.
+Creative Commons Attribution (CC BY)
 
 *Built by DragonDiffusionbyBoyo.*
